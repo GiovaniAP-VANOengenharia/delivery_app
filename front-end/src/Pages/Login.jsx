@@ -1,10 +1,9 @@
-import React, { useContext } from 'react';
-import MyContext from '../Context/MyContext';
+import React from 'react';
+import LoginForm from '../Components/LoginForm';
 
 function Login() {
-  const { state } = useContext(MyContext);
   return (
-    <h1>{state}</h1>
+    <LoginForm />
   );
 }
 
