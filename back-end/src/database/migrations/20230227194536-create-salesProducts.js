@@ -23,6 +23,10 @@ module.exports = {
         onDelete: 'CASCADE',
         onUpdate: 'CASCADE',
       },
+      quantity: {
+        type: Sequelize.INTEGER,
+        allowNull: false,
+      },
     });
   },
 
