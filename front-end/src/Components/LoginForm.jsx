@@ -1,9 +1,10 @@
 import React, { useEffect, useState } from 'react';
 import styled from 'styled-components';
+import { requestLogin } from '../services/requests';
 import { emailValidate, passwordValidate } from '../Utils/loginValidate';
 
 function LoginForm() {
-  const [showPopUp] = useState(false);
+  const [showPopUp, setShowPopUp] = useState(false);
   const [isDisabled, setIsDisabled] = useState(true);
   const [loginFields, setLoginFiels] = useState({
     email: '',
@@ -17,6 +18,14 @@ function LoginForm() {
       [id]: value,
     });
   };
+  const handleClick = async () => {
+    try {
+      const test = await requestLogin('/login', loginFields);
+      console.log(test);
+    } catch (error) {
+      setShowPopUp(true);
+    }
+  };
 
   useEffect(() => {
     const emailIsValid = emailValidate(loginFields.email);
@@ -28,6 +37,7 @@ function LoginForm() {
       <label htmlFor="common_login__input-email">
         Login
         <input
+          id="email"
           onChange={ handleChange }
           type="email"
           data-testid="common_login__input-email"
@@ -37,6 +47,7 @@ function LoginForm() {
       <label htmlFor="common_login__input-password">
         Senha
         <input
+          id="password"
           onChange={ handleChange }
           type="password"
           data-testid="common_login__input-password"
@@ -45,6 +56,7 @@ function LoginForm() {
 
       <button
         disabled={ isDisabled }
+        onClick={ () => handleClick() }
         type="submit"
         data-testid="common_login__button-login"
       >
