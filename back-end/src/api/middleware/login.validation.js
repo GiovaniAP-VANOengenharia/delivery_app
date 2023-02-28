@@ -1,6 +1,6 @@
 const validateLogin = (req, res, next) => {
   const { email, password } = req.body;
-  const inputEmail = /^([a-z\d-]+)@([a-z\d-]+)\.com$/;
+  const inputEmail = /^[a-z0-9.]+@[a-z0-9]+\.[a-z]+\.([a-z]+)?$/i;
   if (!email) {
     return res.status(400).json({ message: 'O campo "email" é obrigatório' });
   }
@@ -12,8 +12,8 @@ const validateLogin = (req, res, next) => {
     return res.status(400).json({ message: 'O "password" deve ter pelo menos 6 caracteres' });
   }
   next();
-}
+};
 
 module.exports = {
   validateLogin,
-}
+};

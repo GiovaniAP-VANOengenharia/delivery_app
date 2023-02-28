@@ -8,4 +8,4 @@ userRouter.post('/', validateLogin, userController.login);
 
 module.exports = {
   userRouter,
-}
+};
