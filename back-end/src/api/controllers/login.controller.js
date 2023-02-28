@@ -7,18 +7,18 @@ const login = async (req, res) => {
   if (!hasUser) {
     res.status(404).json({
       hasToken: false,
-      method: "POST",
+      method: 'POST',
       status: 404,
-      message: 'Usuário não encontrado'
+      message: 'Usuário não encontrado',
     });
   }
   const token = jwtConfig.createToken({ id: hasUser.id, email, role: hasUser.role });
 
   return res.status(200).json({
     hasToken: true,
-    method: "POST",
+    method: 'POST',
     status: 200,
-    message: token
+    message: token,
   });
 };
 
