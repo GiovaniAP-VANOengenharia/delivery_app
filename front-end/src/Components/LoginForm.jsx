@@ -23,7 +23,9 @@ function LoginForm() {
   const handleClickLoginBtn = async () => {
     try {
       const test = await requestLogin('/login', loginFields);
-      console.log(test);
+      if (test) {
+        history.push('/customer/products');
+      }
     } catch (error) {
       setShowPopUp(true);
     }
