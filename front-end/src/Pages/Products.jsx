@@ -1,15 +1,24 @@
-import React from 'react';
+import React, { useEffect, useState } from 'react';
 import NavBar from '../Components/NavBar';
 import ProductCard from '../Components/ProductCard';
-import productsMock from '../Utils/productsMock';
+import { requestData } from '../services/requests';
 
 function Products() {
-  const allProducts = productsMock;
+  const [productsArray, setProductsArray] = useState([]);
+
+  const fetchProducts = async () => {
+    const result = await requestData('/products');
+    setProductsArray(result);
+  };
+
+  useEffect(() => {
+    fetchProducts();
+  }, []);
 
   return (
     <>
       <NavBar />
-      { allProducts.map((product) => (
+      { productsArray.map((product) => (
         <ProductCard productData={ product } key={ product.id } />
       ))}
     </>
