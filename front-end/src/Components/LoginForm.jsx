@@ -1,5 +1,6 @@
 import React, { useEffect, useState } from 'react';
 import styled from 'styled-components';
+import { useHistory } from 'react-router-dom';
 import { requestLogin } from '../services/requests';
 import { emailValidate, passwordValidate } from '../Utils/loginValidate';
 
@@ -10,6 +11,7 @@ function LoginForm() {
     email: '',
     password: '',
   });
+  const history = useHistory();
 
   const handleChange = ({ target }) => {
     const { id, value } = target;
@@ -18,13 +20,17 @@ function LoginForm() {
       [id]: value,
     });
   };
-  const handleClick = async () => {
+  const handleClickLoginBtn = async () => {
     try {
       const test = await requestLogin('/login', loginFields);
       console.log(test);
     } catch (error) {
       setShowPopUp(true);
     }
+  };
+
+  const handleClickRegisterBtn = () => {
+    history.push('/register');
   };
 
   useEffect(() => {
@@ -56,14 +62,18 @@ function LoginForm() {
 
       <button
         disabled={ isDisabled }
-        onClick={ () => handleClick() }
+        onClick={ () => handleClickLoginBtn() }
         type="submit"
         data-testid="common_login__button-login"
       >
         LOGIN
       </button>
 
-      <button type="button" data-testid="common_login__button-register">
+      <button
+        onClick={ () => handleClickRegisterBtn() }
+        type="button"
+        data-testid="common_login__button-register"
+      >
         Ainda não tenho conta
       </button>
       { showPopUp && (
