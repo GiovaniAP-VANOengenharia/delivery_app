@@ -2,12 +2,12 @@ import React, { useEffect, useState } from 'react';
 import styled from 'styled-components';
 import { useHistory } from 'react-router-dom';
 import { requestLogin } from '../services/requests';
-import { emailValidate, passwordValidate } from '../Utils/loginValidate';
+import { emailValidate, passwordValidate } from '../Utils/fieldsValidate';
 
 function LoginForm() {
   const [showPopUp, setShowPopUp] = useState(false);
   const [isDisabled, setIsDisabled] = useState(true);
-  const [loginFields, setLoginFiels] = useState({
+  const [loginFields, setLoginFields] = useState({
     email: '',
     password: '',
   });
@@ -15,7 +15,7 @@ function LoginForm() {
 
   const handleChange = ({ target }) => {
     const { id, value } = target;
-    setLoginFiels({
+    setLoginFields({
       ...loginFields,
       [id]: value,
     });

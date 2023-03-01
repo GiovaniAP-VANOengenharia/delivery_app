@@ -1,8 +1,9 @@
 import React from 'react';
+import RegisterForm from '../Components/RegisterForm';
 
 function Register() {
   return (
-    <h1>Tela de Registro</h1>
+    <RegisterForm />
   );
 }
 
