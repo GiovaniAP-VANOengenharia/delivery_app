@@ -1,4 +1,4 @@
-const validateName = (req, res, next)  => {
+const validateName = (req, res, next) => {
   const { name } = req.body;
   if (name.length < 12) {
     return res.status(400).json({ 
@@ -8,7 +8,7 @@ const validateName = (req, res, next)  => {
       message: 'O "name" deve ter pelo menos 12 caracteres' });
   }
   next();
-}
+};
 
 const validateEmail = (req, res, next) => {
   const { email } = req.body;
