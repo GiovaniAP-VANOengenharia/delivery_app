@@ -1,3 +1,15 @@
+const validateName = (req, res, next)  => {
+  const { name } = req.body;
+  if (name.length < 12) {
+    return res.status(400).json({ 
+      hasToken: false,
+      method: 'POST',
+      status: 400,
+      message: 'O "name" deve ter pelo menos 12 caracteres' });
+  }
+  next();
+}
+
 const validateEmail = (req, res, next) => {
   const { email } = req.body;
   const inputEmail = /^\w+([.-]?\w+)*@\w+([.-]?\w+)*(\.\w{2,3})+$/;
@@ -34,4 +46,5 @@ const validatePassword = (req, res, next) => {
 module.exports = {
   validateEmail,
   validatePassword,
+  validateName,
 };
