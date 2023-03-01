@@ -1,27 +1,29 @@
 import React from 'react';
+import PropTypes from 'prop-types';
 
-function ProductCard() {
-  const product = { id: 'xxxx', image: 'urlLink' };
+function ProductCard(props) {
+  const { productData } = props;
+  const { id, name, price, urlImage } = productData;
 
   return (
     <div>
-      <div data-testid={ `customer_products__element-card-title-${product.id}` }>
-        Product.Name
+      <div data-testid={ `customer_products__element-card-title-${id}` }>
+        { name }
       </div>
 
-      <div data-testid={ `customer_products__element-card-price-${product.id}` }>
-        Product.Price
+      <div data-testid={ `customer_products__element-card-price-${id}` }>
+        {`R$: ${price}`}
       </div>
 
       <img
-        src={ product.image }
+        src={ urlImage }
         alt="Imagem do Produto"
-        data-testid={ `customer_products__img-card-bg-image-${product.id}` }
+        data-testid={ `customer_products__img-card-bg-image-${id}` }
       />
 
       <button
         type="button"
-        data-testid={ `customer_products__button-card-add-item-${product.id}` }
+        data-testid={ `customer_products__button-card-add-item-${id}` }
       >
         +
       </button>
@@ -32,12 +34,21 @@ function ProductCard() {
 
       <button
         type="button"
-        data-testid={ `customer_products__button-card-rm-item-${product.id}` }
+        data-testid={ `customer_products__button-card-rm-item-${id}` }
       >
         -
       </button>
     </div>
   );
 }
+
+ProductCard.propTypes = {
+  productData: PropTypes.shape({
+    id: PropTypes.number.isRequired,
+    name: PropTypes.string.isRequired,
+    price: PropTypes.string.isRequired,
+    urlImage: PropTypes.string.isRequired,
+  }).isRequired,
+};
 
 export default ProductCard;
