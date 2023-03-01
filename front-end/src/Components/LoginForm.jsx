@@ -1,30 +1,38 @@
 import React, { useEffect, useState } from 'react';
 import styled from 'styled-components';
+import { useHistory } from 'react-router-dom';
 import { requestLogin } from '../services/requests';
-import { emailValidate, passwordValidate } from '../Utils/loginValidate';
+import { emailValidate, passwordValidate } from '../Utils/fieldsValidate';
 
 function LoginForm() {
   const [showPopUp, setShowPopUp] = useState(false);
   const [isDisabled, setIsDisabled] = useState(true);
-  const [loginFields, setLoginFiels] = useState({
+  const [loginFields, setLoginFields] = useState({
     email: '',
     password: '',
   });
+  const history = useHistory();
 
   const handleChange = ({ target }) => {
     const { id, value } = target;
-    setLoginFiels({
+    setLoginFields({
       ...loginFields,
       [id]: value,
     });
   };
-  const handleClick = async () => {
+  const handleClickLoginBtn = async () => {
     try {
       const test = await requestLogin('/login', loginFields);
-      console.log(test);
+      if (test) {
+        history.push('/customer/products');
+      }
     } catch (error) {
       setShowPopUp(true);
     }
+  };
+
+  const handleClickRegisterBtn = () => {
+    history.push('/register');
   };
 
   useEffect(() => {
@@ -56,14 +64,18 @@ function LoginForm() {
 
       <button
         disabled={ isDisabled }
-        onClick={ () => handleClick() }
+        onClick={ () => handleClickLoginBtn() }
         type="submit"
         data-testid="common_login__button-login"
       >
         LOGIN
       </button>
 
-      <button type="button" data-testid="common_login__button-register">
+      <button
+        onClick={ () => handleClickRegisterBtn() }
+        type="button"
+        data-testid="common_login__button-register"
+      >
         Ainda não tenho conta
       </button>
       { showPopUp && (
