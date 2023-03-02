@@ -37,7 +37,8 @@ const createUser = async (req, res) => {
     });
   }
 
-  const newUser = await userService.createUser({ name, email, password: md5(password), role: role || 'customer' });
+  const newUser = await userService
+  .createUser({ name, email, password: md5(password), role: role || 'customer' });
 
   const token = jwtConfig.createToken({ id: newUser.id, email, role: role || 'customer' });
 
