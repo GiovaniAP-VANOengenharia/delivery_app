@@ -4,7 +4,7 @@ const { Product } = require('../../database/models');
 const productService = require('../../api/services/product.service');
 const { products } = require('./mocks/products.service.mock');
 
-describe("Testes controller de products", function () {
+describe("Testes service de products", function () {
     describe("Puxando produtos", function () {
         afterEach(function () {
             sinon.restore();
