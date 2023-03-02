@@ -5,7 +5,6 @@ const jwtConfig = require('../auth/jwtConfig');
 const login = async (req, res) => {
   const { email, password } = req.body;
   const hasUser = await userService.getLogin(email, password);
-  console.log(hasUser);
   if (!hasUser) {
     res.status(404).json({
       hasToken: false,
