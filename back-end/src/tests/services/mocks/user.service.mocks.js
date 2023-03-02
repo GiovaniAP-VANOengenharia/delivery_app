@@ -1,7 +1,3 @@
-// const validUserInput = {
-//     email: 'fulana@deliveryapp.com',
-//     password: 'fulana@123'
-// };
 const validEmail = 'fulana@deliveryapp.com';
 const validPassword = 'fulana@123';
 const validUser = {
