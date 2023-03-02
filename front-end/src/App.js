@@ -2,6 +2,7 @@ import React from 'react';
 import { Redirect, Route, Switch } from 'react-router-dom';
 import './App.css';
 import Provider from './Context/MyProvider';
+import Checkout from './Pages/Checkout';
 import Login from './Pages/Login';
 import Products from './Pages/Products';
 import Register from './Pages/Register';
@@ -21,6 +22,10 @@ function App() {
 
         <Route exact path="/customer/products">
           <Products />
+        </Route>
+
+        <Route exact path="/customer/checkout">
+          <Checkout />
         </Route>
 
         <Route exact path="/register">
