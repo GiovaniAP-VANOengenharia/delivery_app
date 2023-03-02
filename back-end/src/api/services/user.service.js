@@ -12,7 +12,8 @@ const getUser = async (email) => {
 };
 
 const createUser = async (user) => {
-  await User.create(user);
+  const newUser = await User.create(user);
+  return newUser;
 };
 
 module.exports = {
