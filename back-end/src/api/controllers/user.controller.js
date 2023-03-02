@@ -6,7 +6,7 @@ const login = async (req, res) => {
   const { email, password } = req.body;
   const hasUser = await userService.getLogin(email, password);
   if (!hasUser) {
-    res.status(404).json({
+    return res.status(404).json({
       hasToken: false,
       method: 'POST',
       status: 404,
@@ -20,6 +20,7 @@ const login = async (req, res) => {
     method: 'POST',
     status: 200,
     message: token,
+    result: { name: hasUser.name, email: hasUser.email, role: hasUser.role, token },
   });
 };
 

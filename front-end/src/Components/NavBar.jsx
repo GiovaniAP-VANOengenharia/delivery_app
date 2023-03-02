@@ -1,6 +1,14 @@
 import React from 'react';
+import { useHistory } from 'react-router-dom';
 
 function NavBar() {
+  const history = useHistory();
+
+  const logOut = () => {
+    localStorage.clear();
+    history.push('/login');
+  };
+
   return (
     <nav>
       <div data-testid="customer_products__element-navbar-link-products">
@@ -15,9 +23,13 @@ function NavBar() {
         State.fullName
       </div>
 
-      <div data-testid="customer_products__element-navbar-link-logout">
+      <button
+        type="button"
+        data-testid="customer_products__element-navbar-link-logout"
+        onClick={ logOut }
+      >
         Sair
-      </div>
+      </button>
 
     </nav>
   );
