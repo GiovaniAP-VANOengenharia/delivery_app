@@ -2,7 +2,7 @@ const { expect } = require("chai");
 const sinon = require("sinon");
 const userService = require("../../api/services/user.service");
 const { User } = require("../../database/models");
-const { validUser, validEmail, validPassword } = require('./mocks/user.service.mocks');
+const { validUser, validEmail, validPassword, newUser, newUserInput } = require('./mocks/user.service.mocks');
 
 
 
@@ -36,6 +36,16 @@ describe("Testes controller de users", function () {
             sinon.stub(User, "findOne").resolves(validUser);
             const result = await userService.getUser(validEmail);
             expect(result).to.be.deep.equal(validUser);
+        });
+        it('O retorno de createUser é um objeto?', async function () {
+            sinon.stub(User, 'create').resolves(newUser);
+            const result = await userService.createUser(newUserInput);
+            expect(result instanceof Object).to.equal(true);
+        });
+        it('Teste função createUser', async function () {
+            sinon.stub(User, "create").resolves(newUser);
+            const result = await userService.createUser(newUserInput);
+            expect(result).to.be.deep.equal(newUser);
         });
     });
 });
