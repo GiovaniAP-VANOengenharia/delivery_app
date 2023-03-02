@@ -1,15 +1,18 @@
 import React, { useEffect, useState } from 'react';
+import { useHistory } from 'react-router-dom';
 import styled from 'styled-components';
+import { requestRegister } from '../services/requests';
 import { emailValidate, nameValidate, passwordValidate } from '../Utils/fieldsValidate';
 
 function RegisterForm() {
-  const [showPopUp] = useState(false);
+  const [showPopUp, setShowPopUp] = useState(false);
   const [isDisabled, setIsDisabled] = useState(true);
   const [registerFields, setRegisterFields] = useState({
     name: '',
     email: '',
     password: '',
   });
+  const history = useHistory();
 
   const handleChange = ({ target }) => {
     const { id, value } = target;
@@ -18,18 +21,16 @@ function RegisterForm() {
       [id]: value,
     });
   };
-  // const handleClickLoginBtn = async () => {
-  //   try {
-  //     const test = await requestLogin('/login', loginFields);
-  //     console.log(test);
-  //   } catch (error) {
-  //     setShowPopUp(true);
-  //   }
-  // };
-
-  // const handleClickRegisterBtn = () => {
-  //   history.push('/register');
-  // };
+  const handleClickRegisterBtn = async () => {
+    try {
+      const register = await requestRegister('/register', registerFields);
+      if (register) {
+        history.push('/customer/products');
+      }
+    } catch (error) {
+      setShowPopUp(true);
+    }
+  };
 
   useEffect(() => {
     const nameIsValid = nameValidate(registerFields.name);
@@ -72,7 +73,7 @@ function RegisterForm() {
 
       <button
         disabled={ isDisabled }
-        onClick={ () => handleClickLoginBtn() }
+        onClick={ () => handleClickRegisterBtn() }
         type="submit"
         data-testid="common_register__button-register"
       >

@@ -5,7 +5,6 @@ const jwtConfig = require('../auth/jwtConfig');
 const login = async (req, res) => {
   const { email, password } = req.body;
   const hasUser = await userService.getLogin(email, password);
-  console.log(hasUser);
   if (!hasUser) {
     res.status(404).json({
       hasToken: false,
@@ -37,11 +36,10 @@ const createUser = async (req, res) => {
     });
   }
 
-  await userService.createUser({ name, email, password: md5(password), role });
+  const newUser = await userService
+  .createUser({ name, email, password: md5(password), role: role || 'customer' });
 
-  const newUser = await userService.getUser(email);
-
-  const token = jwtConfig.createToken({ id: newUser.id, email, role });
+  const token = jwtConfig.createToken({ id: newUser.id, email, role: role || 'customer' });
 
   return res.status(201).json({ hasToken: true, method: 'POST', status: 201, message: token });
 };

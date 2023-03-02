@@ -22,8 +22,8 @@ function LoginForm() {
   };
   const handleClickLoginBtn = async () => {
     try {
-      const test = await requestLogin('/login', loginFields);
-      if (test) {
+      const login = await requestLogin('/login', loginFields);
+      if (login) {
         history.push('/customer/products');
       }
     } catch (error) {
