@@ -12,7 +12,7 @@ function ProductCard(props) {
       </div>
 
       <div data-testid={ `customer_products__element-card-price-${id}` }>
-        {`R$: ${price}`}
+        {`R$ ${price}`}
       </div>
 
       <img
