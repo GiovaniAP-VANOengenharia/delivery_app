@@ -2,7 +2,7 @@ const { expect } = require("chai");
 const sinon = require("sinon");
 const userService = require("../../api/services/user.service");
 const { User } = require("../../database/models");
-const { validUser, validEmail, validPassword } = require('./mocks.user.service.mocks');
+const { validUser, validEmail, validPassword } = require('./mocks/user.service.mocks');
 
 
 
