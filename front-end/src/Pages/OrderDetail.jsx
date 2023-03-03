@@ -38,6 +38,20 @@ const OrderHeader = styled.div`
   display: flex;
   flex-direction: row;
   justify-content: space-between;
+  align-items: center;
+  border: 1px solid #B1C2BE;
+  background-color: #EAF1EF;
+  height: 40px;
+  padding: 0 10px 0 10px;
+  & > p:nth-child(1) {
+    font-size: 25px;
+    font-weight: 500;
+    margin: 0;
+  }
+  & > p:nth-child(2) {
+    font-size: 20px;
+    margin: 0;
+  }
 `;
 
 export default OrderDetail;

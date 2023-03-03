@@ -5,25 +5,26 @@ import statusColors from '../Utils/statusColors';
 
 function OrderCard(props) {
   const { sale } = props;
-  const { order, orderId, status, date, price } = sale;
+  const { id, totalPrice, saleDate, status } = sale;
+  const orderIdMaxLength = 4;
   return (
     <OrderContainer>
-      <OrderId data-testid={ `customer_orders__element-order-id-${orderId}` }>
+      <OrderId data-testid={ `customer_orders__element-order-id-${id}` }>
         <div>Pedido</div>
-        <div>{order}</div>
+        <div>{id.toString().padStart(orderIdMaxLength, '0')}</div>
       </OrderId>
       <OrderStatus
-        data-testid={ `customer_orders__element-delivery-status-${orderId}` }
+        data-testid={ `customer_orders__element-delivery-status-${id}` }
         backgroundColor={ statusColors[status] }
       >
         <div>{status}</div>
       </OrderStatus>
       <OrderDatePrice>
-        <div data-testid={ `customer_orders__element-order-date-${orderId}` }>
-          {date}
+        <div data-testid={ `customer_orders__element-order-date-${id}` }>
+          {saleDate}
         </div>
-        <div data-testid={ `customer_orders__element-card-price-${orderId}` }>
-          {price}
+        <div data-testid={ `customer_orders__element-card-price-${id}` }>
+          {`R$ ${totalPrice.toString().replace('.', ',')}`}
         </div>
       </OrderDatePrice>
     </OrderContainer>
@@ -56,7 +57,7 @@ const OrderId = styled.div`
 `;
 
 const OrderStatus = styled.div`
-  width: 160px;
+  width: 190px;
   margin: 3px;
   text-align: center;
   border-radius: 10px;
@@ -64,7 +65,7 @@ const OrderStatus = styled.div`
   & > div {
     font-size: 20px;
     font-weight: 500;
-    padding: 30px;
+    padding: 30px 0 30px 0;
   }
 `;
 
@@ -75,18 +76,17 @@ const OrderDatePrice = styled.div`
   align-items: center;
   & > div {
     margin: 2px;
-    padding: 2px 10px 2px 10px;
+    padding: 2px 7px 2px 10px;
     font-size: 17px;
   }
 `;
 
 OrderCard.propTypes = {
   sale: PropTypes.shape({
-    order: PropTypes.string.isRequired,
-    orderId: PropTypes.number.isRequired,
+    id: PropTypes.number.isRequired,
     status: PropTypes.string.isRequired,
-    date: PropTypes.string.isRequired,
-    price: PropTypes.string.isRequired,
+    saleDate: PropTypes.string.isRequired,
+    totalPrice: PropTypes.number.isRequired,
   }).isRequired,
 };
 
