@@ -1,10 +1,22 @@
-import React, { useEffect, useState } from 'react';
+import React, { useContext, useEffect, useState } from 'react';
 import { useHistory } from 'react-router-dom';
 import styled from 'styled-components';
+import MyContext from '../Context/MyContext';
 
 function NavBar() {
   const [username, setUsername] = useState('');
   const history = useHistory();
+  const { cart } = useContext(MyContext);
+  const [priceTotal, setPriceTotal] = useState(0);
+
+  useEffect(() => {
+    let cost = 0;
+    cart.forEach((product) => {
+      cost += Math.round(product.price * product.quantity * 100) / 100;
+      cost = Number(cost.toFixed(2));
+      setPriceTotal(cost);
+    });
+  }, [cart]);
 
   const logOut = () => {
     localStorage.clear();
@@ -33,6 +45,8 @@ function NavBar() {
         <div data-testid="customer_products__element-navbar-user-full-name">
           {username}
         </div>
+        
+        <span>{ `Total Price: ${priceTotal}` }</span>
 
         <button
           type="button"
@@ -74,7 +88,7 @@ const NavbarContainer = styled.nav`
     padding: 20px;
     color: white;
     }
-    & > button:nth-child(2) {
+    & > button:nth-child(3) {
       border: 0;
       background-color: #056CF9;
       padding: 20px 40px;
