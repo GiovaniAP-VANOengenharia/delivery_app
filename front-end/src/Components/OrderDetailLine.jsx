@@ -5,19 +5,29 @@ function OrderDetailLine() {
   return (
     <OrderBody>
       <div>
-        <p>1</p>
+        <p data-testid="customer_order_details__element-order-table-item-number-<index>">
+          1
+        </p>
       </div>
       <div>
-        <p>Cerveja Stella 250ml</p>
+        <p data-testid="customer_order_details__element-order-table-name-<index>">
+          Cerveja Stella 250ml
+        </p>
       </div>
       <div>
-        <p>3</p>
+        <p data-testid="customer_order_details__element-order-table-quantity-<index>">
+          3
+        </p>
       </div>
       <div>
-        <p>R$3,50</p>
+        <p data-testid="customer_order_details__element-order-table-unit-price-<index>">
+          R$3,50
+        </p>
       </div>
       <div>
-        <p>R$10,50</p>
+        <p data-testid="customer_order_details__element-order-table-sub-total-<index>">
+          R$10,50
+        </p>
       </div>
     </OrderBody>
   );

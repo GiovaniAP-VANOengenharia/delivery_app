@@ -12,11 +12,29 @@ function OrderDetail() {
       <OrderContainer>
         <h1>Detalhe do pedido</h1>
         <OrderHeader>
-          <p>PEDIDO 0003;</p>
-          <p>P.Vend: Fulana Pereira</p>
-          <p>07/04/2021</p>
-          <p>ENTREGUE</p>
-          <button type="button">MARCAR COMO ENTREGUE</button>
+          <p data-testid="customer_order_details__element-order-details-label-order-id">
+            PEDIDO 0003;
+          </p>
+          <p
+            data-testid="customer_order_details__element-order-details-label-seller-name"
+          >
+            P.Vend: Fulana Pereira
+          </p>
+          <p data-testid="customer_order_details__element-order-details-label-order-date">
+            07/04/2021
+          </p>
+          <p
+            data-testid="customer_order_details
+            __element-order-details-label-delivery-status<index>"
+          >
+            ENTREGUE
+          </p>
+          <button
+            type="button"
+            data-testid="customer_order_details__button-delivery-check"
+          >
+            MARCAR COMO ENTREGUE
+          </button>
         </OrderHeader>
         <OrderDetailLine />
         <OrderDetailLine />
