@@ -88,7 +88,7 @@ const NavbarContainer = styled.nav`
     padding: 20px;
     color: white;
     }
-    & > button:nth-child(2) {
+    & > button:nth-child(3) {
       border: 0;
       background-color: #056CF9;
       padding: 20px 40px;
