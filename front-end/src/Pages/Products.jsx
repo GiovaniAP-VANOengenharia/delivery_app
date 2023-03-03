@@ -21,6 +21,9 @@ function Products() {
       { productsArray.map((product) => (
         <ProductCard productData={ product } key={ product.id } />
       ))}
+      <div>
+        Ver Carrinho: R$ !valorTotal!
+      </div>
     </>
   );
 }

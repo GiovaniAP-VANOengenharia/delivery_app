@@ -23,7 +23,9 @@ function LoginForm() {
   const handleClickLoginBtn = async () => {
     try {
       const login = await requestLogin('/login', loginFields);
-      if (login) {
+      if (login.result) {
+        const toLocalStorage = JSON.stringify(login.result);
+        localStorage.setItem('login', toLocalStorage);
         history.push('/customer/products');
       }
     } catch (error) {
