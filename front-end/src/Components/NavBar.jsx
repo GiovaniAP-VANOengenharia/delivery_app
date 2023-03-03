@@ -1,14 +1,21 @@
-import React from 'react';
+import React, { useEffect, useState } from 'react';
 import { useHistory } from 'react-router-dom';
 import styled from 'styled-components';
 
 function NavBar() {
+  const [username, setUsername] = useState('');
   const history = useHistory();
 
   const logOut = () => {
     localStorage.clear();
     history.push('/login');
   };
+
+  useEffect(() => {
+    const { name } = JSON.parse(localStorage.getItem('user'));
+    setUsername(name);
+    console.log();
+  }, []);
 
   return (
     <NavbarContainer>
@@ -24,17 +31,17 @@ function NavBar() {
 
       <div>
         <div data-testid="customer_products__element-navbar-user-full-name">
-          State.fullName
+          {username}
         </div>
 
-      <button
-        type="button"
-        data-testid="customer_products__element-navbar-link-logout"
-        onClick={ logOut }
-      >
-        Sair
-      </button>
-
+        <button
+          type="button"
+          data-testid="customer_products__element-navbar-link-logout"
+          onClick={ logOut }
+        >
+          Sair
+        </button>
+      </div>
     </NavbarContainer>
   );
 }
@@ -67,7 +74,8 @@ const NavbarContainer = styled.nav`
     padding: 20px;
     color: white;
     }
-    & > div:nth-child(2) {
+    & > button:nth-child(2) {
+      border: 0;
       background-color: #056CF9;
       padding: 20px 40px;
       color: white;
