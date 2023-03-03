@@ -4,6 +4,7 @@ import styled from 'styled-components';
 import MyContext from '../Context/MyContext';
 
 function NavBar() {
+  const [username, setUsername] = useState('');
   const history = useHistory();
   const { cart } = useContext(MyContext);
   const [priceTotal, setPriceTotal] = useState(0);
@@ -22,6 +23,12 @@ function NavBar() {
     history.push('/login');
   };
 
+  useEffect(() => {
+    const { name } = JSON.parse(localStorage.getItem('user'));
+    setUsername(name);
+    console.log();
+  }, []);
+
   return (
     <NavbarContainer>
       <div>
@@ -36,7 +43,7 @@ function NavBar() {
 
       <div>
         <div data-testid="customer_products__element-navbar-user-full-name">
-          State.fullName
+          {username}
         </div>
 
         <span>{ `Total Price: ${priceTotal}` }</span>
@@ -81,7 +88,8 @@ const NavbarContainer = styled.nav`
     padding: 20px;
     color: white;
     }
-    & > div:nth-child(2) {
+    & > button:nth-child(2) {
+      border: 0;
       background-color: #056CF9;
       padding: 20px 40px;
       color: white;

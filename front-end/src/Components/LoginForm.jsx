@@ -25,7 +25,7 @@ function LoginForm() {
       const login = await requestLogin('/login', loginFields);
       if (login.result) {
         const toLocalStorage = JSON.stringify(login.result);
-        localStorage.setItem('login', toLocalStorage);
+        localStorage.setItem('user', toLocalStorage);
         history.push('/customer/products');
       }
     } catch (error) {

@@ -1,7 +1,9 @@
 const jwt = require('jsonwebtoken');
+const fs = require('fs');
+
 require('dotenv').config();
 
-const secret = process.env.JWT_SECRET || 'xablau';
+const secret = fs.readFileSync('./jwt.evaluation.key');
 
 const jwtConfig = {
   expiresIn: '50min',
