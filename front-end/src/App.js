@@ -4,6 +4,7 @@ import './App.css';
 import Provider from './Context/MyProvider';
 import Login from './Pages/Login';
 import Order from './Pages/Order';
+import OrderDetail from './Pages/OrderDetail';
 import Products from './Pages/Products';
 import Register from './Pages/Register';
 
@@ -26,6 +27,10 @@ function App() {
 
         <Route exact path="/customer/order">
           <Order />
+        </Route>
+
+        <Route exact path="/customer/order/:id">
+          <OrderDetail />
         </Route>
 
         <Route exact path="/register">
