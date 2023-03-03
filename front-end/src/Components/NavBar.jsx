@@ -45,7 +45,7 @@ function NavBar() {
         <div data-testid="customer_products__element-navbar-user-full-name">
           {username}
         </div>
-        
+
         <span>{ `Total Price: ${priceTotal}` }</span>
 
         <button
