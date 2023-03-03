@@ -1,12 +1,43 @@
-import React, { useState, useEffect, useContext } from 'react';
+import React, { useState, useEffect } from 'react';
 import PropTypes from 'prop-types';
-import MyContext from '../Context/MyContext';
+// import MyContext from '../Context/MyContext';
 
 function ProductCard(props) {
   const [quantity, setQuantity] = useState(0);
-  const { cart, setCart } = useContext(MyContext);
+  // const { cart, setCart } = useContext(MyContext);
   const { productData } = props;
   const { id, name, price, urlImage } = productData;
+
+  const toCart = () => {
+    const products = localStorage.getItem('products');
+    let cart = [];
+    let findItem = '';
+    if (products) {
+      cart = JSON.parse(products);
+      findItem = cart.find((product) => product.id === id);
+    }
+    if (products && !findItem && quantity > 0) {
+      const newCart = [...cart, { id, name, price, quantity }];
+      const toLocalStorage = JSON.stringify(newCart);
+      localStorage.setItem('products', toLocalStorage);
+    }
+    if (findItem && quantity > 0) {
+      const newItem = { ...findItem, quantity };
+      const filterCart = cart.filter((product) => product.id !== id);
+      const newCart = [...filterCart, newItem];
+      const toLocalStorage = JSON.stringify(newCart);
+      localStorage.setItem('products', toLocalStorage);
+    }
+    if (!products && quantity > 0) {
+      const toLocalStorage = JSON.stringify([{ id, name, price, quantity }]);
+      localStorage.setItem('products', toLocalStorage);
+    }
+    if (findItem && !quantity) {
+      const newCart = cart.filter((product) => product.id !== id);
+      const toLocalStorage = JSON.stringify(newCart);
+      localStorage.setItem('products', toLocalStorage);
+    }
+  };
 
   const inputQuantity = (e) => {
     if (e.target.name === 'add') {
@@ -16,37 +47,19 @@ function ProductCard(props) {
     }
   };
 
-  const checkLocalStorage = (findItem) => {
-    let newCart = [];
-    if (findItem && quantity > 0) {
-      const newItem = { ...findItem, quantity };
-      const filterCart = cart.filter((product) => product.id !== id);
-      newCart = [...filterCart, newItem];
-      setCart(newCart);
-    } else if (quantity > 0) {
-      newCart = [...cart, { id, name, price, quantity }];
-      setCart(newCart);
+  useEffect(() => {
+    const products = localStorage.getItem('products');
+    let findItem = '';
+    if (products) {
+      const cart = JSON.parse(products);
+      findItem = cart.find((product) => product.id === id);
     }
-    if (findItem && !quantity) {
-      const filterCart = cart.filter((product) => product.id !== id);
-      newCart = [...filterCart];
-      setCart(newCart);
-    }
-  };
-
-  const toLocalStorage = () => {
-    if (!cart.length && quantity > 0) {
-      setCart([{ id, name, price, quantity }]);
-    } else {
-      const findItem = cart.find((product) => product.id === id);
-      if (findItem && !quantity) setQuantity(findItem.quantity);
-      checkLocalStorage(findItem);
-    }
-  };
+    if (findItem) setQuantity(findItem.quantity);
+  }, []);
 
   useEffect(() => {
     if (quantity < 0) setQuantity(0);
-    toLocalStorage();
+    toCart();
   }, [quantity]);
 
   const inputChange = (e) => {

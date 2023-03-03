@@ -23,6 +23,10 @@ function NavBar() {
     history.push('/login');
   };
 
+  const custumerCheckout = () => {
+    history.push('/customer/checkout');
+  };
+
   useEffect(() => {
     const { name } = JSON.parse(localStorage.getItem('user'));
     setUsername(name);
@@ -46,7 +50,12 @@ function NavBar() {
           {username}
         </div>
 
-        <span>{ `Total Price: ${priceTotal}` }</span>
+        <button
+          type="button"
+          onClick={ custumerCheckout }
+        >
+          { `Total Price: ${priceTotal}` }
+        </button>
 
         <button
           type="button"
