@@ -1,8 +1,10 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useContext } from 'react';
 import PropTypes from 'prop-types';
+import MyContext from '../Context/MyContext';
 
 function ProductCard(props) {
   const [quantity, setQuantity] = useState(0);
+  const { cart, setCart } = useContext(MyContext);
   const { productData } = props;
   const { id, name, price, urlImage } = productData;
 
@@ -14,32 +16,31 @@ function ProductCard(props) {
     }
   };
 
-  const checkLocalStorage = (products) => {
-    let cart = JSON.parse(products);
-    console.log(cart);
-    const findItem = cart.find((product) => product.id === id);
+  const checkLocalStorage = (findItem) => {
+    let newCart = [];
     if (findItem && quantity > 0) {
       const newItem = { ...findItem, quantity };
       const filterCart = cart.filter((product) => product.id !== id);
-      cart = [...filterCart, newItem];
+      newCart = [...filterCart, newItem];
+      setCart(newCart);
     } else if (quantity > 0) {
-      cart.push({ id, name, price, quantity });
+      newCart = [...cart, { id, name, price, quantity }];
+      setCart(newCart);
     }
-    if (!quantity) {
+    if (findItem && !quantity) {
       const filterCart = cart.filter((product) => product.id !== id);
-      cart = [...filterCart];
+      newCart = [...filterCart];
+      setCart(newCart);
     }
-    const toCart = JSON.stringify(cart);
-    localStorage.setItem('products', toCart);
   };
 
   const toLocalStorage = () => {
-    const products = localStorage.getItem('products');
-    if (!products) {
-      const toCart = JSON.stringify([{ id, name, price, quantity }]);
-      localStorage.setItem('products', toCart);
+    if (!cart.length && quantity > 0) {
+      setCart([{ id, name, price, quantity }]);
     } else {
-      checkLocalStorage(products);
+      const findItem = cart.find((product) => product.id === id);
+      if (findItem && !quantity) setQuantity(findItem.quantity);
+      checkLocalStorage(findItem);
     }
   };
 
