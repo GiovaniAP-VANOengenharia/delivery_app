@@ -1,13 +1,11 @@
-import React from 'react';
+import React, { useContext } from 'react';
 import { calcCartTotal, fixDecimals } from '../Utils';
-import { cartProductsMock } from '../Utils/checkoutPageMocks';
+import MyContext from '../Context/MyContext';
 
 function CheckoutTable() {
-  // Mock do carrinho que deve vir do LocalStorage/Context
-  const cartProducts = cartProductsMock;
-  // -----
+  const { cart, setCart } = useContext(MyContext);
 
-  const totalValue = calcCartTotal(cartProducts);
+  const totalValue = calcCartTotal(cart);
 
   const tableHeaders = [
     'Item', 'Descrição', 'Quantidade',
@@ -24,7 +22,7 @@ function CheckoutTable() {
           </tr>
         </thead>
         <tbody>
-          { cartProducts.map((product, index) => {
+          { cart.map((product, index) => {
             const { name, price, quantity } = product;
 
             return (
