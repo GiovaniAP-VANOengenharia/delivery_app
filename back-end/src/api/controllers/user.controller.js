@@ -45,7 +45,14 @@ const createUser = async (req, res) => {
   return res.status(201).json({ hasToken: true, method: 'POST', status: 201, message: token });
 };
 
+const getSellers = async (_req, res) => {
+  const sellers = await userService.getSellers('seller');
+
+  return res.status(200).json(sellers);
+}
+
 module.exports = {
   login,
   createUser,
+  getSellers,
 };

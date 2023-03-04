@@ -16,8 +16,14 @@ const createUser = async (user) => {
   return newUser;
 };
 
+const getSellers = async (role) => {
+  const sellers = await User.findAll({ where: { role } });
+  return sellers;
+};
+
 module.exports = {
   getLogin,
   getUser,
   createUser,
+  getSellers,
 };

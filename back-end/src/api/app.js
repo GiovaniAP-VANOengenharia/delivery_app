@@ -9,6 +9,7 @@ app.use(cors());
 
 app.use('/images', express.static('images'));
 app.use('/', userRouter);
+app.use('/customer', userRouter);
 app.use('/products', productRouter);
 
 app.get('/coffee', (_req, res) => res.status(418).end());

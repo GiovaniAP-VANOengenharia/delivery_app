@@ -5,7 +5,26 @@ import MyContext from '../Context/MyContext';
 function CheckoutTable() {
   const { cart, setCart } = useContext(MyContext);
 
-  const totalValue = calcCartTotal(cart);
+  const totalValue = fixDecimals(calcCartTotal(cart));
+
+  const removeItem = (id) => {
+    const products = localStorage.getItem('products');
+    let items = [];
+    let findItem = '';
+    if (products) {
+      items = JSON.parse(products);
+      findItem = items.find((product) => product.id === id);
+    }
+    if (findItem) {
+      const newCart = items.filter((product) => product.id !== id);
+      if (!newCart.length) localStorage.removeItem('products');
+      else {
+        const toLocalStorage = JSON.stringify(newCart);
+        localStorage.setItem('products', toLocalStorage);
+      }
+      setCart(newCart);
+    }
+  };
 
   const tableHeaders = [
     'Item', 'Descrição', 'Quantidade',
@@ -71,6 +90,7 @@ function CheckoutTable() {
                     data-testid={
                       `customer_checkout__element-order-table-remove-${index}`
                     }
+                    onClick={ () => removeItem(product.id) }
                   >
                     Remover
                   </button>

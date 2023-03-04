@@ -1,21 +1,22 @@
 import React, { useContext, useEffect, useState } from 'react';
 import { useHistory } from 'react-router-dom';
 import styled from 'styled-components';
+import { fixDecimals } from '../Utils';
 import MyContext from '../Context/MyContext';
 
 function NavBar() {
   const [username, setUsername] = useState('');
   const history = useHistory();
   const { cart } = useContext(MyContext);
-  const [priceTotal, setPriceTotal] = useState(0);
+  const [priceTotal, setPriceTotal] = useState('');
 
   useEffect(() => {
     let cost = 0;
     cart.forEach((product) => {
       cost += Math.round(product.price * product.quantity * 100) / 100;
-      cost = Number(cost.toFixed(2));
-      setPriceTotal(cost);
     });
+    const total = fixDecimals(cost);
+    setPriceTotal(total);
   }, [cart]);
 
   const logOut = () => {
