@@ -1,21 +1,23 @@
-import React, { useEffect } from 'react';
+import React, { useEffect, useState } from 'react';
 import styled from 'styled-components';
 import NavBar from '../Components/NavBar';
 import OrderCard from '../Components/OrderCard';
-import { requestSales } from '../services/requests';
+import { requestAllSales } from '../services/requests';
 
 function Order() {
   const [sales, setSales] = useState();
 
+  console.log(sales);
   useEffect(() => {
     const getSales = async () => {
-      const data = await requestSales('/order');
+      const data = await requestAllSales('/order');
+      console.log(data);
       setSales(data);
     };
     getSales();
   }, []);
 
-  const orderList = sales.map((sale, index) => (
+  const orderList = sales && sales.map((sale, index) => (
     <OrderCard sale={ sale } key={ index } />
   ));
 
@@ -23,7 +25,7 @@ function Order() {
     <div>
       <NavBar />
       <OrdersContainer>
-        {orderList}
+        { sales && orderList}
       </OrdersContainer>
     </div>
   );

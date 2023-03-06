@@ -1,15 +1,15 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 import styled from 'styled-components';
-import { Link } from 'react-router-dom';
 import statusColors from '../Utils/statusColors';
+import mountDate from '../Utils/mountDate';
 
 function OrderCard(props) {
   const { sale } = props;
   const { id, totalPrice, saleDate, status } = sale;
   const orderIdMaxLength = 4;
   return (
-    <OrderContainer to={ `/customer/order/${id}` }>
+    <OrderContainer>
       <OrderId data-testid={ `customer_orders__element-order-id-${id}` }>
         <div>Pedido</div>
         <div>{id.toString().padStart(orderIdMaxLength, '0')}</div>
@@ -18,21 +18,21 @@ function OrderCard(props) {
         data-testid={ `customer_orders__element-delivery-status-${id}` }
         backgroundColor={ statusColors[status] }
       >
-        <div>{status}</div>
+        <div>{status.toUpperCase()}</div>
       </OrderStatus>
       <OrderDatePrice>
         <div data-testid={ `customer_orders__element-order-date-${id}` }>
-          {saleDate}
+          {mountDate(saleDate)}
         </div>
         <div data-testid={ `customer_orders__element-card-price-${id}` }>
-          {`R$ ${totalPrice.toString().replace('.', ',')}`}
+          {`R$ ${totalPrice}`}
         </div>
       </OrderDatePrice>
     </OrderContainer>
   );
 }
 
-const OrderContainer = styled(Link)`
+const OrderContainer = styled.div`
   display: flex;
   justify-content: space-around;
   align-items: center;
