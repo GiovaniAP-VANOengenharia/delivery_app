@@ -1,6 +1,7 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 import styled from 'styled-components';
+import { Link } from 'react-router-dom';
 import statusColors from '../Utils/statusColors';
 
 function OrderCard(props) {
@@ -8,7 +9,7 @@ function OrderCard(props) {
   const { id, totalPrice, saleDate, status } = sale;
   const orderIdMaxLength = 4;
   return (
-    <OrderContainer>
+    <OrderContainer to={ `/customer/order/${id}` }>
       <OrderId data-testid={ `customer_orders__element-order-id-${id}` }>
         <div>Pedido</div>
         <div>{id.toString().padStart(orderIdMaxLength, '0')}</div>
@@ -31,7 +32,7 @@ function OrderCard(props) {
   );
 }
 
-const OrderContainer = styled.div`
+const OrderContainer = styled(Link)`
   display: flex;
   justify-content: space-around;
   align-items: center;
