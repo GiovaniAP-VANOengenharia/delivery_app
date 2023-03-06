@@ -28,4 +28,9 @@ export const requestSellers = async (endpoint) => {
   return data;
 };
 
+export const requestSale = async (endpoint, body) => {
+  const { data } = await api.post(endpoint, body);
+  return data;
+};
+
 export default api;

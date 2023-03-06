@@ -1,19 +1,25 @@
-import React from 'react';
+import React, { useContext, useEffect } from 'react';
 import { useHistory } from 'react-router-dom';
+import MyContext from '../Context/MyContext';
 import NavBar from '../Components/NavBar';
-import { requestData } from '../services/requests';
+import { requestSale } from '../services/requests';
 
 function FinishSale() {
+  const { sale, setSale } = useContext(MyContext);
   const history = useHistory();
 
-  const fetchProducts = async () => {
-    const result = await requestData('/products');
-    setProductsArray(result);
-    history.push('/customer/order/1');
+  const apiSetSale = async () => {
+    const response = await requestSale('/order', sale);
+    console.log(response.result);
+    if (response.result) {
+      const { id } = response.result;
+      setSale({ ...sale, id });
+      history.push(`/customer/order/${id}`);
+    }
   };
 
   useEffect(() => {
-    fetchProducts();
+    apiSetSale();
   }, []);
 
   return (
