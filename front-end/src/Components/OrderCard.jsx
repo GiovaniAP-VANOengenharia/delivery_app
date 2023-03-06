@@ -1,15 +1,17 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 import styled from 'styled-components';
+import { useHistory } from 'react-router-dom';
 import statusColors from '../Utils/statusColors';
 import mountDate from '../Utils/mountDate';
 
 function OrderCard(props) {
+  const history = useHistory();
   const { sale } = props;
   const { id, totalPrice, saleDate, status } = sale;
   const orderIdMaxLength = 4;
   return (
-    <OrderContainer>
+    <OrderContainer onClick={ () => history.push(`/customer/orders/${id}`) }>
       <OrderId data-testid={ `customer_orders__element-order-id-${id}` }>
         <div>Pedido</div>
         <div>{id.toString().padStart(orderIdMaxLength, '0')}</div>
@@ -18,27 +20,28 @@ function OrderCard(props) {
         data-testid={ `customer_orders__element-delivery-status-${id}` }
         backgroundColor={ statusColors[status] }
       >
-        <div>{status.toUpperCase()}</div>
+        <div>{status}</div>
       </OrderStatus>
       <OrderDatePrice>
         <div data-testid={ `customer_orders__element-order-date-${id}` }>
           {mountDate(saleDate)}
         </div>
         <div data-testid={ `customer_orders__element-card-price-${id}` }>
-          {`R$ ${totalPrice}`}
+          {totalPrice.toString().replace('.', ',')}
         </div>
       </OrderDatePrice>
     </OrderContainer>
   );
 }
 
-const OrderContainer = styled.div`
+const OrderContainer = styled.button`
   display: flex;
   justify-content: space-around;
   align-items: center;
   width: 400px;
   border: 1px solid gray;
   margin: 20px;
+  background-color: white;
 `;
 
 const OrderId = styled.div`

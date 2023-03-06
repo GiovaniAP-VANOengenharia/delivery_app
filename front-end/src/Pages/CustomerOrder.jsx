@@ -4,10 +4,9 @@ import NavBar from '../Components/NavBar';
 import OrderCard from '../Components/OrderCard';
 import { requestAllSales } from '../services/requests';
 
-function Order() {
+function CustomerOrder() {
   const [sales, setSales] = useState();
 
-  console.log(sales);
   useEffect(() => {
     const getSales = async () => {
       const data = await requestAllSales('/order');
@@ -37,4 +36,4 @@ const OrdersContainer = styled.div`
   
 `;
 
-export default Order;
+export default CustomerOrder;
