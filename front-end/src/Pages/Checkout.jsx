@@ -43,10 +43,10 @@ function Checkout() {
 
   const getSale = () => {
     const totalPrice = calcCartTotal(cart);
-    console.log(selectedSelr);
+    const selrId = sellerData.find((seller) => seller.name === selectedSelr);
     setSale(() => ({
       userId,
-      sellerId: 2,
+      sellerId: selrId.id,
       totalPrice,
       deliveryAddress,
       deliveryNumber,
