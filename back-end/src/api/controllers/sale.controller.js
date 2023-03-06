@@ -14,7 +14,7 @@ const response = (sale, saleProducts, status, method) => ({
     deliveryNumber: sale.deliveryNumber,
     status: sale.status,
     saleDate: sale.saleDate,
-    cart: saleProducts
+    cart: saleProducts,
   },
 });
 
@@ -33,8 +33,11 @@ const createSale = async (req, res) => {
 
   const salesProducts = await Promise.all(cart
     .map(async (product) => saleService
-    .createSaleProduct({productId: product.id, saleId: newSale.id, quantity: product.quantity }))
-  );
+    .createSaleProduct({
+      productId: product.id,
+      saleId: newSale.id,
+      quantity: product.quantity,
+    })));
 
   return res.status(201).json(response(newSale, salesProducts, 201, 'POST'));
 };
