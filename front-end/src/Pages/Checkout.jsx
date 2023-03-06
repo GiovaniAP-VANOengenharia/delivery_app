@@ -8,11 +8,11 @@ import { calcCartTotal } from '../Utils';
 
 function Checkout() {
   const { userId, cart, setCart, setSale } = useContext(MyContext);
-  const [sellers, setSellers] = useState([]);
   const [deliveryAddress, setAddress] = useState('');
   const [deliveryNumber, setNumber] = useState('');
   const [selectedSelr, setSelectedSelr] = useState('');
   const [sellerData, setSellerData] = useState([]);
+  const [isDisabled, setIsDisabled] = useState(true);
   const history = useHistory();
 
   const getSellers = async () => {
@@ -20,16 +20,19 @@ function Checkout() {
     const loginFields = JSON.parse(userData);
     setToken(loginFields.token);
     const result = await requestSellers('/customer/sellers');
-    setSellerData(result.map((seller) => ({ name: seller.name, id: seller.id })));
-    const sellersName = result.map((seller) => seller.name);
-    setSellers(sellersName);
-    setSelectedSelr(() => sellersName[0]);
+    const sellers = result.map((seller) => ({ name: seller.name, id: seller.id }));
+    setSellerData([{ name: 'Selecione' }, ...sellers]);
   };
 
   const selectingSelr = ({ target }) => {
     setSelectedSelr(target.value);
-    console.log(selectedSelr);
   };
+
+  useEffect(() => {
+    if (deliveryAddress && deliveryNumber && selectedSelr) {
+      setIsDisabled(false);
+    }
+  }, [selectedSelr, deliveryAddress, deliveryNumber]);
 
   useEffect(() => {
     getSellers();
@@ -39,12 +42,11 @@ function Checkout() {
   }, []);
 
   const getSale = () => {
-    const salr = sellerData.find((selr) => selectedSelr === selr.name);
-    console.log(selectedSelr);
     const totalPrice = calcCartTotal(cart);
+    console.log(selectedSelr);
     setSale(() => ({
       userId,
-      sallerId: salr.id,
+      sellerId: selectedSelr.id,
       totalPrice,
       deliveryAddress,
       deliveryNumber,
@@ -52,8 +54,8 @@ function Checkout() {
     }));
   };
 
-  const finish = async () => {
-    await getSale();
+  const finish = () => {
+    getSale();
     history.push('/finished');
   };
 
@@ -72,9 +74,9 @@ function Checkout() {
               value={ selectedSelr }
               onChange={ selectingSelr }
             >
-              { sellers.map((seller, i) => (
-                <option value={ seller } key={ i }>
-                  {seller}
+              { sellerData.map((seller, i) => (
+                <option value={ seller.name } key={ i }>
+                  {seller.name}
                 </option>
               )) }
             </select>
@@ -105,6 +107,7 @@ function Checkout() {
             type="button"
             data-testid="customer_checkout__button-submit-order"
             onClick={ finish }
+            disabled={ isDisabled }
           >
             Finalizar Pedido
           </button>

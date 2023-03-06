@@ -19,13 +19,12 @@ const response = (sale, saleProducts, status, method) => ({
 });
 
 const createSale = async (req, res) => {
-  const { userId, sallerId, totalPrice, deliveryAddress, deliveryNumber, cart } = req.body;
-  console.log(req.body);
+  const { userId, sellerId, totalPrice, deliveryAddress, deliveryNumber, cart } = req.body;
 
   const newSale = await saleService.createSale({
-    userId,
-    sallerId,
-    totalPrice,
+    userId: Number(userId),
+    sellerId: Number(sellerId),
+    totalPrice: Number(totalPrice),
     deliveryAddress,
     deliveryNumber,
     status: 'pendente',

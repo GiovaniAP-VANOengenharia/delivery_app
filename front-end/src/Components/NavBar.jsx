@@ -7,20 +7,36 @@ import MyContext from '../Context/MyContext';
 function NavBar() {
   const [username, setUsername] = useState('');
   const history = useHistory();
-  const { cart } = useContext(MyContext);
+  const { cart, setCart } = useContext(MyContext);
   const [priceTotal, setPriceTotal] = useState('');
+  const [isDisabled, setIsDisabled] = useState(true);
 
   useEffect(() => {
-    let cost = 0;
-    cart.forEach((product) => {
-      cost += Math.round(product.price * product.quantity * 100) / 100;
-    });
-    const total = fixDecimals(cost);
-    setPriceTotal(total);
+    const products = localStorage.getItem('products');
+    if (!products) {
+      setIsDisabled(true);
+      setPriceTotal(fixDecimals(0));
+    }
+  }, []);
+
+  useEffect(() => {
+    if (!cart.length) {
+      setIsDisabled(true);
+      setPriceTotal(fixDecimals(0));
+    } else {
+      setIsDisabled(false);
+      let cost = 0;
+      cart.forEach((product) => {
+        cost += Math.round(product.price * product.quantity * 100) / 100;
+      });
+      const total = fixDecimals(cost);
+      setPriceTotal(total);
+    }
   }, [cart]);
 
   const logOut = () => {
     localStorage.clear();
+    setCart([]);
     history.push('/login');
   };
 
@@ -54,6 +70,7 @@ function NavBar() {
         <button
           type="button"
           onClick={ custumerCheckout }
+          disabled={ isDisabled }
         >
           { `Total Price: ${priceTotal}` }
         </button>
