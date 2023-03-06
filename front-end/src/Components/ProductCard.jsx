@@ -1,43 +1,50 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useContext, useCallback } from 'react';
 import PropTypes from 'prop-types';
-// import MyContext from '../Context/MyContext';
+import MyContext from '../Context/MyContext';
 
 function ProductCard(props) {
   const [quantity, setQuantity] = useState(0);
-  // const { cart, setCart } = useContext(MyContext);
+  const { setCart } = useContext(MyContext);
   const { productData } = props;
   const { id, name, price, urlImage } = productData;
 
-  const toCart = () => {
+  const toCart = useCallback(() => {
     const products = localStorage.getItem('products');
-    let cart = [];
+    let items = [];
     let findItem = '';
     if (products) {
-      cart = JSON.parse(products);
-      findItem = cart.find((product) => product.id === id);
+      items = JSON.parse(products);
+      findItem = items.find((product) => product.id === id);
     }
     if (products && !findItem && quantity > 0) {
-      const newCart = [...cart, { id, name, price, quantity }];
+      const newCart = [...items, { id, name, price, quantity }];
       const toLocalStorage = JSON.stringify(newCart);
       localStorage.setItem('products', toLocalStorage);
+      setCart(newCart);
     }
     if (findItem && quantity > 0) {
       const newItem = { ...findItem, quantity };
-      const filterCart = cart.filter((product) => product.id !== id);
+      const filterCart = items.filter((product) => product.id !== id);
       const newCart = [...filterCart, newItem];
       const toLocalStorage = JSON.stringify(newCart);
       localStorage.setItem('products', toLocalStorage);
+      setCart(newCart);
     }
     if (!products && quantity > 0) {
       const toLocalStorage = JSON.stringify([{ id, name, price, quantity }]);
       localStorage.setItem('products', toLocalStorage);
+      setCart([{ id, name, price, quantity }]);
     }
     if (findItem && !quantity) {
-      const newCart = cart.filter((product) => product.id !== id);
-      const toLocalStorage = JSON.stringify(newCart);
-      localStorage.setItem('products', toLocalStorage);
+      const newCart = items.filter((product) => product.id !== id);
+      if (!newCart.length) localStorage.removeItem('products');
+      else {
+        const toLocalStorage = JSON.stringify(newCart);
+        localStorage.setItem('products', toLocalStorage);
+      }
+      setCart(newCart);
     }
-  };
+  }, [quantity]);
 
   const inputQuantity = (e) => {
     if (e.target.name === 'add') {

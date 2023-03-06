@@ -25,6 +25,13 @@ module.exports = {
         password: "1c37466c159755ce1fa181bd247cb925",
         role: "customer",
       },
+      {
+        email: "canabrava@deliveryapp.com",
+        id: 4,
+        name: "João Cana Brava",
+        password: "3c28d2b0881bf46457a853e0b07531c6",
+        role: "seller",
+      },
     ], { timestamps: false });
   },
 

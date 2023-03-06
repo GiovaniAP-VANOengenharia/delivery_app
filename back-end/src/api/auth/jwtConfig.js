@@ -6,7 +6,7 @@ require('dotenv').config();
 const secret = fs.readFileSync('./jwt.evaluation.key');
 
 const jwtConfig = {
-  expiresIn: '50min',
+  expiresIn: '10000min',
   algorithm: 'HS256',
 };
 

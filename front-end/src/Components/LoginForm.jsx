@@ -1,10 +1,12 @@
-import React, { useEffect, useState } from 'react';
+import React, { useContext, useEffect, useState } from 'react';
 import styled from 'styled-components';
 import { useHistory } from 'react-router-dom';
+import MyContext from '../Context/MyContext';
 import { requestLogin } from '../services/requests';
 import { emailValidate, passwordValidate } from '../Utils/fieldsValidate';
 
 function LoginForm() {
+  const { setUserId } = useContext(MyContext);
   const [showPopUp, setShowPopUp] = useState(false);
   const [isDisabled, setIsDisabled] = useState(true);
   const [loginFields, setLoginFields] = useState({
@@ -24,8 +26,10 @@ function LoginForm() {
     try {
       const login = await requestLogin('/login', loginFields);
       if (login.result) {
-        const toLocalStorage = JSON.stringify(login.result);
+        const { id, name, email, role, token } = login.result;
+        const toLocalStorage = JSON.stringify({ name, email, role, token });
         localStorage.setItem('user', toLocalStorage);
+        setUserId(id);
         history.push('/customer/products');
       }
     } catch (error) {
