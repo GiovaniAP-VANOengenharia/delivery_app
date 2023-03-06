@@ -46,7 +46,7 @@ function Checkout() {
     console.log(selectedSelr);
     setSale(() => ({
       userId,
-      sellerId: selectedSelr.id,
+      sellerId: 2,
       totalPrice,
       deliveryAddress,
       deliveryNumber,
