@@ -1,10 +1,12 @@
-import React, { useEffect, useState } from 'react';
+import React, { useContext, useEffect, useState } from 'react';
 import { useHistory } from 'react-router-dom';
 import styled from 'styled-components';
+import MyContext from '../Context/MyContext';
 import { requestRegister } from '../services/requests';
 import { emailValidate, nameValidate, passwordValidate } from '../Utils/fieldsValidate';
 
 function RegisterForm() {
+  const { setUserId } = useContext(MyContext);
   const [showPopUp, setShowPopUp] = useState(false);
   const [isDisabled, setIsDisabled] = useState(true);
   const [registerFields, setRegisterFields] = useState({
@@ -24,7 +26,11 @@ function RegisterForm() {
   const handleClickRegisterBtn = async () => {
     try {
       const register = await requestRegister('/register', registerFields);
-      if (register) {
+      if (register.result) {
+        const { id, name, email, role, token } = register.result;
+        const toLocalStorage = JSON.stringify({ name, email, role, token });
+        localStorage.setItem('user', toLocalStorage);
+        setUserId(id);
         history.push('/customer/products');
       }
     } catch (error) {

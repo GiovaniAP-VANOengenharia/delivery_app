@@ -1,13 +1,30 @@
-import React from 'react';
+import React, { useContext } from 'react';
 import { calcCartTotal, fixDecimals } from '../Utils';
-import { cartProductsMock } from '../Utils/checkoutPageMocks';
+import MyContext from '../Context/MyContext';
 
 function CheckoutTable() {
-  // Mock do carrinho que deve vir do LocalStorage/Context
-  const cartProducts = cartProductsMock;
-  // -----
+  const { cart, setCart } = useContext(MyContext);
 
-  const totalValue = calcCartTotal(cartProducts);
+  const totalValue = fixDecimals(calcCartTotal(cart));
+
+  const removeItem = (id) => {
+    const products = localStorage.getItem('products');
+    let items = [];
+    let findItem = '';
+    if (products) {
+      items = JSON.parse(products);
+      findItem = items.find((product) => product.id === id);
+    }
+    if (findItem) {
+      const newCart = items.filter((product) => product.id !== id);
+      if (!newCart.length) localStorage.removeItem('products');
+      else {
+        const toLocalStorage = JSON.stringify(newCart);
+        localStorage.setItem('products', toLocalStorage);
+      }
+      setCart(newCart);
+    }
+  };
 
   const tableHeaders = [
     'Item', 'Descrição', 'Quantidade',
@@ -24,7 +41,7 @@ function CheckoutTable() {
           </tr>
         </thead>
         <tbody>
-          { cartProducts.map((product, index) => {
+          { cart.map((product, index) => {
             const { name, price, quantity } = product;
 
             return (
@@ -73,6 +90,7 @@ function CheckoutTable() {
                     data-testid={
                       `customer_checkout__element-order-table-remove-${index}`
                     }
+                    onClick={ () => removeItem(product.id) }
                   >
                     Remover
                   </button>

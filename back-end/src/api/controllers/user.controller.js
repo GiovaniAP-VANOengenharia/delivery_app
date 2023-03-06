@@ -2,6 +2,20 @@ const md5 = require('md5');
 const userService = require('../services/user.service');
 const jwtConfig = require('../auth/jwtConfig');
 
+const response = (user, token, status, method) => ({
+  hasToken: true,
+  method,
+  status,
+  message: token,
+  result: {
+    id: user.id,
+    name: user.name,
+    email: user.email,
+    role: user.role,
+    token,
+  },
+});
+
 const login = async (req, res) => {
   const { email, password } = req.body;
   const hasUser = await userService.getLogin(email, password);
@@ -15,13 +29,7 @@ const login = async (req, res) => {
   }
   const token = jwtConfig.createToken({ id: hasUser.id, email, role: hasUser.role });
 
-  return res.status(200).json({
-    hasToken: true,
-    method: 'POST',
-    status: 200,
-    message: token,
-    result: { name: hasUser.name, email: hasUser.email, role: hasUser.role, token },
-  });
+  return res.status(200).json(response(hasUser, token, 200, 'POST'));
 };
 
 const createUser = async (req, res) => {
@@ -36,16 +44,23 @@ const createUser = async (req, res) => {
       message: 'User already registered',
     });
   }
-
+  
   const newUser = await userService
   .createUser({ name, email, password: md5(password), role: role || 'customer' });
 
   const token = jwtConfig.createToken({ id: newUser.id, email, role: role || 'customer' });
 
-  return res.status(201).json({ hasToken: true, method: 'POST', status: 201, message: token });
+  return res.status(201).json(response(newUser, token, 201, 'POST'));
+};
+
+const getSellers = async (_req, res) => {
+  const sellers = await userService.getSellers('seller');
+
+  return res.status(200).json(sellers);
 };
 
 module.exports = {
   login,
   createUser,
+  getSellers,
 };

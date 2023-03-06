@@ -1,3 +1,5 @@
+const jwtConfig = require('../auth/jwtConfig');
+
 const validateName = (req, res, next) => {
   const { name } = req.body;
   if (name.length < 12) {
@@ -43,8 +45,23 @@ const validatePassword = (req, res, next) => {
   next();
 };
 
+const validateToken = (req, res, next) => {
+  const { authorization } = req.headers;
+  
+  const secret = process.env.JWT_SECRET || 'segredoDoXablau';
+  
+  if (!authorization.length) return res.status(401).json({ message: 'Token not found' });
+  
+  const payload = jwtConfig.verifyToken(authorization, secret);
+
+  if (payload.isError) return res.status(401).json({ message: 'Expired or invalid token' });
+
+  next();
+};
+
 module.exports = {
   validateEmail,
   validatePassword,
   validateName,
+  validateToken,
 };
