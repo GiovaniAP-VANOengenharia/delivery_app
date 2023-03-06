@@ -44,6 +44,9 @@ function OrderDetail() {
         <OrderDetailLine />
         <OrderDetailLine />
       </OrderContainer>
+      <h1 data-testid="customer_order_details__element-order-total-price">
+        Total:R$21,00
+      </h1>
     </div>
   );
 }
