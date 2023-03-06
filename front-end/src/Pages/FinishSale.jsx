@@ -10,7 +10,6 @@ function FinishSale() {
 
   const apiSetSale = async () => {
     const response = await requestSale('/order', sale);
-    console.log(response.result);
     if (response.result) {
       const { id } = response.result;
       setSale({ ...sale, id });
