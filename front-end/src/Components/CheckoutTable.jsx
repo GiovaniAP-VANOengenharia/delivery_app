@@ -73,7 +73,7 @@ function CheckoutTable() {
                     `customer_checkout__element-order-table-unit-price-${index}`
                   }
                 >
-                  { `R$: ${price}` }
+                  { price.toString().replace('.', ',')}
                 </td>
 
                 <td
@@ -81,7 +81,7 @@ function CheckoutTable() {
                     `customer_checkout__element-order-table-sub-total-${index}`
                   }
                 >
-                  {`R$: ${fixDecimals(quantity * price)}`}
+                  {fixDecimals(quantity * price).replace('.', ',')}
                 </td>
 
                 <td>
@@ -103,7 +103,7 @@ function CheckoutTable() {
       </table>
 
       <div data-testid="customer_checkout__element-order-total-price">
-        { `Total: R$ ${totalValue}` }
+        { totalValue.toString().replace('.', ',') }
       </div>
     </>
   );

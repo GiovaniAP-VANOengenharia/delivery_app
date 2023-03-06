@@ -47,7 +47,6 @@ function NavBar() {
   useEffect(() => {
     const { name } = JSON.parse(localStorage.getItem('user'));
     setUsername(name);
-    console.log();
   }, []);
 
   return (
@@ -71,8 +70,11 @@ function NavBar() {
           type="button"
           onClick={ custumerCheckout }
           disabled={ isDisabled }
+          data-testid="customer_products__button-cart"
         >
-          { `Total Price: ${priceTotal}` }
+          <p data-testid="customer_products__checkout-bottom-value">
+            {priceTotal.toString().replace('.', ',')}
+          </p>
         </button>
 
         <button

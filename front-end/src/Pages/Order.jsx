@@ -1,48 +1,23 @@
-import React from 'react';
+import React, { useEffect, useState } from 'react';
 import styled from 'styled-components';
 import NavBar from '../Components/NavBar';
 import OrderCard from '../Components/OrderCard';
+import { requestAllSales } from '../services/requests';
 
 function Order() {
-  const sales = [
-    {
-      order: '0001',
-      orderId: 1,
-      status: 'PENDENTE',
-      date: '08/04/2023',
-      price: 'R$23,80',
-    },
-    {
-      order: '0002',
-      orderId: 2,
-      status: 'ENTREGUE',
-      date: '09/04/2023',
-      price: 'R$23,80',
-    },
-    {
-      order: '0002',
-      orderId: 4,
-      status: 'PREPARANDO',
-      date: '10/04/2023',
-      price: 'R$23,80',
-    },
-    {
-      order: '0002',
-      orderId: 5,
-      status: 'PREPARANDO',
-      date: '11/04/2023',
-      price: 'R$23,80',
-    },
-    {
-      order: '0002',
-      orderId: 6,
-      status: 'PREPARANDO',
-      date: '12/04/2023',
-      price: 'R$23,80',
-    },
-  ];
+  const [sales, setSales] = useState();
 
-  const orderList = sales.map((sale, index) => (
+  console.log(sales);
+  useEffect(() => {
+    const getSales = async () => {
+      const data = await requestAllSales('/order');
+      console.log(data);
+      setSales(data);
+    };
+    getSales();
+  }, []);
+
+  const orderList = sales && sales.map((sale, index) => (
     <OrderCard sale={ sale } key={ index } />
   ));
 
@@ -50,7 +25,7 @@ function Order() {
     <div>
       <NavBar />
       <OrdersContainer>
-        {orderList}
+        { sales && orderList}
       </OrdersContainer>
     </div>
   );

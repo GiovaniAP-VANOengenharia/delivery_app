@@ -6,6 +6,7 @@ export default function Provider({ children }) {
   const [state, setState] = useState('ESTADO DO PROVIDER');
   const [cart, setCart] = useState([]);
   const [sale, setSale] = useState([]);
+  const [orders, setOrders] = useState([]);
   const [userId, setUserId] = useState('');
 
   useEffect(() => {
@@ -17,8 +18,17 @@ export default function Provider({ children }) {
   }, []);
 
   const providerValue = useMemo(() => (
-    { state, setState, cart, setCart, userId, setUserId, sale, setSale }
-  ), [state, cart, userId, sale]);
+    { state,
+      setState,
+      cart,
+      setCart,
+      userId,
+      setUserId,
+      sale,
+      setSale,
+      orders,
+      setOrders }
+  ), [state, cart, userId, sale, orders]);
 
   return (
     <MyContext.Provider value={ providerValue }>
