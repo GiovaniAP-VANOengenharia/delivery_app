@@ -1,10 +1,10 @@
-import React, { useContext } from 'react';
+import React from 'react';
 import { calcCartTotal, fixDecimals } from '../Utils';
-import MyContext from '../Context/MyContext';
+// import MyContext from '../Context/MyContext';
 
 function CheckoutTable() {
-  const { cart, setCart } = useContext(MyContext);
-
+  const cartProducts = localStorage.getItem('products');
+  const cart = JSON.parse(cartProducts);
   const totalValue = calcCartTotal(cart);
 
   const tableHeaders = [
