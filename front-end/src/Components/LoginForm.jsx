@@ -87,7 +87,7 @@ function LoginForm() {
       </button>
       { showPopUp && (
         <p data-testid="common_login__element-invalid-email">
-          Mensagem de Erro
+          Login ou senha inválidos
         </p>)}
     </FormContainer>
   );
@@ -97,9 +97,43 @@ const FormContainer = styled.div`
   display: flex;
   width: fit-content;
   flex-direction: column;
-  & label {
+  border: 1px solid #CBD4D2;
+  padding: 35px 20px;
+  background-color: #EAF1EF;
+  margin-top: 10px;
+  & > label {
     display: flex;
     flex-direction: column;
+  }
+  & > label > input {
+    padding: 10px;
+    width: 250px;
+    margin: 7px 0;
+    border-radius: 3px;
+  }
+  & > :nth-child(3) {
+    &:disabled {
+      background-color: #036b5352;
+      color: white
+    }
+    margin: 6px 0;
+    width: 270px;
+    padding: 10px;
+    background-color: #036B52;
+    color: white;
+    border-radius: 3px;
+    border: 1px solid #036B52;
+  }
+  & > :nth-child(4) {
+    width: 270px;
+    padding: 10px;
+    color: #036B52;
+    border-radius: 3px;
+    border: 1px solid #036B52;
+  }
+  & > :nth-child(5) {
+    text-align: center;
+    margin-bottom: 0;
   }
 `;
 
