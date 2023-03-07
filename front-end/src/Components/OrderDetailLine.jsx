@@ -8,19 +8,49 @@ function OrderDetailLine(props) {
   return (
     <OrderBody>
       <div>
-        <p>{ productIndex }</p>
+        <p
+          data-testid={
+            `customer_order_details__element-order-table-item-number-${productIndex}`
+          }
+        >
+          { productIndex }
+        </p>
       </div>
       <div>
-        <p>{ productData.name }</p>
+        <p
+          data-testid={
+            `customer_order_details__element-order-table-name-${productIndex}`
+          }
+        >
+          { productData.name }
+        </p>
       </div>
       <div>
-        <p>{ productData.quantity }</p>
+        <p
+          data-testid={
+            `customer_order_details__element-order-table-quantity-${productIndex}`
+          }
+        >
+          { productData.quantity }
+        </p>
       </div>
       <div>
-        <p>{ productData.price }</p>
+        <p
+          data-testid={
+            `customer_order_details__element-order-table-unit-price-${productIndex}`
+          }
+        >
+          { productData.price }
+        </p>
       </div>
       <div>
-        <p>{ fixDecimals(productData.price * productData.quantity) }</p>
+        <p
+          data-testid={
+            `customer_order_details__element-order-table-sub-total-${productIndex}`
+          }
+        >
+          { fixDecimals(productData.price * productData.quantity) }
+        </p>
       </div>
     </OrderBody>
   );

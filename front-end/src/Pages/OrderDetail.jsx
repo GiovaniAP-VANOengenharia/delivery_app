@@ -1,13 +1,21 @@
-import React, { useContext, useEffect } from 'react';
+import React, { useContext, useEffect, useState } from 'react';
 import { useParams } from 'react-router-dom';
 import styled from 'styled-components';
 import NavBar from '../Components/NavBar';
 import OrderDetailLine from '../Components/OrderDetailLine';
 import MyContext from '../Context/MyContext';
+import { requestAllSales, requestSellers, setToken } from '../services/requests';
+import mountDate from '../Utils/mountDate';
 
 function OrderDetail() {
   const { cart, setCart } = useContext(MyContext);
+
+  const [sale, setSale] = useState();
+  const [sellerName, setSellerName] = useState();
+
   const { id } = useParams();
+
+  const orderIdMaxLength = 4;
 
   useEffect(() => {
     const products = localStorage.getItem('products');
@@ -15,26 +23,78 @@ function OrderDetail() {
     setCart(newCart);
   }, []);
 
+  useEffect(() => {
+    const getSales = async () => {
+      const userData = localStorage.getItem('user');
+      const loginFields = JSON.parse(userData);
+      setToken(loginFields.token);
+      const data = await requestAllSales('/order');
+      const saleDetail = data.filter((curr) => curr.id === Number(id))[0];
+      const sellers = await requestSellers('sellers');
+      setSellerName(sellers
+        .filter((curr) => curr.id === Number(saleDetail.sellerId))[0].name);
+      setSale(saleDetail);
+    };
+    getSales();
+  }, []);
+
   return (
     <div>
       <NavBar />
-      <OrderContainer>
-        <h1>Detalhe do pedido</h1>
-        <OrderHeader>
-          <p>{ `PEDIDO ${id}` }</p>
-          <p>P.Vend: Fulana Pereira</p>
-          <p>07/04/2021</p>
-          <p>ENTREGUE</p>
-          <button type="button">MARCAR COMO ENTREGUE</button>
-        </OrderHeader>
-        { cart.map((product, index) => (
-          <OrderDetailLine
-            productIndex={ index }
-            productData={ product }
-            key={ product.id }
-          />
-        ))}
-      </OrderContainer>
+      {sale && (
+        <OrderContainer>
+          <h1>Detalhe do pedido</h1>
+          <OrderHeader>
+            <div
+              data-testid="customer_order_details__element-order-details-label-order-id"
+            >
+              <p>PEDIDO</p>
+              {id.toString().padStart(orderIdMaxLength, '0')}
+            </div>
+            <div
+              data-testid={
+                `customer_order_details__element-order-details-label-seller-${'name'}`
+              }
+            >
+              <p>Pessoa Vendedora:</p>
+              {sellerName}
+            </div>
+            <p
+              data-testid={
+                `customer_order_details__element-order-details-label-order-${'date'}`
+              }
+            >
+              {mountDate(new Date(sale.saleDate))}
+            </p>
+            <p
+              data-testid={
+                `customer_order_details__element-order-details-label-delivery-status${id}`
+              }
+            >
+              {sale.status}
+            </p>
+            <button
+              type="button"
+              disabled="true"
+              data-testid="customer_order_details__button-delivery-check"
+            >
+              MARCAR COMO ENTREGUE
+            </button>
+          </OrderHeader>
+          { cart.map((product, index) => (
+            <OrderDetailLine
+              productIndex={ index }
+              productData={ product }
+              key={ product.id }
+            />
+          ))}
+          <h1
+            data-testid="customer_order_details__element-order-total-price"
+          >
+            {sale.totalPrice.toString().replace('.', ',')}
+          </h1>
+        </OrderContainer>
+      )}
     </div>
   );
 }
@@ -52,10 +112,17 @@ const OrderHeader = styled.div`
   background-color: #EAF1EF;
   height: 40px;
   padding: 0 10px 0 10px;
-  & > p:nth-child(1) {
+  & > div:nth-child(1) {
+    display: flex;
+    flex-direction: row;
+    justify-content: center;
+    padding: 0;
     font-size: 25px;
     font-weight: 500;
     margin: 0;
+    & >:nth-child(1){
+      margin: 0 5px 0 0;
+    }
   }
   & > p:nth-child(2) {
     font-size: 20px;
