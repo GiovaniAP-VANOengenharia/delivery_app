@@ -30,7 +30,7 @@ function App() {
           <Order />
         </Route>
 
-        <Route exact path="/customer/order/:id">
+        <Route exact path="/customer/orders/:id">
           <OrderDetail />
         </Route>
 

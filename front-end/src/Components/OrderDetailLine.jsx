@@ -1,37 +1,49 @@
 import React from 'react';
+import PropTypes from 'prop-types';
 import styled from 'styled-components';
+import { fixDecimals } from '../Utils';
 
-function OrderDetailLine() {
+function OrderDetailLine(props) {
+  const { productIndex, productData } = props;
   return (
     <OrderBody>
       <div>
         <p data-testid="customer_order_details__element-order-table-item-number-<index>">
-          1
+          { productIndex }
         </p>
       </div>
       <div>
         <p data-testid="customer_order_details__element-order-table-name-<index>">
-          Cerveja Stella 250ml
+          { productData.name }
         </p>
       </div>
       <div>
         <p data-testid="customer_order_details__element-order-table-quantity-<index>">
-          3
+          { productData.quantity }
         </p>
       </div>
       <div>
         <p data-testid="customer_order_details__element-order-table-unit-price-<index>">
-          R$3,50
+          { productData.price }
         </p>
       </div>
       <div>
         <p data-testid="customer_order_details__element-order-table-sub-total-<index>">
-          R$10,50
+          { fixDecimals(productData.price * productData.quantity) }
         </p>
       </div>
     </OrderBody>
   );
 }
+
+OrderDetailLine.propTypes = {
+  productData: PropTypes.shape({
+    name: PropTypes.string.isRequired,
+    price: PropTypes.string.isRequired,
+    quantity: PropTypes.number.isRequired,
+  }).isRequired,
+  productIndex: PropTypes.number.isRequired,
+};
 
 const OrderBody = styled.div`
   display: flex;

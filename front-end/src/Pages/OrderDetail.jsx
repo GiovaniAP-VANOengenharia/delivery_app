@@ -1,11 +1,20 @@
-import React from 'react';
-// import { useParams } from 'react-router-dom';
+import React, { useContext, useEffect } from 'react';
+import { useParams } from 'react-router-dom';
 import styled from 'styled-components';
 import NavBar from '../Components/NavBar';
 import OrderDetailLine from '../Components/OrderDetailLine';
+import MyContext from '../Context/MyContext';
 
 function OrderDetail() {
-  // const { id } = useParams();
+  const { cart, setCart } = useContext(MyContext);
+  const { id } = useParams();
+
+  useEffect(() => {
+    const products = localStorage.getItem('products');
+    const newCart = JSON.parse(products);
+    setCart(newCart);
+  }, []);
+
   return (
     <div>
       <NavBar />
@@ -36,13 +45,13 @@ function OrderDetail() {
             MARCAR COMO ENTREGUE
           </button>
         </OrderHeader>
-        <OrderDetailLine />
-        <OrderDetailLine />
-        <OrderDetailLine />
-        <OrderDetailLine />
-        <OrderDetailLine />
-        <OrderDetailLine />
-        <OrderDetailLine />
+        { cart.map((product, index) => (
+          <OrderDetailLine
+            productIndex={ index }
+            productData={ product }
+            key={ product.id }
+          />
+        ))}
       </OrderContainer>
       <h1 data-testid="customer_order_details__element-order-total-price">
         Total:R$21,00

@@ -23,4 +23,19 @@ export const requestRegister = async (endpoint, body) => {
   return data;
 };
 
+export const requestSellers = async (endpoint) => {
+  const { data } = await api.get(endpoint);
+  return data;
+};
+
+export const requestSale = async (endpoint, body) => {
+  const { data } = await api.post(endpoint, body);
+  return data;
+};
+
+export const requestAllSales = async (endpoint) => {
+  const { data } = await api.get(endpoint);
+  return data;
+};
+
 export default api;

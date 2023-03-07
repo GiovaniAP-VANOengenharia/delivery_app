@@ -2,6 +2,7 @@ import React from 'react';
 import PropTypes from 'prop-types';
 import styled from 'styled-components';
 import statusColors from '../Utils/statusColors';
+import mountDate from '../Utils/mountDate';
 
 function OrderCard(props) {
   const { sale } = props;
@@ -17,14 +18,14 @@ function OrderCard(props) {
         data-testid={ `customer_orders__element-delivery-status-${id}` }
         backgroundColor={ statusColors[status] }
       >
-        <div>{status}</div>
+        <div>{status.toUpperCase()}</div>
       </OrderStatus>
       <OrderDatePrice>
         <div data-testid={ `customer_orders__element-order-date-${id}` }>
-          {saleDate}
+          {mountDate(saleDate)}
         </div>
         <div data-testid={ `customer_orders__element-card-price-${id}` }>
-          {`R$ ${totalPrice.toString().replace('.', ',')}`}
+          {`R$ ${totalPrice}`}
         </div>
       </OrderDatePrice>
     </OrderContainer>

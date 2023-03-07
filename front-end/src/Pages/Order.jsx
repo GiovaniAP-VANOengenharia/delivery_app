@@ -1,13 +1,23 @@
-import React from 'react';
+import React, { useEffect, useState } from 'react';
 import styled from 'styled-components';
 import NavBar from '../Components/NavBar';
 import OrderCard from '../Components/OrderCard';
-import salesMock from '../Utils/salesMock';
+import { requestAllSales } from '../services/requests';
 
 function Order() {
-  const sales = salesMock;
+  const [sales, setSales] = useState();
 
-  const orderList = sales.map((sale, index) => (
+  console.log(sales);
+  useEffect(() => {
+    const getSales = async () => {
+      const data = await requestAllSales('/order');
+      console.log(data);
+      setSales(data);
+    };
+    getSales();
+  }, []);
+
+  const orderList = sales && sales.map((sale, index) => (
     <OrderCard sale={ sale } key={ index } />
   ));
 
@@ -15,7 +25,7 @@ function Order() {
     <div>
       <NavBar />
       <OrdersContainer>
-        {orderList}
+        { sales && orderList}
       </OrdersContainer>
     </div>
   );

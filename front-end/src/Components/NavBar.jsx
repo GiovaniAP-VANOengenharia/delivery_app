@@ -1,32 +1,52 @@
 import React, { useContext, useEffect, useState } from 'react';
 import { useHistory } from 'react-router-dom';
 import styled from 'styled-components';
+import { fixDecimals } from '../Utils';
 import MyContext from '../Context/MyContext';
 
 function NavBar() {
   const [username, setUsername] = useState('');
   const history = useHistory();
-  const { cart } = useContext(MyContext);
-  const [priceTotal, setPriceTotal] = useState(0);
+  const { cart, setCart } = useContext(MyContext);
+  const [priceTotal, setPriceTotal] = useState('');
+  const [isDisabled, setIsDisabled] = useState(true);
 
   useEffect(() => {
-    let cost = 0;
-    cart.forEach((product) => {
-      cost += Math.round(product.price * product.quantity * 100) / 100;
-      cost = Number(cost.toFixed(2));
-      setPriceTotal(cost);
-    });
+    const products = localStorage.getItem('products');
+    if (!products) {
+      setIsDisabled(true);
+      setPriceTotal(fixDecimals(0));
+    }
+  }, []);
+
+  useEffect(() => {
+    if (!cart.length) {
+      setIsDisabled(true);
+      setPriceTotal(fixDecimals(0));
+    } else {
+      setIsDisabled(false);
+      let cost = 0;
+      cart.forEach((product) => {
+        cost += Math.round(product.price * product.quantity * 100) / 100;
+      });
+      const total = fixDecimals(cost);
+      setPriceTotal(total);
+    }
   }, [cart]);
 
   const logOut = () => {
     localStorage.clear();
+    setCart([]);
     history.push('/login');
+  };
+
+  const custumerCheckout = () => {
+    history.push('/customer/checkout');
   };
 
   useEffect(() => {
     const { name } = JSON.parse(localStorage.getItem('user'));
     setUsername(name);
-    console.log();
   }, []);
 
   return (
@@ -46,7 +66,16 @@ function NavBar() {
           {username}
         </div>
 
-        <span>{ `Total Price: ${priceTotal}` }</span>
+        <button
+          type="button"
+          onClick={ custumerCheckout }
+          disabled={ isDisabled }
+          data-testid="customer_products__button-cart"
+        >
+          <p data-testid="customer_products__checkout-bottom-value">
+            {priceTotal.toString().replace('.', ',')}
+          </p>
+        </button>
 
         <button
           type="button"
