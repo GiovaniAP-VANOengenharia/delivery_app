@@ -48,48 +48,53 @@ function LoginForm() {
     setIsDisabled(!(emailIsValid && passwordIsValid));
   }, [loginFields]);
   return (
-    <FormContainer>
-      <label htmlFor="common_login__input-email">
-        Login
-        <input
-          id="email"
-          onChange={ handleChange }
-          type="email"
-          data-testid="common_login__input-email"
-        />
-      </label>
+    <div>
+      <FormContainer>
+        <label htmlFor="common_login__input-email">
+          Login
+          <input
+            id="email"
+            onChange={ handleChange }
+            type="email"
+            data-testid="common_login__input-email"
+          />
+        </label>
 
-      <label htmlFor="common_login__input-password">
-        Senha
-        <input
-          id="password"
-          onChange={ handleChange }
-          type="password"
-          data-testid="common_login__input-password"
-        />
-      </label>
+        <label htmlFor="common_login__input-password">
+          Senha
+          <input
+            id="password"
+            onChange={ handleChange }
+            type="password"
+            data-testid="common_login__input-password"
+          />
+        </label>
 
-      <button
-        disabled={ isDisabled }
-        onClick={ () => handleClickLoginBtn() }
-        type="submit"
-        data-testid="common_login__button-login"
-      >
-        LOGIN
-      </button>
+        <button
+          disabled={ isDisabled }
+          onClick={ () => handleClickLoginBtn() }
+          type="submit"
+          data-testid="common_login__button-login"
+        >
+          LOGIN
+        </button>
 
-      <button
-        onClick={ () => handleClickRegisterBtn() }
-        type="button"
-        data-testid="common_login__button-register"
-      >
-        Ainda não tenho conta
-      </button>
+        <button
+          onClick={ () => handleClickRegisterBtn() }
+          type="button"
+          data-testid="common_login__button-register"
+        >
+          Ainda não tenho conta
+        </button>
+      </FormContainer>
       { showPopUp && (
-        <p data-testid="common_login__element-invalid-email">
+        <p
+          data-testid="common_login__element-invalid-email"
+          style={ { textAlign: 'center' } }
+        >
           Login ou senha inválidos
         </p>)}
-    </FormContainer>
+    </div>
   );
 }
 
@@ -130,10 +135,6 @@ const FormContainer = styled.div`
     color: #036B52;
     border-radius: 3px;
     border: 1px solid #036B52;
-  }
-  & > :nth-child(5) {
-    text-align: center;
-    margin-bottom: 0;
   }
 `;
 
