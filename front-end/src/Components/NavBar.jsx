@@ -1,8 +1,9 @@
 import React, { useContext, useEffect, useState } from 'react';
-import { useHistory } from 'react-router-dom';
+import { useHistory, useLocation } from 'react-router-dom';
 import styled from 'styled-components';
 import { fixDecimals } from '../Utils';
 import MyContext from '../Context/MyContext';
+import { verifyPathOrder, verifyPathProducts } from '../Utils/verifyPathNavBar';
 
 function NavBar() {
   const [username, setUsername] = useState('');
@@ -10,6 +11,7 @@ function NavBar() {
   const { cart, setCart } = useContext(MyContext);
   const [priceTotal, setPriceTotal] = useState('');
   const [isDisabled, setIsDisabled] = useState(true);
+  const { pathname } = useLocation();
 
   useEffect(() => {
     const products = localStorage.getItem('products');
@@ -47,19 +49,34 @@ function NavBar() {
   useEffect(() => {
     const { name } = JSON.parse(localStorage.getItem('user'));
     setUsername(name);
-    console.log();
   }, []);
+
+  const redirectFunction = ({ target }) => {
+    history.push(`/customer/${target.value}`);
+  };
 
   return (
     <NavbarContainer>
       <div>
-        <div data-testid="customer_products__element-navbar-link-products">
+        <button
+          type="button"
+          onClick={ (e) => redirectFunction(e) }
+          value="products"
+          data-testid="customer_products__element-navbar-link-products"
+          style={ verifyPathProducts(pathname) }
+        >
           PRODUTOS
-        </div>
+        </button>
 
-        <div data-testid="customer_products__element-navbar-link-orders">
+        <button
+          type="button"
+          onClick={ (e) => redirectFunction(e) }
+          value="orders"
+          data-testid="customer_products__element-navbar-link-orders"
+          style={ verifyPathOrder(pathname) }
+        >
           MEUS PEDIDOS
-        </div>
+        </button>
       </div>
 
       <div>
@@ -71,8 +88,11 @@ function NavBar() {
           type="button"
           onClick={ custumerCheckout }
           disabled={ isDisabled }
+          data-testid="customer_products__button-cart"
         >
-          { `Total Price: ${priceTotal}` }
+          <p data-testid="customer_products__checkout-bottom-value">
+            {priceTotal.toString().replace('.', ',')}
+          </p>
         </button>
 
         <button
@@ -96,15 +116,18 @@ const NavbarContainer = styled.nav`
   height: 64px;
   & > div:nth-child(1) {
     display: flex;
-    & > div:nth-child(1) {
+    & > button:nth-child(1) {
     font-size: 20px;
     padding: 20px;
     color: white;
+    border: 0;
+    background-color: #036B52;
   }
-    & > div:nth-child(2) {
+    & > button:nth-child(2) {
     background-color: #2FC18C;
     padding: 20px;
     font-size: 20px;
+    border: 0;
   }
   }
   & > div:nth-child(2) {

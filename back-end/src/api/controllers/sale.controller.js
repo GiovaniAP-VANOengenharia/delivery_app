@@ -8,7 +8,7 @@ const response = (sale, saleProducts, status, method) => ({
   result: {
     id: sale.id,
     userId: sale.userId,
-    sallerId: sale.sellerId,
+    sellerId: sale.sellerId,
     totalPrice: sale.totalPrice,
     deliveryAddress: sale.deliveryAddress,
     deliveryNumber: sale.deliveryNumber,
@@ -27,7 +27,7 @@ const createSale = async (req, res) => {
     totalPrice: Number(totalPrice),
     deliveryAddress,
     deliveryNumber,
-    status: 'pendente',
+    status: 'Pendente',
     saleDate: Date.now(),
   });
 
@@ -42,6 +42,13 @@ const createSale = async (req, res) => {
   return res.status(201).json(response(newSale, salesProducts, 201, 'POST'));
 };
 
+const getAllSales = async (_req, res) => {
+  const sales = await saleService.getAllSales();
+
+  return res.status(200).json(sales);
+};
+
 module.exports = {
   createSale,
+  getAllSales,
 };

@@ -3,11 +3,12 @@ import { useHistory } from 'react-router-dom';
 import MyContext from '../Context/MyContext';
 import CheckoutTable from '../Components/CheckoutTable';
 import NavBar from '../Components/NavBar';
-import { requestSellers, setToken } from '../services/requests';
+import { requestSale, requestSellers, setToken } from '../services/requests';
 import { calcCartTotal } from '../Utils';
 
 function Checkout() {
-  const { userId, cart, setCart, setSale } = useContext(MyContext);
+  const { userId,
+    cart, setCart, setSale, orders, setOrders } = useContext(MyContext);
   const [deliveryAddress, setAddress] = useState('');
   const [deliveryNumber, setNumber] = useState('');
   const [selectedSelr, setSelectedSelr] = useState('');
@@ -43,7 +44,7 @@ function Checkout() {
 
   const getSale = () => {
     const totalPrice = calcCartTotal(cart);
-    const selrId = sellerData.find((seller) => seller.name === selectedSelr);
+    const selrId = sellerData.find((seller) => seller.id === Number(selectedSelr));
     setSale(() => ({
       userId,
       sellerId: selrId.id,
@@ -52,11 +53,32 @@ function Checkout() {
       deliveryNumber,
       cart,
     }));
+    return {
+      userId,
+      sellerId: selrId.id,
+      totalPrice,
+      deliveryAddress,
+      deliveryNumber,
+      cart,
+    };
+  };
+
+  const apiSetSale = async () => {
+    try {
+      const newSale = getSale();
+      const response = await requestSale('/order', newSale);
+      if (response.result) {
+        const { id } = response.result;
+        setOrders([...orders, { ...response.result, cart }]);
+        history.push(`/customer/orders/${id}`);
+      }
+    } catch (error) {
+      console.log(error);
+    }
   };
 
   const finish = () => {
-    getSale();
-    history.push('/finished');
+    apiSetSale();
   };
 
   return (
@@ -75,8 +97,8 @@ function Checkout() {
               onChange={ selectingSelr }
             >
               { sellerData.map((seller, i) => (
-                <option value={ seller.name } key={ i }>
-                  {seller.name}
+                <option value={ seller.id } key={ i }>
+                  {seller.id}
                 </option>
               )) }
             </select>
