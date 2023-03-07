@@ -8,6 +8,7 @@ import Login from './Pages/Login';
 import OrderDetail from './Pages/OrderDetail';
 import Products from './Pages/Products';
 import Register from './Pages/Register';
+import SellerOrdersDetails from './Pages/SellerOrdersDetails';
 
 function App() {
   return (
@@ -38,6 +39,10 @@ function App() {
           <Checkout />
         </Route>
 
+        <Route exact path="/seller/orders">
+          <SellerOrdersDetails />
+        </Route>
+        
         <Route exact path="/register">
           <Register />
         </Route>
