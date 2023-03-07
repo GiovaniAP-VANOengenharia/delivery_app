@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useContext } from 'react';
 import { calcCartTotal, fixDecimals } from '../Utils';
 import MyContext from '../Context/MyContext';
 
