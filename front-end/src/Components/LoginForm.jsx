@@ -30,7 +30,8 @@ function LoginForm() {
         const toLocalStorage = JSON.stringify({ name, email, role, token });
         localStorage.setItem('user', toLocalStorage);
         setUserId(id);
-        history.push('/customer/products');
+        if (role === 'customer') history.push('/customer/products');
+        if (role === 'seller') history.push('/seller/orders');
       }
     } catch (error) {
       setShowPopUp(true);

@@ -8,6 +8,7 @@ import Login from './Pages/Login';
 import OrderDetail from './Pages/OrderDetail';
 import Products from './Pages/Products';
 import Register from './Pages/Register';
+import SellerOrders from './Pages/SellerOrders';
 import SellerOrdersDetails from './Pages/SellerOrdersDetails';
 
 function App() {
@@ -40,9 +41,13 @@ function App() {
         </Route>
 
         <Route exact path="/seller/orders">
+          <SellerOrders />
+        </Route>
+
+        <Route exact path="/seller/orders/:id">
           <SellerOrdersDetails />
         </Route>
-        
+
         <Route exact path="/register">
           <Register />
         </Route>

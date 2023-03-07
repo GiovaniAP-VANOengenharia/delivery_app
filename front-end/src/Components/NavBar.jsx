@@ -7,6 +7,7 @@ import { verifyPathOrder, verifyPathProducts } from '../Utils/verifyPathNavBar';
 
 function NavBar() {
   const [username, setUsername] = useState('');
+  const [userRole, setUserRole] = useState('');
   const history = useHistory();
   const { cart, setCart } = useContext(MyContext);
   const [priceTotal, setPriceTotal] = useState('');
@@ -47,12 +48,13 @@ function NavBar() {
   };
 
   useEffect(() => {
-    const { name } = JSON.parse(localStorage.getItem('user'));
+    const { name, role } = JSON.parse(localStorage.getItem('user'));
     setUsername(name);
+    setUserRole(role);
   }, []);
 
   const redirectFunction = ({ target }) => {
-    history.push(`/customer/${target.value}`);
+    history.push(`/${userRole}/${target.value}`);
   };
 
   return (
