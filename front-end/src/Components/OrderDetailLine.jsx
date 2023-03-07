@@ -8,27 +8,47 @@ function OrderDetailLine(props) {
   return (
     <OrderBody>
       <div>
-        <p data-testid="customer_order_details__element-order-table-item-number-<index>">
+        <p
+          data-testid={
+            `customer_order_details__element-order-table-item-number-${productIndex}`
+          }
+        >
           { productIndex }
         </p>
       </div>
       <div>
-        <p data-testid="customer_order_details__element-order-table-name-<index>">
+        <p
+          data-testid={
+            `customer_order_details__element-order-table-name-${productIndex}`
+          }
+        >
           { productData.name }
         </p>
       </div>
       <div>
-        <p data-testid="customer_order_details__element-order-table-quantity-<index>">
+        <p
+          data-testid={
+            `customer_order_details__element-order-table-quantity-${productIndex}`
+          }
+        >
           { productData.quantity }
         </p>
       </div>
       <div>
-        <p data-testid="customer_order_details__element-order-table-unit-price-<index>">
+        <p
+          data-testid={
+            `customer_order_details__element-order-table-unit-price-${productIndex}`
+          }
+        >
           { productData.price }
         </p>
       </div>
       <div>
-        <p data-testid="customer_order_details__element-order-table-sub-total-<index>">
+        <p
+          data-testid={
+            `customer_order_details__element-order-table-sub-total-${productIndex}`
+          }
+        >
           { fixDecimals(productData.price * productData.quantity) }
         </p>
       </div>
