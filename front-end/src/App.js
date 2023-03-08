@@ -39,7 +39,7 @@ function App() {
           <Checkout />
         </Route>
 
-        <Route exact path="/:user/orders/:id">
+        <Route exact path="/seller/orders/:id">
           <OrderDetails />
         </Route>
 
