@@ -84,8 +84,31 @@ const getSaleById = async (req, res) => {
   return res.status(200).json(response(order, xablau, 200, 'GET'));
 };
 
+const updateSale = async (req, res) => {
+  const { id } = req.params;
+  const { status } = req.body;
+
+  let order = await saleService.getSaleById(id);
+
+  if (!order) {
+    return res.status(404).json({
+      hasToken: false,
+      method: 'POST',
+      status: 404,
+      message: 'Venda não encontrada',
+    });
+  }
+
+  await saleService.updateSale({ id, status });
+
+  order = await saleService.getSaleById(id);
+
+  return res.status(200).json(response(order, '', 200, 'POST'));
+};
+
 module.exports = {
   createSale,
   getAllSales,
   getSaleById,
+  updateSale,
 };

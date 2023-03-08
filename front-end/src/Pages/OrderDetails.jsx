@@ -1,7 +1,12 @@
 import React, { useEffect, useState } from 'react';
 import { useParams } from 'react-router-dom';
 import OrderTable from '../Components/OrderTable';
-import { requestSaleById, requestSellerById, setToken } from '../services/requests';
+import {
+  requestSaleById,
+  requestSellerById,
+  requestUpdateSale,
+  setToken,
+} from '../services/requests';
 import mountDate from '../Utils/mountDate';
 import { fixDecimals } from '../Utils';
 import NavBar from '../Components/NavBar';
@@ -9,7 +14,11 @@ import NavBar from '../Components/NavBar';
 function OrderDetails() {
   const [sale, setSale] = useState();
   const [role, setRole] = useState('');
+  const [status, setStatus] = useState('Pendente');
   const [sellerName, setSellerName] = useState('');
+  const [isDisabled, setIsDisabled] = useState(true);
+  const [disablePrep, setDisablePrep] = useState(false);
+  const [disableDisp, setDisableDisp] = useState(true);
   const { id } = useParams();
 
   const orderIdMaxLength = 4;
@@ -30,6 +39,34 @@ function OrderDetails() {
     getSales();
   }, []);
 
+  useEffect(() => {
+    if (sale && sale.result.status === 'Em Trânsito') {
+      setIsDisabled(false);
+      setDisableDisp(true);
+      setDisablePrep(true);
+    }
+    if (sale && sale.result.status === 'Preparando') {
+      setDisablePrep(true);
+      setDisableDisp(false);
+    }
+    if (sale && sale.result.status === 'Entregue') {
+      setIsDisabled(true);
+      setDisablePrep(true);
+      setDisableDisp(true);
+    }
+    setStatus(sale.result.status);
+  }, [sale]);
+
+  const updateStatus = async ({ target }) => {
+    const { name } = target;
+    const updateStatusSale = await requestUpdateSale(`/order/update/${id}`, {
+      status: name,
+      id,
+    });
+    console.log(updateStatusSale);
+    setSale(updateStatusSale);
+  };
+
   return (
     <div>
       <NavBar />
@@ -41,7 +78,7 @@ function OrderDetails() {
           <div>
             <span> PEDIDO </span>
             <span
-              data-test-id={
+              data-testid={
                 `${role}_order_details__element-order-details-label-order-id`
               }
             >
@@ -69,13 +106,15 @@ function OrderDetails() {
                 `${role}_order_details__element-order-details-label-delivery-status`
               }
             >
-              { sale.result.status }
+              { status }
             </span>
             { role === 'customer' && (
               <button
                 type="button"
-                disabled="true"
+                disabled={ isDisabled }
+                name="Entregue"
                 data-testid="customer_order_details__button-delivery-check"
+                onClick={ updateStatus }
               >
                 MARCAR COMO ENTREGUE
               </button>
@@ -84,14 +123,20 @@ function OrderDetails() {
               <div>
                 <button
                   type="button"
-                  data-testid={ `${role}_order_details__button-preparing-check` }
+                  name="Preparando"
+                  disabled={ disablePrep }
+                  data-testid="seller_order_details__button-preparing-check"
+                  onClick={ updateStatus }
                 >
                   Preparar Pedido
                 </button>
 
                 <button
                   type="button"
-                  data-testid={ `${role}_order_details__button-dispatch-check` }
+                  name="Em Trânsito"
+                  disabled={ disableDisp }
+                  data-testid="seller_order_details__button-dispatch-check"
+                  onClick={ updateStatus }
                 >
                   Saiu para Entrega
                 </button>

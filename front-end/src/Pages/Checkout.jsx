@@ -8,7 +8,7 @@ import { calcCartTotal } from '../Utils';
 
 function Checkout() {
   const { userId,
-    cart, setCart, setSale, orders, setOrders } = useContext(MyContext);
+    cart, setCart, setSale, setStatus, orders, setOrders } = useContext(MyContext);
   const [deliveryAddress, setAddress] = useState('');
   const [deliveryNumber, setNumber] = useState('');
   const [selectedSelr, setSelectedSelr] = useState('');
@@ -79,6 +79,7 @@ function Checkout() {
 
   const finish = () => {
     apiSetSale();
+    setStatus('');
   };
 
   return (
