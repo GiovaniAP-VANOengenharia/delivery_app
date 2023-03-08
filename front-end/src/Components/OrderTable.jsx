@@ -1,10 +1,19 @@
-import React from 'react';
+import React, { useEffect, useState } from 'react';
+import PropTypes from 'prop-types';
 import { fixDecimals } from '../Utils';
-import { cartProductsMock } from '../Utils/checkoutPageMocks';
 
-function SellerOrdersTable() {
-  const orderProducts = cartProductsMock;
+function SellerOrdersTable(props) {
+  const [cart, setCart] = useState([]);
+  const { sale, role } = props;
   const tableHeaders = ['Item', 'Descrição', 'Quantidade', 'Valor Unitário', 'Sub-total'];
+
+  const fetchProducts = async () => {
+    setCart(sale.result.cart);
+  };
+
+  useEffect(() => {
+    fetchProducts();
+  }, []);
 
   return (
     <table>
@@ -16,14 +25,14 @@ function SellerOrdersTable() {
         </tr>
       </thead>
       <tbody>
-        { orderProducts.map((product, index) => {
+        { cart.map((product, index) => {
           const { name, price, quantity } = product;
 
           return (
             <tr key={ name }>
               <td
                 data-testid={
-                  `seller_order_details__element-order-table-item-number-${index}`
+                  `${role}_order_details__element-order-table-item-number-${index}`
                 }
               >
                 {index + 1 }
@@ -31,7 +40,7 @@ function SellerOrdersTable() {
 
               <td
                 data-testid={
-                  `seller_order_details__element-order-table-name-${index}`
+                  `${role}_order_details__element-order-table-name-${index}`
                 }
               >
                 { name }
@@ -39,7 +48,7 @@ function SellerOrdersTable() {
 
               <td
                 data-testid={
-                  `seller_order_details__element-order-table-quantity-${index}`
+                  `${role}_order_details__element-order-table-quantity-${index}`
                 }
               >
                 { quantity }
@@ -47,7 +56,7 @@ function SellerOrdersTable() {
 
               <td
                 data-testid={
-                  `seller_order_details__element-order-table-unit-price-${index}`
+                  `${role}_order_details__element-order-table-unit-price-${index}`
                 }
               >
                 { fixDecimals(price) }
@@ -55,7 +64,7 @@ function SellerOrdersTable() {
 
               <td
                 data-testid={
-                  `seller_order_details__element-order-table-sub-total-${index}`
+                  `${role}_order_details__element-order-table-sub-total-${index}`
                 }
               >
                 { fixDecimals(price * quantity) }
@@ -67,5 +76,18 @@ function SellerOrdersTable() {
     </table>
   );
 }
+
+SellerOrdersTable.propTypes = {
+  sale: PropTypes.shape({
+    result: PropTypes.shape({
+      cart: PropTypes.arrayOf(PropTypes.shape({
+        name: PropTypes.string.isRequired,
+        price: PropTypes.string.isRequired,
+        quantity: PropTypes.number.isRequired,
+      })).isRequired,
+    }).isRequired,
+  }).isRequired,
+  role: PropTypes.string.isRequired,
+};
 
 export default SellerOrdersTable;

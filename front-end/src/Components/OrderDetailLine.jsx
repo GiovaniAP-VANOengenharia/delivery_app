@@ -4,13 +4,13 @@ import styled from 'styled-components';
 import { fixDecimals } from '../Utils';
 
 function OrderDetailLine(props) {
-  const { productIndex, productData } = props;
+  const { productIndex, productData, role } = props;
   return (
     <OrderBody>
       <div>
         <p
           data-testid={
-            `customer_order_details__element-order-table-item-number-${productIndex}`
+            `${role}_order_details__element-order-table-item-number-${productIndex}`
           }
         >
           { productIndex }
@@ -19,7 +19,7 @@ function OrderDetailLine(props) {
       <div>
         <p
           data-testid={
-            `customer_order_details__element-order-table-name-${productIndex}`
+            `${role}_order_details__element-order-table-name-${productIndex}`
           }
         >
           { productData.name }
@@ -28,7 +28,7 @@ function OrderDetailLine(props) {
       <div>
         <p
           data-testid={
-            `customer_order_details__element-order-table-quantity-${productIndex}`
+            `${role}_order_details__element-order-table-quantity-${productIndex}`
           }
         >
           { productData.quantity }
@@ -37,16 +37,16 @@ function OrderDetailLine(props) {
       <div>
         <p
           data-testid={
-            `customer_order_details__element-order-table-unit-price-${productIndex}`
+            `${role}_order_details__element-order-table-unit-price-${productIndex}`
           }
         >
-          { productData.price }
+          { fixDecimals(productData.price) }
         </p>
       </div>
       <div>
         <p
           data-testid={
-            `customer_order_details__element-order-table-sub-total-${productIndex}`
+            `${role}_order_details__element-order-table-sub-total-${productIndex}`
           }
         >
           { fixDecimals(productData.price * productData.quantity) }
@@ -63,6 +63,7 @@ OrderDetailLine.propTypes = {
     quantity: PropTypes.number.isRequired,
   }).isRequired,
   productIndex: PropTypes.number.isRequired,
+  role: PropTypes.string.isRequired,
 };
 
 const OrderBody = styled.div`

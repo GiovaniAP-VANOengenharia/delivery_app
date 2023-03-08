@@ -30,6 +30,8 @@ function RegisterForm() {
         const { id, name, email, role, token } = register.result;
         const toLocalStorage = JSON.stringify({ name, email, role, token });
         localStorage.setItem('user', toLocalStorage);
+        const userId = JSON.stringify(id);
+        localStorage.setItem('id', userId);
         setUserId(id);
         history.push('/customer/products');
       }
