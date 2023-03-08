@@ -1,6 +1,7 @@
 const saleService = require('../services/sale.service');
+const productService = require('../services/product.service');
 
-const response = (sale, saleProducts, status, method) => ({
+const response = (sale, cart, status, method) => ({
   hasToken: false,
   method,
   status,
@@ -14,7 +15,7 @@ const response = (sale, saleProducts, status, method) => ({
     deliveryNumber: sale.deliveryNumber,
     status: sale.status,
     saleDate: sale.saleDate,
-    cart: saleProducts,
+    cart,
   },
 });
 
@@ -31,7 +32,7 @@ const createSale = async (req, res) => {
     saleDate: Date.now(),
   });
 
-  const salesProducts = await Promise.all(cart
+  await Promise.all(cart
     .map(async (product) => saleService
     .createSaleProduct({
       productId: product.id,
@@ -39,16 +40,53 @@ const createSale = async (req, res) => {
       quantity: product.quantity,
     })));
 
-  return res.status(201).json(response(newSale, salesProducts, 201, 'POST'));
+  return res.status(201).json(response(newSale, cart, 201, 'POST'));
 };
 
 const getAllSales = async (_req, res) => {
   const sales = await saleService.getAllSales();
 
-  return res.status(200).json(sales);
+  const cart = await Promise.all(sales
+    .map(async (sale) => saleService
+    .getSalesProductsById(sale.id)));
+
+  const xablau = [];
+
+  for (i = 0; i < sales.length; i++) {
+    xablau.push(response(sales[i], cart[i], 200, 'GET'))
+  };
+
+  return res.status(200).json(xablau);
+};
+
+const getSaleById = async (req, res) => {
+  const { id } = req.params;
+
+  const order = await saleService.getSaleById(id);
+  
+  const cart = await saleService.getSalesProductsById(id);
+  
+  const productsCart = await Promise.all(cart
+    .map(async (product) => productService
+    .getProductById(product.productId))
+  );
+    
+  const xablau = [];
+  
+  for (i = 0; i < productsCart.length; i++) {
+    xablau.push({
+      id: cart[i].productId,
+      name: productsCart[i].name,
+      price: productsCart[i].price,
+      quantity: cart[i].quantity,
+    })
+  };
+
+  return res.status(200).json(response(order, xablau, 200, 'GET'));
 };
 
 module.exports = {
   createSale,
   getAllSales,
+  getSaleById,
 };

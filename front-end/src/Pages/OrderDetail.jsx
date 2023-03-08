@@ -29,10 +29,10 @@ function OrderDetail() {
       const loginFields = JSON.parse(userData);
       setToken(loginFields.token);
       const data = await requestAllSales('/order');
-      const saleDetail = data.filter((curr) => curr.id === Number(id))[0];
+      const saleDetail = data.filter(({ result }) => result.id === Number(id))[0];
       const sellers = await requestSellers('sellers');
       setSellerName(sellers
-        .filter((curr) => curr.id === Number(saleDetail.sellerId))[0].name);
+        .filter((curr) => curr.id === Number(saleDetail.result.sellerId))[0].name);
       setSale(saleDetail);
     };
     getSales();
@@ -64,14 +64,14 @@ function OrderDetail() {
                 `customer_order_details__element-order-details-label-order-${'date'}`
               }
             >
-              {mountDate(new Date(sale.saleDate))}
+              {mountDate(new Date(sale.result.saleDate))}
             </p>
             <p
               data-testid={
                 `customer_order_details__element-order-details-label-delivery-status${id}`
               }
             >
-              {sale.status}
+              {sale.result.status}
             </p>
             <button
               type="button"
@@ -91,7 +91,7 @@ function OrderDetail() {
           <h1
             data-testid="customer_order_details__element-order-total-price"
           >
-            {sale.totalPrice.toString().replace('.', ',')}
+            {sale.result.totalPrice.toString().replace('.', ',')}
           </h1>
         </OrderContainer>
       )}

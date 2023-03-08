@@ -3,13 +3,12 @@ import { Redirect, Route, Switch } from 'react-router-dom';
 import './App.css';
 import Provider from './Context/MyProvider';
 import Checkout from './Pages/Checkout';
-import CustomerOrder from './Pages/CustomerOrder';
+import Orders from './Pages/Orders';
 import Login from './Pages/Login';
 import OrderDetail from './Pages/OrderDetail';
 import Products from './Pages/Products';
 import Register from './Pages/Register';
-import SellerOrders from './Pages/SellerOrders';
-import SellerOrdersDetails from './Pages/SellerOrdersDetails';
+import OrderDetails from './Pages/OrderDetails';
 
 function App() {
   return (
@@ -28,8 +27,8 @@ function App() {
           <Products />
         </Route>
 
-        <Route exact path="/customer/orders">
-          <CustomerOrder />
+        <Route exact path="/:user/orders">
+          <Orders />
         </Route>
 
         <Route exact path="/customer/orders/:id">
@@ -40,12 +39,8 @@ function App() {
           <Checkout />
         </Route>
 
-        <Route exact path="/seller/orders">
-          <SellerOrders />
-        </Route>
-
-        <Route exact path="/seller/orders/:id">
-          <SellerOrdersDetails />
+        <Route exact path="/:user/orders/:id">
+          <OrderDetails />
         </Route>
 
         <Route exact path="/register">

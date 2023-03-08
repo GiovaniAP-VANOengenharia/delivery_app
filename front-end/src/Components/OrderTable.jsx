@@ -1,10 +1,19 @@
-import React from 'react';
+import React, { useEffect, useState } from 'react';
+import PropTypes from 'prop-types';
 import { fixDecimals } from '../Utils';
-import { cartProductsMock } from '../Utils/checkoutPageMocks';
 
-function SellerOrdersTable() {
-  const orderProducts = cartProductsMock;
+function SellerOrdersTable(props) {
+  const [cart, setCart] = useState([]);
+  const { sale } = props;
   const tableHeaders = ['Item', 'Descrição', 'Quantidade', 'Valor Unitário', 'Sub-total'];
+
+  const fetchProducts = async () => {
+    setCart(sale.result.cart);
+  };
+
+  useEffect(() => {
+    fetchProducts();
+  }, []);
 
   return (
     <table>
@@ -16,7 +25,7 @@ function SellerOrdersTable() {
         </tr>
       </thead>
       <tbody>
-        { orderProducts.map((product, index) => {
+        { cart.map((product, index) => {
           const { name, price, quantity } = product;
 
           return (
@@ -67,5 +76,17 @@ function SellerOrdersTable() {
     </table>
   );
 }
+
+SellerOrdersTable.propTypes = {
+  sale: PropTypes.shape({
+    result: PropTypes.shape({
+      cart: PropTypes.arrayOf(PropTypes.shape({
+        name: PropTypes.string.isRequired,
+        price: PropTypes.string.isRequired,
+        quantity: PropTypes.number.isRequired,
+      })).isRequired,
+    }).isRequired,
+  }).isRequired,
+};
 
 export default SellerOrdersTable;

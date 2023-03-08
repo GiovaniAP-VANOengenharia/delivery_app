@@ -6,17 +6,28 @@ import { requestAllSales } from '../services/requests';
 
 function CustomerOrder() {
   const [sales, setSales] = useState();
+  const [userData, setUser] = useState({});
 
   useEffect(() => {
     const getSales = async () => {
+      const user = JSON.parse(localStorage.getItem('user'));
+      setUser(user);
       const data = await requestAllSales('/order');
-      setSales(data);
+      const userId = JSON.parse(localStorage.getItem('id'));
+      let userOrders = [];
+      if (user.role === 'customer') {
+        userOrders = data.filter((sale) => userId === sale.result.userId);
+      }
+      if (user.role === 'seller') {
+        userOrders = data.filter((sale) => userId === sale.result.sellerId);
+      }
+      setSales(userOrders);
     };
     getSales();
   }, []);
 
-  const orderList = sales && sales.map((sale, index) => (
-    <OrderCard sale={ sale } key={ index } />
+  const orderList = sales && sales.map(({ result }, index) => (
+    <OrderCard sale={ result } user={ userData } key={ index } />
   ));
 
   return (

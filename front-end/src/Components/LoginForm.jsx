@@ -28,7 +28,9 @@ function LoginForm() {
       if (login.result) {
         const { id, name, email, role, token } = login.result;
         const toLocalStorage = JSON.stringify({ name, email, role, token });
+        const userId = JSON.stringify(id);
         localStorage.setItem('user', toLocalStorage);
+        localStorage.setItem('id', userId);
         setUserId(id);
         if (role === 'customer') history.push('/customer/products');
         if (role === 'seller') history.push('/seller/orders');

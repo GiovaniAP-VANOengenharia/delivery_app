@@ -7,26 +7,26 @@ import mountDate from '../Utils/mountDate';
 
 function OrderCard(props) {
   const history = useHistory();
-  const { sale } = props;
+  const { sale, user } = props;
   const { id, totalPrice, saleDate, status } = sale;
   const orderIdMaxLength = 4;
   return (
-    <OrderContainer onClick={ () => history.push(`/customer/orders/${id}`) }>
-      <OrderId data-testid={ `customer_orders__element-order-id-${id}` }>
+    <OrderContainer onClick={ () => history.push(`/${user.role}/orders/${id}`) }>
+      <OrderId data-testid={ `${user.role}_orders__element-order-id-${id}` }>
         <div>Pedido</div>
         <div>{id.toString().padStart(orderIdMaxLength, '0')}</div>
       </OrderId>
       <OrderStatus
-        data-testid={ `customer_orders__element-delivery-status-${id}` }
+        data-testid={ `${user.role}_orders__element-delivery-status-${id}` }
         backgroundColor={ statusColors[status] }
       >
         <div>{status}</div>
       </OrderStatus>
       <OrderDatePrice>
-        <div data-testid={ `customer_orders__element-order-date-${id}` }>
+        <div data-testid={ `${user.role}_orders__element-order-date-${id}` }>
           {mountDate(saleDate)}
         </div>
-        <div data-testid={ `customer_orders__element-card-price-${id}` }>
+        <div data-testid={ `${user.role}_orders__element-card-price-${id}` }>
           {totalPrice.toString().replace('.', ',')}
         </div>
       </OrderDatePrice>
@@ -86,11 +86,12 @@ const OrderDatePrice = styled.div`
 `;
 
 OrderCard.propTypes = {
+  user: PropTypes.shape({ role: PropTypes.string.isRequired }).isRequired,
   sale: PropTypes.shape({
     id: PropTypes.number.isRequired,
     status: PropTypes.string.isRequired,
     saleDate: PropTypes.string.isRequired,
-    totalPrice: PropTypes.number.isRequired,
+    totalPrice: PropTypes.string.isRequired,
   }).isRequired,
 };
 
