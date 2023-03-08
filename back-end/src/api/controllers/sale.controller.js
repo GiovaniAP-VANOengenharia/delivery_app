@@ -52,9 +52,9 @@ const getAllSales = async (_req, res) => {
 
   const xablau = [];
 
-  for (i = 0; i < sales.length; i++) {
-    xablau.push(response(sales[i], cart[i], 200, 'GET'))
-  };
+  for (let i = 0; i < sales.length; i += 1) {
+    xablau.push(response(sales[i], cart[i], 200, 'GET'));
+  }
 
   return res.status(200).json(xablau);
 };
@@ -68,19 +68,18 @@ const getSaleById = async (req, res) => {
   
   const productsCart = await Promise.all(cart
     .map(async (product) => productService
-    .getProductById(product.productId))
-  );
+    .getProductById(product.productId)));
     
   const xablau = [];
   
-  for (i = 0; i < productsCart.length; i++) {
+  for (let i = 0; i < productsCart.length; i += 1) {
     xablau.push({
       id: cart[i].productId,
       name: productsCart[i].name,
       price: productsCart[i].price,
       quantity: cart[i].quantity,
-    })
-  };
+    });
+  }
 
   return res.status(200).json(response(order, xablau, 200, 'GET'));
 };
