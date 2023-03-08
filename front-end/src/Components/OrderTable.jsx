@@ -87,6 +87,7 @@ SellerOrdersTable.propTypes = {
       })).isRequired,
     }).isRequired,
   }).isRequired,
+  role: PropTypes.string.isRequired,
 };
 
 export default SellerOrdersTable;
