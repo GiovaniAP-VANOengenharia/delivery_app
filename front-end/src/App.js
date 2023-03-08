@@ -5,7 +5,6 @@ import Provider from './Context/MyProvider';
 import Checkout from './Pages/Checkout';
 import Orders from './Pages/Orders';
 import Login from './Pages/Login';
-import OrderDetail from './Pages/OrderDetail';
 import Products from './Pages/Products';
 import Register from './Pages/Register';
 import OrderDetails from './Pages/OrderDetails';
@@ -31,16 +30,12 @@ function App() {
           <Orders />
         </Route>
 
-        <Route exact path="/customer/orders/:id">
-          <OrderDetail />
+        <Route exact path="/:user/orders/:id">
+          <OrderDetails />
         </Route>
 
         <Route exact path="/customer/checkout">
           <Checkout />
-        </Route>
-
-        <Route exact path="/seller/orders/:id">
-          <OrderDetails />
         </Route>
 
         <Route exact path="/register">

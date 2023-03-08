@@ -4,7 +4,7 @@ import { fixDecimals } from '../Utils';
 
 function SellerOrdersTable(props) {
   const [cart, setCart] = useState([]);
-  const { sale } = props;
+  const { sale, role } = props;
   const tableHeaders = ['Item', 'Descrição', 'Quantidade', 'Valor Unitário', 'Sub-total'];
 
   const fetchProducts = async () => {
@@ -32,7 +32,7 @@ function SellerOrdersTable(props) {
             <tr key={ name }>
               <td
                 data-testid={
-                  `seller_order_details__element-order-table-item-number-${index}`
+                  `${role}_order_details__element-order-table-item-number-${index}`
                 }
               >
                 {index + 1 }
@@ -40,7 +40,7 @@ function SellerOrdersTable(props) {
 
               <td
                 data-testid={
-                  `seller_order_details__element-order-table-name-${index}`
+                  `${role}_order_details__element-order-table-name-${index}`
                 }
               >
                 { name }
@@ -48,7 +48,7 @@ function SellerOrdersTable(props) {
 
               <td
                 data-testid={
-                  `seller_order_details__element-order-table-quantity-${index}`
+                  `${role}_order_details__element-order-table-quantity-${index}`
                 }
               >
                 { quantity }
@@ -56,7 +56,7 @@ function SellerOrdersTable(props) {
 
               <td
                 data-testid={
-                  `seller_order_details__element-order-table-unit-price-${index}`
+                  `${role}_order_details__element-order-table-unit-price-${index}`
                 }
               >
                 { fixDecimals(price) }
@@ -64,7 +64,7 @@ function SellerOrdersTable(props) {
 
               <td
                 data-testid={
-                  `seller_order_details__element-order-table-sub-total-${index}`
+                  `${role}_order_details__element-order-table-sub-total-${index}`
                 }
               >
                 { fixDecimals(price * quantity) }
