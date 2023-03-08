@@ -3,12 +3,12 @@ import { useParams } from 'react-router-dom';
 import styled from 'styled-components';
 import NavBar from '../Components/NavBar';
 import OrderDetailLine from '../Components/OrderDetailLine';
-import { requestSaleById, requestSellers, setToken } from '../services/requests';
+import { requestSaleById, requestSellerById, setToken } from '../services/requests';
 import mountDate from '../Utils/mountDate';
 import { fixDecimals } from '../Utils';
 
 function OrderDetails() {
-  const [sale, setSale] = useState();
+  const [sale, setSale] = useState('');
   const [cart, setCart] = useState([]);
   const [role, setRole] = useState('');
   const [sellerName, setSellerName] = useState('');
@@ -25,10 +25,9 @@ function OrderDetails() {
       const data = await requestSaleById(`/order/${id}`);
       setSale(data);
       setCart(data.result.cart);
-      if (role === 'customer') {
-        const sellers = await requestSellers('sellers');
-        setSellerName(sellers
-          .find((curr) => curr.id === Number(saleDetail.result.sellerId)).name);
+      if (loginFields.role === 'customer') {
+        const seller = await requestSellerById(`/sellers/${data.result.sellerId}`);
+        setSellerName(seller.result.name);
       }
     };
     getSales();

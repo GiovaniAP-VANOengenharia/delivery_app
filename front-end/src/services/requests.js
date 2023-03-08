@@ -38,6 +38,11 @@ export const requestAllSales = async (endpoint) => {
   return data;
 };
 
+export const requestSellerById = async (endpoint) => {
+  const { data } = await api.get(endpoint);
+  return data;
+};
+
 export const requestSaleById = async (endpoint) => {
   const { data } = await api.get(endpoint);
   return data;

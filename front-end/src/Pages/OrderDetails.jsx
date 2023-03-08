@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from 'react';
 import { useParams } from 'react-router-dom';
 import OrderTable from '../Components/OrderTable';
-import { requestSaleById, setToken } from '../services/requests';
+import { requestSaleById, requestSellerById, setToken } from '../services/requests';
 import mountDate from '../Utils/mountDate';
 import { fixDecimals } from '../Utils';
 import NavBar from '../Components/NavBar';
@@ -22,10 +22,9 @@ function OrderDetails() {
       setToken(loginFields.token);
       const data = await requestSaleById(`/order/${id}`);
       setSale(data);
-      if (role === 'customer') {
-        const sellers = await requestSellers('sellers');
-        setSellerName(sellers
-          .find((curr) => curr.id === Number(saleDetail.result.sellerId)).name);
+      if (loginFields.role === 'customer') {
+        const seller = await requestSellerById(`/sellers/${data.result.sellerId}`);
+        setSellerName(seller.result.name);
       }
     };
     getSales();
