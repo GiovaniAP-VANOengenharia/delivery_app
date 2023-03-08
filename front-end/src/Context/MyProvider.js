@@ -7,6 +7,7 @@ export default function Provider({ children }) {
   const [cart, setCart] = useState([]);
   const [sale, setSale] = useState([]);
   const [orders, setOrders] = useState([]);
+  const [status, setStatus] = useState('');
   const [userId, setUserId] = useState('');
 
   useEffect(() => {
@@ -26,9 +27,11 @@ export default function Provider({ children }) {
       setUserId,
       sale,
       setSale,
+      status,
+      setStatus,
       orders,
       setOrders }
-  ), [state, cart, userId, sale, orders]);
+  ), [state, cart, userId, sale, status, orders]);
 
   return (
     <MyContext.Provider value={ providerValue }>

@@ -48,4 +48,9 @@ export const requestSaleById = async (endpoint) => {
   return data;
 };
 
+export const requestUpdateSale = async (endpoint, body) => {
+  const { data } = await api.put(endpoint, body);
+  return data;
+};
+
 export default api;

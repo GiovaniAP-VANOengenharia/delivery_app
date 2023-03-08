@@ -24,7 +24,7 @@ function CustomerOrder() {
       setSales(userOrders);
     };
     getSales();
-  }, []);
+  }, [sales]);
 
   const orderList = sales && sales.map(({ result }, index) => (
     <OrderCard sale={ result } user={ userData } key={ index } />
