@@ -46,51 +46,56 @@ function RegisterForm() {
   }, [registerFields]);
 
   return (
-    <FormContainer>
-      <label htmlFor="common_register__input-name">
-        Nome
-        <input
-          id="name"
-          onChange={ handleChange }
-          type="text"
-          data-testid="common_register__input-name"
-        />
-      </label>
+    <div>
+      <FormContainer>
+        <label htmlFor="common_register__input-name">
+          Nome
+          <input
+            id="name"
+            onChange={ handleChange }
+            type="text"
+            data-testid="common_register__input-name"
+          />
+        </label>
 
-      <label htmlFor="common_register__input-email">
-        Login
-        <input
-          id="email"
-          onChange={ handleChange }
-          type="email"
-          data-testid="common_register__input-email"
-        />
-      </label>
+        <label htmlFor="common_register__input-email">
+          Login
+          <input
+            id="email"
+            onChange={ handleChange }
+            type="email"
+            data-testid="common_register__input-email"
+          />
+        </label>
 
-      <label htmlFor="common_register__input-password">
-        Senha
-        <input
-          id="password"
-          onChange={ handleChange }
-          type="password"
-          data-testid="common_register__input-password"
-        />
-      </label>
+        <label htmlFor="common_register__input-password">
+          Senha
+          <input
+            id="password"
+            onChange={ handleChange }
+            type="password"
+            data-testid="common_register__input-password"
+          />
+        </label>
 
-      <button
-        disabled={ isDisabled }
-        onClick={ () => handleClickRegisterBtn() }
-        type="submit"
-        data-testid="common_register__button-register"
-      >
-        CADASTRAR
-      </button>
+        <button
+          disabled={ isDisabled }
+          onClick={ () => handleClickRegisterBtn() }
+          type="submit"
+          data-testid="common_register__button-register"
+        >
+          CADASTRAR
+        </button>
 
+      </FormContainer>
       { showPopUp && (
-        <p data-testid="common_register__element-invalid_register">
-          Mensagem de Erro
+        <p
+          data-testid="common_register__element-invalid_register"
+          style={ { textAlign: 'center' } }
+        >
+          Email já utilizado
         </p>)}
-    </FormContainer>
+    </div>
   );
 }
 
@@ -98,9 +103,31 @@ const FormContainer = styled.div`
   display: flex;
   width: fit-content;
   flex-direction: column;
-  & label {
+  border: 1px solid #CBD4D2;
+  padding: 35px 20px;
+  background-color: #EAF1EF;
+  & > label {
     display: flex;
     flex-direction: column;
+  }
+  & > label > input {
+    padding: 10px;
+    width: 250px;
+    margin: 7px 0;
+    border-radius: 3px;
+  }
+  & > :nth-child(4) {
+    &:disabled {
+      background-color: #036b5352;
+      color: white
+    }
+    margin: 6px 0;
+    width: 270px;
+    padding: 10px;
+    background-color: #036B52;
+    color: white;
+    border-radius: 3px;
+    border: 1px solid #036B52;
   }
 `;
 
