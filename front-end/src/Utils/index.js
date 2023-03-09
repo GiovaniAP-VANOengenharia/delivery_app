@@ -1,7 +1,8 @@
 export const fixDecimals = (value) => {
-  const result = parseFloat(value).toFixed(2);
+  const valueToNumber = Number(value);
+  const result = parseFloat(valueToNumber).toFixed(2);
 
-  return result;
+  return result.replace('.', ',');
 };
 
 export const calcCartTotal = (cartArray) => {
@@ -9,5 +10,6 @@ export const calcCartTotal = (cartArray) => {
   cartArray.forEach((item) => {
     acc += (Number(item.price) * item.quantity);
   });
+
   return acc;
 };

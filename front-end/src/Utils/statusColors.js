@@ -1,7 +1,7 @@
 const statusColors = {
-  PENDENTE: '#CCB800',
-  PREPARANDO: '#66CC00',
-  ENTREGUE: '#00CC9B',
+  Pendente: '#CCB800',
+  preparando: '#66CC00',
+  entregue: '#00CC9B',
 };
 
 export default statusColors;

@@ -1,13 +1,15 @@
 import React, { useContext, useEffect, useState } from 'react';
 import { useHistory } from 'react-router-dom';
+import styled from 'styled-components';
 import MyContext from '../Context/MyContext';
 import CheckoutTable from '../Components/CheckoutTable';
 import NavBar from '../Components/NavBar';
-import { requestSellers, setToken } from '../services/requests';
+import { requestSale, requestSellers, setToken } from '../services/requests';
 import { calcCartTotal } from '../Utils';
 
 function Checkout() {
-  const { userId, cart, setCart, setSale } = useContext(MyContext);
+  const { userId,
+    cart, setCart, setSale, setStatus, orders, setOrders } = useContext(MyContext);
   const [deliveryAddress, setAddress] = useState('');
   const [deliveryNumber, setNumber] = useState('');
   const [selectedSelr, setSelectedSelr] = useState('');
@@ -43,31 +45,53 @@ function Checkout() {
 
   const getSale = () => {
     const totalPrice = calcCartTotal(cart);
-    console.log(selectedSelr);
+    const selrId = sellerData.find((seller) => seller.id === Number(selectedSelr));
     setSale(() => ({
       userId,
-      sellerId: selectedSelr.id,
+      sellerId: selrId.id,
       totalPrice,
       deliveryAddress,
       deliveryNumber,
       cart,
     }));
+    return {
+      userId,
+      sellerId: selrId.id,
+      totalPrice,
+      deliveryAddress,
+      deliveryNumber,
+      cart,
+    };
+  };
+
+  const apiSetSale = async () => {
+    try {
+      const newSale = getSale();
+      const response = await requestSale('/order', newSale);
+      if (response.result) {
+        const { id } = response.result;
+        setOrders([...orders, { ...response.result, cart }]);
+        history.push(`/customer/orders/${id}`);
+      }
+    } catch (error) {
+      console.log(error);
+    }
   };
 
   const finish = () => {
-    getSale();
-    history.push('/finished');
+    apiSetSale();
+    setStatus('');
   };
 
   return (
     <>
       <NavBar />
-      <CheckoutTable />
-
-      <div>
+      <CheckoutContainer>
+        <CheckoutTable />
+        <p>Detalhes e Endereço Para Entrega</p>
         <form>
           <label htmlFor="seller-input">
-            Vendedor Responsável:
+            P. Vendedor Responsável:
             <select
               id="seller-input"
               data-testid="customer_checkout__select-seller"
@@ -75,8 +99,8 @@ function Checkout() {
               onChange={ selectingSelr }
             >
               { sellerData.map((seller, i) => (
-                <option value={ seller.name } key={ i }>
-                  {seller.name}
+                <option value={ seller.id } key={ i }>
+                  {seller.id}
                 </option>
               )) }
             </select>
@@ -112,8 +136,67 @@ function Checkout() {
             Finalizar Pedido
           </button>
         </form>
-      </div>
+      </CheckoutContainer>
     </>
   );
 }
+
+const CheckoutContainer = styled.div`
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  & > p {
+    font-size: 25px;
+    text-align: left;
+    width: 63%;
+  }
+  & > form {
+    border: 1px solid #CBD4D2;
+    width: 61%;
+    padding: 15px;
+    display: flex;
+    flex-flow: row wrap;
+    justify-content: center;
+    align-items: center;
+    & > label {
+      display: flex;
+      flex-direction: column;
+      margin: 15px;
+      & > input {
+        border: 1px solid #CBD4D2;
+        border-radius: 5px;
+        margin-top: 10px;
+        padding: 13px;
+      }
+      & > select {
+        border: 1px solid #CBD4D2;
+        border-radius: 5px;
+        margin-top: 10px;
+        padding: 13px;
+        width: 250px;
+      }
+      :nth-child(2){
+        width: 550px;
+      }
+      :nth-child(3){
+        width: 250px;
+      }
+    }
+    & > button {
+      width: 320px;
+      height: 60px;
+      border: 1px solid #036B52;
+      border-radius: 5px;
+      background-color: #036B52;
+      font-size: 25px;
+      margin: 0;
+      color: white;
+      &:disabled {
+        background-color: #036b5352;
+      }
+    }
+  }
+`;
+
 export default Checkout;

@@ -11,6 +11,11 @@ const getUser = async (email) => {
   return user;
 };
 
+const getUserById = async (id) => {
+  const user = await User.findByPk(id);
+  return user;
+};
+
 const createUser = async (user) => {
   const newUser = await User.create(user);
   return newUser;
@@ -26,4 +31,5 @@ module.exports = {
   getUser,
   createUser,
   getSellers,
+  getUserById,
 };

@@ -16,6 +16,21 @@ const response = (user, token, status, method) => ({
   },
 });
 
+const getUserById = async (req, res) => {
+  const { id } = req.params;
+  const hasUser = await userService.getUserById(id);
+  if (!hasUser) {
+    return res.status(404).json({
+      hasToken: false,
+      method: 'POST',
+      status: 404,
+      message: 'Usuário não encontrado',
+    });
+  }
+
+  return res.status(200).json(response(hasUser, '', 200, 'POST'));
+};
+
 const login = async (req, res) => {
   const { email, password } = req.body;
   const hasUser = await userService.getLogin(email, password);
@@ -60,6 +75,7 @@ const getSellers = async (_req, res) => {
 };
 
 module.exports = {
+  getUserById,
   login,
   createUser,
   getSellers,

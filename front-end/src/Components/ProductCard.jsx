@@ -1,5 +1,6 @@
 import React, { useState, useEffect, useContext, useCallback } from 'react';
 import PropTypes from 'prop-types';
+import styled from 'styled-components';
 import MyContext from '../Context/MyContext';
 
 function ProductCard(props) {
@@ -74,13 +75,12 @@ function ProductCard(props) {
   };
 
   return (
-    <div>
-      <div data-testid={ `customer_products__element-card-title-${id}` }>
-        { name }
-      </div>
-
-      <div data-testid={ `customer_products__element-card-price-${id}` }>
-        {price.toString().replace('.', ',')}
+    <ProductCardContainer>
+      <div>
+        <p>R$</p>
+        <div data-testid={ `customer_products__element-card-price-${id}` }>
+          {price.toString().replace('.', ',')}
+        </div>
       </div>
 
       <img
@@ -88,34 +88,123 @@ function ProductCard(props) {
         alt="Imagem do Produto"
         data-testid={ `customer_products__img-card-bg-image-${id}` }
       />
+      <NameAndQtdContainer>
+        <div data-testid={ `customer_products__element-card-title-${id}` }>
+          { name }
+        </div>
+        <div>
+          <button
+            type="button"
+            data-testid={ `customer_products__button-card-add-item-${id}` }
+            name="add"
+            onClick={ (e) => inputQuantity(e) }
+          >
+            +
+          </button>
 
-      <button
-        type="button"
-        data-testid={ `customer_products__button-card-add-item-${id}` }
-        name="add"
-        onClick={ (e) => inputQuantity(e) }
-      >
-        +
-      </button>
+          <input
+            type="number"
+            value={ quantity }
+            data-testid={ `customer_products__input-card-quantity-${id}` }
+            onChange={ (e) => inputChange(e) }
+          />
 
-      <input
-        type="number"
-        value={ quantity }
-        data-testid={ `customer_products__input-card-quantity-${id}` }
-        onChange={ (e) => inputChange(e) }
-      />
+          <button
+            type="button"
+            data-testid={ `customer_products__button-card-rm-item-${id}` }
+            name="sub"
+            onClick={ (e) => inputQuantity(e) }
+          >
+            -
+          </button>
+        </div>
 
-      <button
-        type="button"
-        data-testid={ `customer_products__button-card-rm-item-${id}` }
-        name="sub"
-        onClick={ (e) => inputQuantity(e) }
-      >
-        -
-      </button>
-    </div>
+      </NameAndQtdContainer>
+    </ProductCardContainer>
   );
 }
+
+const ProductCardContainer = styled.div`
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  border: 1px solid #CBD4D2;
+  margin: 15px;
+  width: 350px;
+  & > img {
+    width: fit-content;
+    height: 350px;
+  }
+  & > div:first-child {
+    display: flex;
+    flex-direction: row;
+    font-size: 25px;
+    font-weight: 600;
+    text-align: left;
+    margin-right: 200px;
+    margin-bottom: 350px;
+    padding: 8px;
+    background-color: #F6FFFD;
+    border-radius: 5px;
+    position: absolute;
+    & > p {
+      margin: 0 5px 0 0;
+    }
+  }
+`;
+
+const NameAndQtdContainer = styled.div`
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  font-size: 20px;
+  flex-direction: column;
+  width: 100%;
+  height: 80px;
+  padding-bottom: 15px;
+  background-color: #EAF1EF;
+  & > div:nth-child(1) {
+    margin: 10px;
+  }
+  & > div:nth-child(2) {
+    display: flex;
+  }
+  & > div > button {
+    font-size: 20px;
+    width: 35px;
+    height: 35px;
+    color: white;
+    background-color: #036B52;
+    border: unset;
+  }
+  & > div > button:nth-child(1) {
+    border-radius: 10px 0 0 10px;
+  }
+  & > div > button:nth-child(3) {
+    border-radius: 0 10px 10px 0;
+  }
+  & > div > input {
+    width: 50px;
+    margin: 0;
+    padding: 0;
+    border: 1px solid #036B52;
+    text-align: center;
+    font-size: 20px;
+    /* TIRAR O ARROW DO INPUT NUMBER */
+    /* Chrome, Safari, Edge, Opera */
+    ::-webkit-outer-spin-button,
+    ::-webkit-inner-spin-button {
+      -webkit-appearance: none;
+      margin: 0;
+    }
+    /* Firefox */
+    & > input[type=number] {
+      -moz-appearance: textfield;
+    }
+
+    }
+  `;
 
 ProductCard.propTypes = {
   productData: PropTypes.shape({

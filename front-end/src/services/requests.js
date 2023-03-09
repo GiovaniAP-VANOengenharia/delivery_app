@@ -33,24 +33,24 @@ export const requestSale = async (endpoint, body) => {
   return data;
 };
 
-export const requestAdm = async (endpoint, body) => {
-  const { data } = await api.post(endpoint, body);
+export const requestAllSales = async (endpoint) => {
+  const { data } = await api.get(endpoint);
   return data;
-}
+};
 
-// export const createUserAdm = async ({ name, email, token, role }) => {
-//   const payLoad = { name, email, token, role };
-//   try {
-//     const response = await fetch(
-//       urlCreateAdm,
-//       {
-//         ...HEADERS_POST,
-//         body: JSON.stringify(payLoad),
-//       }
-//     );
-//   } catch (error) {
-    
-//   }
-// }
+export const requestSellerById = async (endpoint) => {
+  const { data } = await api.get(endpoint);
+  return data;
+};
+
+export const requestSaleById = async (endpoint) => {
+  const { data } = await api.get(endpoint);
+  return data;
+};
+
+export const requestUpdateSale = async (endpoint, body) => {
+  const { data } = await api.put(endpoint, body);
+  return data;
+};
 
 export default api;

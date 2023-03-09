@@ -4,23 +4,53 @@ import styled from 'styled-components';
 import { fixDecimals } from '../Utils';
 
 function OrderDetailLine(props) {
-  const { productIndex, productData } = props;
+  const { productIndex, productData, role } = props;
   return (
     <OrderBody>
       <div>
-        <p>{ productIndex }</p>
+        <p
+          data-testid={
+            `${role}_order_details__element-order-table-item-number-${productIndex}`
+          }
+        >
+          { productIndex }
+        </p>
       </div>
       <div>
-        <p>{ productData.name }</p>
+        <p
+          data-testid={
+            `${role}_order_details__element-order-table-name-${productIndex}`
+          }
+        >
+          { productData.name }
+        </p>
       </div>
       <div>
-        <p>{ productData.quantity }</p>
+        <p
+          data-testid={
+            `${role}_order_details__element-order-table-quantity-${productIndex}`
+          }
+        >
+          { productData.quantity }
+        </p>
       </div>
       <div>
-        <p>{ productData.price }</p>
+        <p
+          data-testid={
+            `${role}_order_details__element-order-table-unit-price-${productIndex}`
+          }
+        >
+          { fixDecimals(productData.price) }
+        </p>
       </div>
       <div>
-        <p>{ fixDecimals(productData.price * productData.quantity) }</p>
+        <p
+          data-testid={
+            `${role}_order_details__element-order-table-sub-total-${productIndex}`
+          }
+        >
+          { fixDecimals(productData.price * productData.quantity) }
+        </p>
       </div>
     </OrderBody>
   );
@@ -33,6 +63,7 @@ OrderDetailLine.propTypes = {
     quantity: PropTypes.number.isRequired,
   }).isRequired,
   productIndex: PropTypes.number.isRequired,
+  role: PropTypes.string.isRequired,
 };
 
 const OrderBody = styled.div`
