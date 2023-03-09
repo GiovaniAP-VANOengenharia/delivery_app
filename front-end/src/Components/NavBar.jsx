@@ -54,7 +54,7 @@ function NavBar() {
     <NavbarContainer>
       <div>
         <div data-testid="customer_products__element-navbar-link-products">
-          PRODUTOS
+          { path === '/admin/manage' ? 'Gerenciar usuários' : 'Produtos' }
         </div>
 
         <div data-testid="customer_products__element-navbar-link-orders">

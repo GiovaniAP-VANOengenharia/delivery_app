@@ -7,6 +7,7 @@ export default function Provider({ children }) {
   const [cart, setCart] = useState([]);
   const [sale, setSale] = useState([]);
   const [userId, setUserId] = useState('');
+  const [role, setRole] = useState('');
 
   useEffect(() => {
     const products = localStorage.getItem('products');
@@ -17,8 +18,8 @@ export default function Provider({ children }) {
   }, []);
 
   const providerValue = useMemo(() => (
-    { state, setState, cart, setCart, userId, setUserId, sale, setSale }
-  ), [state, cart, userId, sale]);
+    { state, setState, cart, setCart, userId, setUserId, sale, setSale, role, setRole }
+  ), [state, cart, userId, sale, role]);
 
   return (
     <MyContext.Provider value={ providerValue }>

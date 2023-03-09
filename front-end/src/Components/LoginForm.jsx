@@ -28,9 +28,18 @@ function LoginForm() {
       if (login.result) {
         const { id, name, email, role, token } = login.result;
         const toLocalStorage = JSON.stringify({ name, email, role, token });
-        localStorage.setItem('user', toLocalStorage);
-        setUserId(id);
-        history.push('/customer/products');
+        // localStorage.setItem('user', toLocalStorage);
+        // setUserId(id);
+        // history.push('/customer/products');
+        if (login.role === 'customer') {
+          localStorage('user', toLocalStorage);
+          setUserId(id);
+          navigate('/customer/products');
+        } if (login.role === 'administrator') {
+          localStorage('user', toLocalStorage);
+          setUserId(id);
+          navigate('/admin/manage');
+        }
       }
     } catch (error) {
       setShowPopUp(true);
