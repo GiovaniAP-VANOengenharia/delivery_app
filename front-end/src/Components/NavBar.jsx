@@ -67,9 +67,8 @@ function NavBar() {
           data-testid="customer_products__element-navbar-link-products"
           style={ verifyPathProducts(pathname) }
         >
-          PRODUTOS
+          Produtos
         </button>
-
         <button
           type="button"
           onClick={ (e) => redirectFunction(e) }

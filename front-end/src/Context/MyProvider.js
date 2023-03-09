@@ -9,6 +9,7 @@ export default function Provider({ children }) {
   const [orders, setOrders] = useState([]);
   const [status, setStatus] = useState('');
   const [userId, setUserId] = useState('');
+  const [role, setRole] = useState('');
 
   useEffect(() => {
     const products = localStorage.getItem('products');
@@ -27,11 +28,13 @@ export default function Provider({ children }) {
       setUserId,
       sale,
       setSale,
+      role,
+      setRole,
       status,
       setStatus,
       orders,
       setOrders }
-  ), [state, cart, userId, sale, status, orders]);
+  ), [state, cart, userId, sale, role, status, orders]);
 
   return (
     <MyContext.Provider value={ providerValue }>

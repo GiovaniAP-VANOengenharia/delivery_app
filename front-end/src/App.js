@@ -7,6 +7,7 @@ import Orders from './Pages/Orders';
 import Login from './Pages/Login';
 import Products from './Pages/Products';
 import Register from './Pages/Register';
+import Admin from './Pages/Admin';
 import OrderDetails from './Pages/OrderDetails';
 
 function App() {
@@ -40,6 +41,10 @@ function App() {
 
         <Route exact path="/register">
           <Register />
+        </Route>
+
+        <Route exact path="/admin/manage">
+          <Admin />
         </Route>
 
       </Switch>

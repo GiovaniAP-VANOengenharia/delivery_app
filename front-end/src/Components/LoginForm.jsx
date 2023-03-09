@@ -34,6 +34,7 @@ function LoginForm() {
         setUserId(id);
         if (role === 'customer') history.push('/customer/products');
         if (role === 'seller') history.push('/seller/orders');
+        if (role === 'administrator') history.push('/admin/manage');
       }
     } catch (error) {
       setShowPopUp(true);
