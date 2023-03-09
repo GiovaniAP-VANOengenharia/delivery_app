@@ -67,7 +67,7 @@ function NavBar() {
           data-testid="customer_products__element-navbar-link-products"
           style={ verifyPathProducts(pathname) }
         >
-          { path === '/admin/manage' ? 'Gerenciar usuários' : 'Produtos' }
+          Produtos
         </button>
         <button
           type="button"

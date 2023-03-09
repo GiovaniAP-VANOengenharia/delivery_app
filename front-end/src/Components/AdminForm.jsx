@@ -2,122 +2,150 @@ import React, { useContext, useEffect, useState } from 'react';
 import { useHistory } from 'react-router-dom';
 import styled from 'styled-components';
 import MyContext from '../Context/MyContext';
-import { requestAdm } from '../services/requests';
+import { requestRegister } from '../services/requests';
 import { emailValidate, nameValidate, passwordValidate } from '../Utils/fieldsValidate';
-import RegisterForm from './RegisterForm';
-// import { requestRegister } from '../services/requests';
-// import { createUserAdm } from '../../../back-end/src/api/services/admin.service';
-// import LoginForm from './LoginForm';
 
 function AdminForm() {
-  const { register, setRegister } = useContext(MyContext);
-  useEffect(
-    () => {
-      const { name, token, email } = register;
-      if (passwordValidate, emailValidate(email, token) && nameValidate(name)) {
-        setRegister((prev) => ({ ...prev, submitIsDisable: false }));
-      } else setRegister((prev) => ({ ...prev, submitIsDisable: true }));
-    },
-    [register.email, RegisterForm.token, register.name],
-  );
+  const { setUserId } = useContext(MyContext);
+  const [showPopUp, setShowPopUp] = useState(false);
+  const [isDisabled, setIsDisabled] = useState(true);
+  const [registerFields, setRegisterFields] = useState({
+    name: '',
+    email: '',
+    password: '',
+  });
+  const history = useHistory();
 
-  const handleChange = ({ target: { value, name } }) => {
-    setRegister((prev) => ({ ...prev, [name]: value }));
+  const handleChange = ({ target }) => {
+    const { id, value } = target;
+    setRegisterFields({
+      ...registerFields,
+      [id]: value,
+    });
+  };
+  const handleClickRegisterBtn = async () => {
+    try {
+      const register = await requestRegister('/register', registerFields);
+      if (register.result) {
+        const { id, name, email, role, token } = register.result;
+        const toLocalStorage = JSON.stringify({ name, email, role, token });
+        localStorage.setItem('user', toLocalStorage);
+        const userId = JSON.stringify(id);
+        localStorage.setItem('id', userId);
+        setUserId(id);
+        history.push('/customer/products');
+      }
+    } catch (error) {
+      setShowPopUp(true);
+    }
   };
 
-  const handleClick = async (event) => {
-    event.preventDefault();
-    let test = {};
-    const request = async () => {
-      const { email, token, name, role } = register;
-      const { status, date } = await requestAdm({ email, token, name, role });
-      test = date;
-      const statusNotFound = 409;
-
-      if (status === statusNotFound) {
-        setRegister((prev) => ({ ...prev, notFound: true }));
-      }
-    };
-    await request();
-  }
+  useEffect(() => {
+    const nameIsValid = nameValidate(registerFields.name);
+    const emailIsValid = emailValidate(registerFields.email);
+    const passwordIsValid = passwordValidate(registerFields.password);
+    setIsDisabled(!(emailIsValid && passwordIsValid && nameIsValid));
+  }, [registerFields]);
 
   return (
-    <form className='form-container'>
-      <h1>Cadastro</h1>
-
-      <div className='user-data-container'>
-        <label htmlFor='name'>
-          Nome:
+    <div>
+      <div>
+        <label htmlFor="admin_manage__input-name">
+          Nome
           <input
-            data-testid='admin_manage__input-name'
-            placeholder='nome'
-            type='text'
-            id='name'
-            name='name'
+            id="name"
             onChange={ handleChange }
+            type="text"
+            data-testid="admin_manage__input-name"
           />
         </label>
 
-        <label htmlFor='email'>
-          Email:
+        <label htmlFor="admin_manage__input-email">
+          Login
           <input
-            data-testid='admin_manage__input-email'
-            placeholder='email@site.com.br'
-            type='email'
-            id='email'
-            name='email'
+            id="email"
             onChange={ handleChange }
+            type="email"
+            data-testid="admin_manage__input-email"
           />
         </label>
 
-        <label htmlFor='password'>
-          Senha:
+        <label htmlFor="admin_manage__input-password">
+          Senha
           <input
-            data-testid='admin_manage__input-password'
-            placeholder='senha'
-            type='password'
-            id='password'
-            name='password'
+            id="password"
             onChange={ handleChange }
+            type="password"
+            data-testid="admin_manage__input-password"
           />
         </label>
 
-        <label htmlFor='role'>
-            {' '}
-            Tipo
-            <select
-              type='select'
-              data-testid='admin_manage__select-role'
-              id='role'
-              name='role'
-              onChange={ handleChange }
-            >
-              <option value="" selected disabled hidden > </option>
-              <option value="seller">Vendedor</option>
-              <option value="customer">Cliente</option>
-              <option value='administrator'>Administrador</option>
-            </select>
+        <label htmlFor="admin_manage__select-role">
+          <select
+            type="select"
+            data-testid="admin_manage__select-role"
+            id="role"
+            name="role"
+            onChange={ handleChange }
+          >
+            <option value="" selected disabled hidden> </option>
+            <option value="seller">Vendedor</option>
+            <option value="customer">Cliente</option>
+            <option value="administrator">Administrador</option>
+          </select>
         </label>
+
         <button
+          disabled={ isDisabled }
+          onClick={ () => handleClickRegisterBtn() }
           type="submit"
-          data-testid="admin_manager__button-register"
-          disabled={ register.submitIsDisable }
-          onClick={ handleClick }
+          data-testid="admin_manage__button-register"
         >
           CADASTRAR
         </button>
-        {
-          register.notFound ? (
-            <p
-              data-testid='common_register__element-invalid_register'
-            >
-              usuário já existe
-            </p>
-          ) : null
-        };
+
       </div>
-    </form>
+      { showPopUp && (
+        <p
+          data-testid="admin_manage__element-invalid_register"
+          style={ { textAlign: 'center' } }
+        >
+          Email já utilizado
+        </p>)}
+    </div>
   );
 }
+
+// const FormContainer = styled.div`
+//   display: flex;
+//   width: fit-content;
+//   flex-direction: column;
+//   border: 1px solid #CBD4D2;
+//   padding: 35px 20px;
+//   background-color: #EAF1EF;
+//   & > label {
+//     display: flex;
+//     flex-direction: column;
+//   }
+//   & > label > input {
+//     padding: 10px;
+//     width: 250px;
+//     margin: 7px 0;
+//     border-radius: 3px;
+//   }
+//   & > :nth-child(4) {
+//     &:disabled {
+//       background-color: #036b5352;
+//       color: white
+//     }
+//     margin: 6px 0;
+//     width: 270px;
+//     padding: 10px;
+//     background-color: #036B52;
+//     color: white;
+//     border-radius: 3px;
+//     border: 1px solid #036B52;
+//   }
+// `;
 
 export default AdminForm;
