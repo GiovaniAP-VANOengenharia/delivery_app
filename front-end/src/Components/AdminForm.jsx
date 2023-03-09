@@ -1,20 +1,17 @@
-import React, { useContext, useEffect, useState } from 'react';
-import { useHistory } from 'react-router-dom';
-import styled from 'styled-components';
-import MyContext from '../Context/MyContext';
-import { requestRegister } from '../services/requests';
+import React, { useEffect, useState } from 'react';
+// import styled from 'styled-components';
+import { requestRegister, setToken } from '../services/requests';
 import { emailValidate, nameValidate, passwordValidate } from '../Utils/fieldsValidate';
 
 function AdminForm() {
-  const { setUserId } = useContext(MyContext);
   const [showPopUp, setShowPopUp] = useState(false);
-  const [isDisabled, setIsDisabled] = useState(true);
+  const [isDisabled, setIsDisabled] = useState(false);
   const [registerFields, setRegisterFields] = useState({
     name: '',
     email: '',
     password: '',
+    role: '',
   });
-  const history = useHistory();
 
   const handleChange = ({ target }) => {
     const { id, value } = target;
@@ -23,18 +20,12 @@ function AdminForm() {
       [id]: value,
     });
   };
+
   const handleClickRegisterBtn = async () => {
+    const { token } = JSON.parse(localStorage.getItem('user'));
     try {
-      const register = await requestRegister('/register', registerFields);
-      if (register.result) {
-        const { id, name, email, role, token } = register.result;
-        const toLocalStorage = JSON.stringify({ name, email, role, token });
-        localStorage.setItem('user', toLocalStorage);
-        const userId = JSON.stringify(id);
-        localStorage.setItem('id', userId);
-        setUserId(id);
-        history.push('/customer/products');
-      }
+      setToken(token);
+      await requestRegister('/register/adm', registerFields);
     } catch (error) {
       setShowPopUp(true);
     }
@@ -98,7 +89,7 @@ function AdminForm() {
         <button
           disabled={ isDisabled }
           onClick={ () => handleClickRegisterBtn() }
-          type="submit"
+          type="button"
           data-testid="admin_manage__button-register"
         >
           CADASTRAR

@@ -13,7 +13,10 @@ userRouter.get('/sellers', validateToken, userController.getSellers);
 userRouter.get('/sellers/:id', validateToken, userController.getUserById);
 
 userRouter.post('/login', validateEmail, validatePassword, userController.login);
-userRouter.post('/register', validateName,
+userRouter.post('/', validateName,
+  validateEmail, validatePassword, userController.createUser);
+
+  userRouter.post('/adm', validateToken, validateName,
   validateEmail, validatePassword, userController.createUser);
 
 module.exports = {
