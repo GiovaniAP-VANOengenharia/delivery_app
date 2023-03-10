@@ -8,13 +8,13 @@ import { requestSale, requestSellers, setToken } from '../services/requests';
 import { calcCartTotal } from '../Utils';
 
 function Checkout() {
-  const { userId,
-    cart, setCart, setSale, setStatus, orders, setOrders } = useContext(MyContext);
+  const { cart, setCart, setSale, setStatus, orders, setOrders } = useContext(MyContext);
   const [deliveryAddress, setAddress] = useState('');
   const [deliveryNumber, setNumber] = useState('');
   const [selectedSelr, setSelectedSelr] = useState('');
   const [sellerData, setSellerData] = useState([]);
   const [isDisabled, setIsDisabled] = useState(true);
+  const idUser = JSON.parse(localStorage.getItem('id'));
   const history = useHistory();
 
   const getSellers = async () => {
@@ -47,7 +47,7 @@ function Checkout() {
     const totalPrice = calcCartTotal(cart);
     const selrId = sellerData.find((seller) => seller.id === Number(selectedSelr));
     setSale(() => ({
-      userId,
+      userId: Number(idUser),
       sellerId: selrId.id,
       totalPrice,
       deliveryAddress,
@@ -55,7 +55,7 @@ function Checkout() {
       cart,
     }));
     return {
-      userId,
+      userId: Number(idUser),
       sellerId: selrId.id,
       totalPrice,
       deliveryAddress,

@@ -13,6 +13,8 @@ app.use('/images', express.static('images'));
 app.use('/', userRouter);
 app.use('/register', userRouter);
 
+app.use('/customer', userRouter);
+
 app.use('/products', productRouter);
 
 app.use('/order', saleRouter);
