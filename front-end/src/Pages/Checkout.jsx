@@ -8,8 +8,7 @@ import { requestSale, requestSellers, setToken } from '../services/requests';
 import { calcCartTotal } from '../Utils';
 
 function Checkout() {
-  const { userId,
-    cart, setCart, setSale, setStatus, orders, setOrders } = useContext(MyContext);
+  const { cart, setCart, setSale, setStatus, orders, setOrders } = useContext(MyContext);
   const [deliveryAddress, setAddress] = useState('');
   const [deliveryNumber, setNumber] = useState('');
   const [selectedSelr, setSelectedSelr] = useState('');
@@ -46,8 +45,9 @@ function Checkout() {
   const getSale = () => {
     const totalPrice = calcCartTotal(cart);
     const selrId = sellerData.find((seller) => seller.id === Number(selectedSelr));
+    const loginFields = JSON.parse(localStorage.getItem('id'));
     setSale(() => ({
-      userId,
+      userId: Number(loginFields),
       sellerId: selrId.id,
       totalPrice,
       deliveryAddress,
@@ -55,7 +55,7 @@ function Checkout() {
       cart,
     }));
     return {
-      userId,
+      userId: Number(loginFields),
       sellerId: selrId.id,
       totalPrice,
       deliveryAddress,

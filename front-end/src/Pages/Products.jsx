@@ -1,10 +1,14 @@
-import React, { useEffect, useState } from 'react';
+import React, { useContext, useEffect, useState } from 'react';
 import styled from 'styled-components';
 import NavBar from '../Components/NavBar';
 import ProductCard from '../Components/ProductCard';
+import MyContext from '../Context/MyContext';
 import { requestData } from '../services/requests';
+import { calcCartTotal, fixDecimals } from '../Utils';
 
 function Products() {
+  const { cart } = useContext(MyContext);
+  const [total, setTotal] = useState(0);
   const [productsArray, setProductsArray] = useState([]);
 
   const fetchProducts = async () => {
@@ -14,6 +18,7 @@ function Products() {
 
   useEffect(() => {
     fetchProducts();
+    setTotal(fixDecimals(calcCartTotal(cart)));
   }, []);
 
   return (
@@ -24,9 +29,9 @@ function Products() {
           <ProductCard productData={ product } key={ product.id } />
         ))}
       </ProductsContainer>
-      <div>
-        Ver Carrinho: R$ !valorTotal!
-      </div>
+      <Productsfooter>
+        { `Ver Carrinho: R$ ${total}` }
+      </Productsfooter>
     </div>
   );
 }
@@ -37,6 +42,17 @@ const ProductsContainer = styled.div`
   align-items: center;
   flex-flow: row wrap;
   margin: 50px;
+`;
+
+const Productsfooter = styled.div`
+  position: fixed;
+  top:550px;
+  left: 900px;
+  background-color: #036b52;
+  color: white;
+  font-size: 25px;
+  padding: 8px 25px;
+  border-radius: 5px;
 `;
 
 export default Products;

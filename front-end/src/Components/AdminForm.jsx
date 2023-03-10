@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from 'react';
-// import styled from 'styled-components';
+import styled from 'styled-components';
 import { requestRegister, setToken } from '../services/requests';
 import { emailValidate, nameValidate, passwordValidate } from '../Utils/fieldsValidate';
 
@@ -35,43 +35,52 @@ function AdminForm() {
     const nameIsValid = nameValidate(registerFields.name);
     const emailIsValid = emailValidate(registerFields.email);
     const passwordIsValid = passwordValidate(registerFields.password);
-    setIsDisabled(!(emailIsValid && passwordIsValid && nameIsValid));
+    setIsDisabled(!(emailIsValid && passwordIsValid && nameIsValid && registerFields.role));
   }, [registerFields]);
 
   return (
-    <div>
-      <div>
-        <label htmlFor="admin_manage__input-name">
-          Nome
+    <AdmContainer>
+      <AdmHeader>
+        <div>
+          <label htmlFor="admin_manage__input-name">
+            Nome
+          </label>
           <input
             id="name"
             onChange={ handleChange }
             type="text"
             data-testid="admin_manage__input-name"
           />
-        </label>
 
-        <label htmlFor="admin_manage__input-email">
-          Login
+        </div>
+
+        <div>
+          <label htmlFor="admin_manage__input-email">
+            Login
+          </label>
           <input
             id="email"
             onChange={ handleChange }
             type="email"
             data-testid="admin_manage__input-email"
           />
-        </label>
+        </div>
 
-        <label htmlFor="admin_manage__input-password">
-          Senha
+        <div>
+          <label htmlFor="admin_manage__input-password">
+            Senha
+          </label>
           <input
             id="password"
             onChange={ handleChange }
             type="password"
             data-testid="admin_manage__input-password"
           />
-        </label>
+        </div>
 
-        <label htmlFor="admin_manage__select-role">
+        <div>
+          <label htmlFor="admin_manage__select-role" />
+          Tipo
           <select
             type="select"
             data-testid="admin_manage__select-role"
@@ -84,18 +93,20 @@ function AdminForm() {
             <option value="customer">Cliente</option>
             <option value="administrator">Administrador</option>
           </select>
-        </label>
+        </div>
 
-        <button
-          disabled={ isDisabled }
-          onClick={ () => handleClickRegisterBtn() }
-          type="button"
-          data-testid="admin_manage__button-register"
-        >
-          CADASTRAR
-        </button>
+        <div>
+          <button
+            disabled={ isDisabled }
+            onClick={ () => handleClickRegisterBtn() }
+            type="button"
+            data-testid="admin_manage__button-register"
+          >
+            CADASTRAR
+          </button>
+        </div>
 
-      </div>
+      </AdmHeader>
       { showPopUp && (
         <p
           data-testid="admin_manage__element-invalid_register"
@@ -103,40 +114,50 @@ function AdminForm() {
         >
           Email já utilizado
         </p>)}
-    </div>
+    </AdmContainer>
   );
 }
 
-// const FormContainer = styled.div`
-//   display: flex;
-//   width: fit-content;
-//   flex-direction: column;
-//   border: 1px solid #CBD4D2;
-//   padding: 35px 20px;
-//   background-color: #EAF1EF;
-//   & > label {
-//     display: flex;
-//     flex-direction: column;
-//   }
-//   & > label > input {
-//     padding: 10px;
-//     width: 250px;
-//     margin: 7px 0;
-//     border-radius: 3px;
-//   }
-//   & > :nth-child(4) {
-//     &:disabled {
-//       background-color: #036b5352;
-//       color: white
-//     }
-//     margin: 6px 0;
-//     width: 270px;
-//     padding: 10px;
-//     background-color: #036B52;
-//     color: white;
-//     border-radius: 3px;
-//     border: 1px solid #036B52;
-//   }
-// `;
+const AdmContainer = styled.div`
+  margin: 20px 50px;
+  border: 1px solid black;
+  height: 80px;
+`;
+
+const AdmHeader = styled.div`
+  height: 100%;
+  display: flex;
+  flex-direction: row;
+  justify-content: space-between;
+  align-items: center;
+  border: 1px solid #B1C2BE;
+  background-color: #EAF1EF;
+  & > div {
+    display: flex;
+    flex-direction: column;
+    align-content: center;
+    padding: 0;
+    font-size: 20px;
+    font-weight: 500;
+    width: 15%;
+    margin: 10px;
+    border-radius: 5px;
+    & >:nth-child(1){
+      margin: 0 5px 0 0;
+    }
+    & > button {
+      background-color: #036b52;
+      color: white;
+      height: 40px;
+    }
+    & > input, select {
+      height: 30px;
+    }
+  }
+  & > p:nth-child(2) {
+    font-size: 20px;
+    margin: 0;
+  }
+`;
 
 export default AdminForm;
