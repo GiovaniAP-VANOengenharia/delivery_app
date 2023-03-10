@@ -54,7 +54,7 @@ function OrderDetails() {
       setDisablePrep(true);
       setDisableDisp(true);
     }
-    setStatus(sale.result.status);
+    if (sale) setStatus(sale.result.status);
   }, [sale]);
 
   const updateStatus = async ({ target }) => {
@@ -103,7 +103,7 @@ function OrderDetails() {
             </span>
             <span
               data-testid={
-                `${role}_order_details__element-order-details-label-delivery-status`
+                `${role}_order_details__element-order-details-label-delivery-status${id}`
               }
             >
               { status }
