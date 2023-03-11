@@ -53,4 +53,8 @@ export const requestUpdateSale = async (endpoint, body) => {
   return data;
 };
 
+export const requestDeleteUser = async (endpoint) => {
+  await api.delete(endpoint);
+};
+
 export default api;

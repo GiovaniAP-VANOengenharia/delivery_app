@@ -6,6 +6,11 @@ const getLogin = async (email, password) => {
   return user;
 };
 
+const getAllUsers = async () => {
+  const users = await User.findAll();
+  return users;
+};
+
 const getUser = async (email) => {
   const user = await User.findOne({ where: { email } });
   return user;
@@ -26,10 +31,17 @@ const getSellers = async (role) => {
   return sellers;
 };
 
+const deleteUser = async (id) => {
+  const user = await User.destroy({ where: { id } });
+  return user;
+};
+
 module.exports = {
   getLogin,
   getUser,
   createUser,
   getSellers,
   getUserById,
+  getAllUsers,
+  deleteUser,
 };

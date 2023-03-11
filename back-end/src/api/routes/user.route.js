@@ -9,8 +9,11 @@ const userController = require('../controllers/user.controller');
 
 const userRouter = Router();
 
+userRouter.get('/users', validateToken, userController.getAllUsers);
 userRouter.get('/sellers', validateToken, userController.getSellers);
 userRouter.get('/sellers/:id', validateToken, userController.getUserById);
+
+userRouter.delete('/delete/:id', validateToken, userController.deleteUser);
 
 userRouter.post('/login', validateEmail, validatePassword, userController.login);
 userRouter.post('/', validateName,

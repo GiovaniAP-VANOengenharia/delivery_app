@@ -1,11 +1,13 @@
 import React, { useEffect, useState } from 'react';
 import styled from 'styled-components';
-import { requestRegister, setToken } from '../services/requests';
+import { requestRegister, requestData, setToken } from '../services/requests';
 import { emailValidate, nameValidate, passwordValidate } from '../Utils/fieldsValidate';
+import AdmTable from './AdmTable';
 
 function AdminForm() {
   const [showPopUp, setShowPopUp] = useState(false);
   const [isDisabled, setIsDisabled] = useState(false);
+  const [users, setUsers] = useState([]);
   const [registerFields, setRegisterFields] = useState({
     name: '',
     email: '',
@@ -25,21 +27,33 @@ function AdminForm() {
     const { token } = JSON.parse(localStorage.getItem('user'));
     try {
       setToken(token);
-      await requestRegister('/register/adm', registerFields);
+      const newUser = await requestRegister('/register/adm', registerFields);
+      setUsers([...users, newUser]);
     } catch (error) {
       setShowPopUp(true);
     }
   };
 
   useEffect(() => {
+    const adm = JSON.parse(localStorage.getItem('user'));
+    const getUsers = async () => {
+      setToken(adm.token);
+      const dbUsers = await requestData('/users');
+      setUsers(dbUsers.filter((user) => adm.email !== user.email));
+    };
+    getUsers();
+  }, []);
+
+  useEffect(() => {
     const nameIsValid = nameValidate(registerFields.name);
     const emailIsValid = emailValidate(registerFields.email);
     const passwordIsValid = passwordValidate(registerFields.password);
-    setIsDisabled(!(emailIsValid && passwordIsValid && nameIsValid && registerFields.role));
+    setIsDisabled(!(emailIsValid && passwordIsValid && nameIsValid));
   }, [registerFields]);
 
   return (
     <AdmContainer>
+      <p>Cadastrar novo usuário</p>
       <AdmHeader>
         <div>
           <label htmlFor="admin_manage__input-name">
@@ -114,6 +128,7 @@ function AdminForm() {
         >
           Email já utilizado
         </p>)}
+      <AdmTable users={ users } setUsers={ setUsers } />
     </AdmContainer>
   );
 }

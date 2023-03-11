@@ -14,6 +14,7 @@ function Checkout() {
   const [selectedSelr, setSelectedSelr] = useState('');
   const [sellerData, setSellerData] = useState([]);
   const [isDisabled, setIsDisabled] = useState(true);
+  const idUser = JSON.parse(localStorage.getItem('id'));
   const history = useHistory();
 
   const getSellers = async () => {
@@ -45,9 +46,8 @@ function Checkout() {
   const getSale = () => {
     const totalPrice = calcCartTotal(cart);
     const selrId = sellerData.find((seller) => seller.id === Number(selectedSelr));
-    const loginFields = JSON.parse(localStorage.getItem('id'));
     setSale(() => ({
-      userId: Number(loginFields),
+      userId: Number(idUser),
       sellerId: selrId.id,
       totalPrice,
       deliveryAddress,
@@ -55,7 +55,7 @@ function Checkout() {
       cart,
     }));
     return {
-      userId: Number(loginFields),
+      userId: Number(idUser),
       sellerId: selrId.id,
       totalPrice,
       deliveryAddress,
