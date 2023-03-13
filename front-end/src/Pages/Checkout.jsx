@@ -100,7 +100,7 @@ function Checkout() {
             >
               { sellerData.map((seller, i) => (
                 <option value={ seller.id } key={ i }>
-                  {seller.id}
+                  {seller.name}
                 </option>
               )) }
             </select>
