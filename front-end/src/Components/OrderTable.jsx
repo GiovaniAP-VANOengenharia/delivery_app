@@ -62,7 +62,7 @@ function OrdersTable(props) {
                       `${role}_order_details__element-order-table-unit-price-${index}`
                     }
                   >
-                    { fixDecimals(price) }
+                    { `R$ ${fixDecimals(price)}` }
                   </td>
 
                   <td
@@ -70,7 +70,7 @@ function OrdersTable(props) {
                       `${role}_order_details__element-order-table-sub-total-${index}`
                     }
                   >
-                    { fixDecimals(price * quantity) }
+                    { `R$ ${fixDecimals(price * quantity)}` }
                   </td>
                 </tr>
               );

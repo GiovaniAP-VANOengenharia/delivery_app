@@ -24,34 +24,46 @@ function NavBar() {
     history.push(`/${userRole}/${target.value}`);
   };
 
+  const renderNavButtons = () => {
+    if (pathname.includes('seller')) {
+      return (
+        <p data-testid="customer_products__element-navbar-link-orders">PEDIDOS</p>
+      );
+    }
+    if (pathname.includes('admin')) {
+      return (
+        <p data-testid="customer_products__element-navbar-link-orders">
+          GERENCIAR USUÁRIOS
+        </p>
+      );
+    }
+    return (
+      <div>
+        <button
+          type="button"
+          onClick={ (e) => redirectFunction(e) }
+          value="products"
+          data-testid="customer_products__element-navbar-link-products"
+          style={ verifyPathProducts(pathname) }
+        >
+          PRODUTOS
+        </button>
+        <button
+          type="button"
+          onClick={ (e) => redirectFunction(e) }
+          value="orders"
+          data-testid="customer_products__element-navbar-link-orders"
+          style={ verifyPathOrder(pathname) }
+        >
+          MEUS PEDIDOS
+        </button>
+      </div>
+    );
+  };
+
   return (
     <NavbarContainer>
-      { pathname.includes('seller') ? (
-        <p data-testid="customer_products__element-navbar-link-orders">PEDIDOS</p>
-      )
-        : (
-          <div>
-            <button
-              type="button"
-              onClick={ (e) => redirectFunction(e) }
-              value="products"
-              data-testid="customer_products__element-navbar-link-products"
-              style={ verifyPathProducts(pathname) }
-            >
-              PRODUTOS
-            </button>
-            <button
-              type="button"
-              onClick={ (e) => redirectFunction(e) }
-              value="orders"
-              data-testid="customer_products__element-navbar-link-orders"
-              style={ verifyPathOrder(pathname) }
-            >
-              MEUS PEDIDOS
-            </button>
-          </div>
-        )}
-
+      {renderNavButtons()}
       <div>
         <div data-testid="customer_products__element-navbar-user-full-name">
           {username}

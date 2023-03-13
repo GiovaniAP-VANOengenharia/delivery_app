@@ -40,7 +40,7 @@ function OrderDetailLine(props) {
             `${role}_order_details__element-order-table-unit-price-${productIndex}`
           }
         >
-          { fixDecimals(productData.price) }
+          { `R$ ${fixDecimals(productData.price)}` }
         </p>
       </div>
       <div>
@@ -49,7 +49,7 @@ function OrderDetailLine(props) {
             `${role}_order_details__element-order-table-sub-total-${productIndex}`
           }
         >
-          { fixDecimals(productData.price * productData.quantity) }
+          { `R$ ${fixDecimals(productData.price * productData.quantity)}` }
         </p>
       </div>
     </OrderBody>

@@ -14,6 +14,7 @@ function AdmTable(props) {
 
   return (
     <AdmContainer>
+      <h1>Lista de Usuários</h1>
       <table>
         <AdmTableContainer>
           <thead>
@@ -82,11 +83,8 @@ function AdmTable(props) {
 }
 
 const AdmContainer = styled.div`
-  display: flex;
-  flex-direction: column;
-  justify-content: center;
-  align-items: center;
   width: 100%;
+  background-color: #FBFFFE;
   & > p {
     font-size: 25px;
     text-align: left;
@@ -156,13 +154,18 @@ const AdmTableContainer = styled.table`
     color: white;
   }
   & > tbody > tr > td:nth-child(5) {
-    width: 10%;
+    background-color: #056CF9;
+    border-radius: 0 5px 5px 0;
+    & > button {
+    width: 100%;
     text-align: center;
-    font-size: 25px;
+    font-size: 22px;
     margin: 0;
-    padding: 5px;
+    padding: 5px 10px;
+    border: none;
     background-color: #056CF9;
     color: white;
+    }
   }
   & > tbody > tr > td:nth-child(6) {
     width: 15%;

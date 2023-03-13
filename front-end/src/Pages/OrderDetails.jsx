@@ -1,3 +1,4 @@
+/* eslint-disable max-lines */
 import React, { useEffect, useState } from 'react';
 import { useParams } from 'react-router-dom';
 import styled from 'styled-components';
@@ -45,6 +46,7 @@ function OrderDetails() {
       setDisablePrep(true);
     }
     if (sale && sale.result.status === 'Preparando') {
+      setIsDisabled(true);
       setDisablePrep(true);
       setDisableDisp(false);
     }
@@ -76,7 +78,7 @@ function OrderDetails() {
               }
             >
               <p>PEDIDO</p>
-              {`${id.toString().padStart(orderIdMaxLength, '0')};`}
+              {id.toString().padStart(orderIdMaxLength, '0')}
             </OrderNumber>
             { role === 'customer' && (
               <Seller
@@ -220,9 +222,13 @@ const MarkAsButton = styled.button`
   font-size: 17px;
   text-align: center;
   padding: 10px 13px;
-  color: white;
-  border-radius: 5px;
-  background-color: #036B52;`;
+  border: none;
+  color: white; border-radius: 5px; background-color: #036B52;
+  :disabled {
+    background-color: #036b5352;
+      color: white
+  }
+  `;
 const SellerButtons = styled.div`
   display: flex;
   flex-direction: row;
@@ -230,18 +236,21 @@ const SellerButtons = styled.div`
   width: 600px;
   text-align: right;
   & > button {
-    width: 250px;
-    padding: 6px;
+    width: 250px; padding: 6px;
     border-radius: 5px;
-    border: none;
-    font-size: 22px;
-    color: white;
+    border: none; font-size: 22px; color: white;
     :nth-child(1){
       background-color: #2FC18C;
       margin-right: 10px;
+      :disabled {
+      background-color: #2fc18c7b;
+      }
     }
     :nth-child(2){
       background-color: #036B52;
+      :disabled {
+        background-color: #036b5380;
+      }
     }
   }`;
 

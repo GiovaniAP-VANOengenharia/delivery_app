@@ -53,47 +53,40 @@ function AdminForm() {
 
   return (
     <AdmContainer>
-      <p>Cadastrar novo usuário</p>
+      <h1>Cadastrar novo usuário</h1>
       <AdmHeader>
-        <div>
-          <label htmlFor="admin_manage__input-name">
-            Nome
-          </label>
+
+        <label htmlFor="name">
+          Nome
           <input
             id="name"
             onChange={ handleChange }
             type="text"
             data-testid="admin_manage__input-name"
           />
+        </label>
 
-        </div>
-
-        <div>
-          <label htmlFor="admin_manage__input-email">
-            Login
-          </label>
+        <label htmlFor="email">
+          Login
           <input
             id="email"
             onChange={ handleChange }
             type="email"
             data-testid="admin_manage__input-email"
           />
-        </div>
+        </label>
 
-        <div>
-          <label htmlFor="admin_manage__input-password">
-            Senha
-          </label>
+        <label htmlFor="password">
+          Senha
           <input
             id="password"
             onChange={ handleChange }
             type="password"
             data-testid="admin_manage__input-password"
           />
-        </div>
+        </label>
 
-        <div>
-          <label htmlFor="admin_manage__select-role" />
+        <label htmlFor="role">
           Tipo
           <select
             type="select"
@@ -107,7 +100,7 @@ function AdminForm() {
             <option value="customer">Cliente</option>
             <option value="administrator">Administrador</option>
           </select>
-        </div>
+        </label>
 
         <div>
           <button
@@ -134,41 +127,53 @@ function AdminForm() {
 }
 
 const AdmContainer = styled.div`
-  margin: 20px 50px;
-  border: 1px solid black;
-  height: 80px;
+  margin: 20px 375px;
+  width: 1200px;
 `;
 
 const AdmHeader = styled.div`
   height: 100%;
+  width: 1190px;
+  margin-left: 4px;
+  margin-bottom: 50px;
   display: flex;
   flex-direction: row;
   justify-content: space-between;
   align-items: center;
   border: 1px solid #B1C2BE;
-  background-color: #EAF1EF;
-  & > div {
+  background-color: #FBFFFE;
+  & > label {
     display: flex;
     flex-direction: column;
     align-content: center;
     padding: 0;
     font-size: 20px;
     font-weight: 500;
-    width: 15%;
+    width: 20%;
     margin: 10px;
     border-radius: 5px;
     & >:nth-child(1){
       margin: 0 5px 0 0;
     }
-    & > button {
-      background-color: #036b52;
-      color: white;
-      height: 40px;
-    }
     & > input, select {
-      height: 30px;
+      height: 35px;
+      font-size: 20px;
     }
   }
+    & > div > button {
+      width: 150px;
+      padding: 6px;
+      margin-right: 10px;
+      border-radius: 5px;
+      border: none;
+      font-size: 20px;
+      color: white;
+      background-color: #036B52;
+      :disabled {
+      background-color: #036b5352;
+      color: white
+      }
+    }
   & > p:nth-child(2) {
     font-size: 20px;
     margin: 0;
