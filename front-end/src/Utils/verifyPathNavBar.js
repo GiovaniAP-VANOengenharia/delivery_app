@@ -1,5 +1,5 @@
 export const verifyPathProducts = (pathname) => {
-  if (pathname.includes('products')) {
+  if (pathname.includes('products') || pathname.includes('checkout')) {
     return {
       backgroundColor: '#2FC18C',
       color: 'black',

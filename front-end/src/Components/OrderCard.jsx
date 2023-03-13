@@ -1,7 +1,7 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 import styled from 'styled-components';
-import { useHistory } from 'react-router-dom';
+import { useHistory, useLocation } from 'react-router-dom';
 import statusColors from '../Utils/statusColors';
 import mountDate from '../Utils/mountDate';
 
@@ -9,6 +9,8 @@ function OrderCard(props) {
   const history = useHistory();
   const { sale, user } = props;
   const { id, totalPrice, saleDate, status } = sale;
+  const { pathname } = useLocation();
+
   const orderIdMaxLength = 4;
   return (
     <OrderContainer onClick={ () => history.push(`/${user.role}/orders/${id}`) }>
@@ -16,32 +18,53 @@ function OrderCard(props) {
         <div>Pedido</div>
         <div>{id.toString().padStart(orderIdMaxLength, '0')}</div>
       </OrderId>
-      <OrderStatus
-        data-testid={ `${user.role}_orders__element-delivery-status-${id}` }
-        backgroundColor={ statusColors[status] }
-      >
-        <div>{status}</div>
-      </OrderStatus>
-      <OrderDatePrice>
-        <div data-testid={ `${user.role}_orders__element-order-date-${id}` }>
-          {mountDate(saleDate)}
+      <div>
+        <div>
+          <OrderStatus
+            data-testid={ `${user.role}_orders__element-delivery-status-${id}` }
+            backgroundColor={ statusColors[status] }
+          >
+            <div>{status}</div>
+          </OrderStatus>
+          <OrderDatePrice>
+            <div data-testid={ `${user.role}_orders__element-order-date-${id}` }>
+              {mountDate(saleDate)}
+            </div>
+            <div data-testid={ `${user.role}_orders__element-card-price-${id}` }>
+              {`R$ ${totalPrice.toString().replace('.', ',')}`}
+            </div>
+          </OrderDatePrice>
         </div>
-        <div data-testid={ `${user.role}_orders__element-card-price-${id}` }>
-          {totalPrice.toString().replace('.', ',')}
-        </div>
-      </OrderDatePrice>
+        { pathname.includes('seller') && (
+          <div data-testid={ `seller_orders__element-card-address-${id}` }>
+            {`${sale.deliveryAddress}, ${sale.deliveryNumber}`}
+          </div>
+        )}
+      </div>
     </OrderContainer>
   );
 }
 
 const OrderContainer = styled.button`
   display: flex;
+  flex-direction: row;
   justify-content: space-around;
   align-items: center;
   width: 400px;
-  border: 1px solid gray;
+  border: 1px solid #CBD4D2;
   margin: 20px;
-  background-color: white;
+  background-color: #EAF1EF;
+  & > div:nth-child(2) {
+    & >:nth-child(1){
+      display: flex;
+      flex-direction: row;
+    }
+    & >:nth-child(2){
+      font-size: 15px;
+      padding: 5px;
+      text-align: left;
+    }
+  }
 `;
 
 const OrderId = styled.div`
@@ -49,7 +72,8 @@ const OrderId = styled.div`
   flex-direction: column;
   align-items: center;
   justify-content: center;
-
+  height: 100%;
+  width: 150px;
   & > div:nth-child(1) {
     font-size: 15px;
     margin: 0px;
@@ -67,7 +91,7 @@ const OrderStatus = styled.div`
   border-radius: 10px;
   background: ${(props) => props.backgroundColor};
   & > div {
-    font-size: 20px;
+    font-size: 25px;
     font-weight: 500;
     padding: 30px 0 30px 0;
   }
@@ -78,10 +102,15 @@ const OrderDatePrice = styled.div`
   flex-direction: column;
   justify-content: center;
   align-items: center;
+  background-color: #F0FBF9;
+  margin: 10px;
+  border-radius: 5px;
+  padding: 10px 0;
   & > div {
     margin: 2px;
     padding: 2px 7px 2px 10px;
-    font-size: 17px;
+    font-size: 18px;
+    font-weight: 600;
   }
 `;
 
@@ -92,6 +121,8 @@ OrderCard.propTypes = {
     status: PropTypes.string.isRequired,
     saleDate: PropTypes.string.isRequired,
     totalPrice: PropTypes.string.isRequired,
+    deliveryAddress: PropTypes.string.isRequired,
+    deliveryNumber: PropTypes.string.isRequired,
   }).isRequired,
 };
 
