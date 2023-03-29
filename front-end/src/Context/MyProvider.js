@@ -10,12 +10,20 @@ export default function Provider({ children }) {
   const [status, setStatus] = useState('');
   const [userId, setUserId] = useState('');
   const [role, setRole] = useState('');
+  const [theme, setTheme] = useState('light');
 
   useEffect(() => {
     const products = localStorage.getItem('products');
     if (products) {
       const updateCart = JSON.parse(products);
       setCart(updateCart);
+    }
+    const localTheme = localStorage.getItem('theme');
+    if (localTheme === 'dark') {
+      setTheme('dark');
+    }
+    if (!localTheme) {
+      localStorage.setItem('theme', 'light');
     }
   }, []);
 
@@ -33,8 +41,11 @@ export default function Provider({ children }) {
       status,
       setStatus,
       orders,
-      setOrders }
-  ), [state, cart, userId, sale, role, status, orders]);
+      setOrders,
+      theme,
+      setTheme,
+    }
+  ), [state, cart, userId, sale, role, status, orders, theme]);
 
   return (
     <MyContext.Provider value={ providerValue }>

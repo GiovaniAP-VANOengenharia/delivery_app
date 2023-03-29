@@ -95,7 +95,6 @@ function AdminForm() {
             name="role"
             onChange={ handleChange }
           >
-            <option value="" selected disabled hidden> </option>
             <option value="seller">Vendedor</option>
             <option value="customer">Cliente</option>
             <option value="administrator">Administrador</option>
@@ -127,13 +126,19 @@ function AdminForm() {
 }
 
 const AdmContainer = styled.div`
-  margin: 20px 375px;
-  width: 1200px;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  width: 100%;
+  h1 {
+    width: 90%;
+  }
 `;
 
 const AdmHeader = styled.div`
   height: 100%;
-  width: 1190px;
+  width: 90%;
   margin-left: 4px;
   margin-bottom: 50px;
   display: flex;
@@ -141,7 +146,7 @@ const AdmHeader = styled.div`
   justify-content: space-between;
   align-items: center;
   border: 1px solid #B1C2BE;
-  background-color: #FBFFFE;
+  border-radius: 8px;
   & > label {
     display: flex;
     flex-direction: column;

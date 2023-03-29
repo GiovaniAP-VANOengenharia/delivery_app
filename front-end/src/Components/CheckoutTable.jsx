@@ -58,6 +58,7 @@ function CheckoutTable() {
 
                 <td
                   data-testid={ `customer_checkout__element-order-table-name-${index}` }
+                  className="card"
                 >
                   { name }
                 </td>
@@ -104,7 +105,7 @@ function CheckoutTable() {
         </tbody>
       </CheckoutTableContainer>
       <div>
-        <p>Total: R$</p>
+        <p className="price">Total: R$</p>
         <div data-testid="customer_checkout__element-order-total-price">
           { totalValue.toString().replace('.', ',') }
         </div>
@@ -118,11 +119,18 @@ const CheckoutContainer = styled.div`
   flex-direction: column;
   justify-content: center;
   align-items: center;
-  width: 70%;
+  width: 100%;
   & > p {
     font-size: 25px;
     text-align: left;
     width: 90%;
+  }
+  .price {
+    font-size: 25px;
+    text-align: left;
+    width: 61%;
+    color: white;
+    margin: 0 10px;
   }
   & > div {
     display: flex;
@@ -139,7 +147,7 @@ const CheckoutContainer = styled.div`
     height: 30px;
     border-radius: 8px;
   }
-`;
+  `;
 
 const CheckoutTableContainer = styled.table`
   width: 90%;
@@ -147,6 +155,7 @@ const CheckoutTableContainer = styled.table`
   border-spacing: 0 10px;
   margin: 10px;
   border: 1px solid #CBD4D2;
+  border-radius: 8px;
   padding: 10px 20px;
 
   & > tbody > tr > td {
@@ -165,8 +174,9 @@ const CheckoutTableContainer = styled.table`
   & > tbody > tr > td:nth-child(2) {
     width: 500px;
     font-size: 20px;
-    background-color: #EAF1EF;
     text-align: left;
+    border-top: 1px solid #CBD4D2;
+    border-bottom: 1px solid #CBD4D2;
     margin: 0;
     padding: 7.5px 15px;
   }

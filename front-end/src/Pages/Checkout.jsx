@@ -1,21 +1,33 @@
 import React, { useContext, useEffect, useState } from 'react';
 import { useHistory } from 'react-router-dom';
-import styled from 'styled-components';
+import styled, { ThemeProvider } from 'styled-components';
 import MyContext from '../Context/MyContext';
 import CheckoutTable from '../Components/CheckoutTable';
 import NavBar from '../Components/NavBar';
 import { requestSale, requestSellers, setToken } from '../services/requests';
 import { calcCartTotal } from '../Utils';
+import { lightTheme, darkTheme } from '../theme';
+import GlobalStyle from '../theme/GlobalStyle';
 
 function Checkout() {
-  const { cart, setCart, setSale, setStatus, orders, setOrders } = useContext(MyContext);
   const [deliveryAddress, setAddress] = useState('');
   const [deliveryNumber, setNumber] = useState('');
   const [selectedSelr, setSelectedSelr] = useState('');
   const [sellerData, setSellerData] = useState([]);
   const [isDisabled, setIsDisabled] = useState(true);
-  const idUser = JSON.parse(localStorage.getItem('id'));
   const history = useHistory();
+  const {
+    theme,
+    setTheme,
+    cart,
+    setCart,
+    setSale,
+    setStatus,
+    orders,
+    setOrders,
+  } = useContext(MyContext);
+
+  const idUser = JSON.parse(localStorage.getItem('id'));
 
   const getSellers = async () => {
     const userData = localStorage.getItem('user');
@@ -37,6 +49,9 @@ function Checkout() {
   }, [selectedSelr, deliveryAddress, deliveryNumber]);
 
   useEffect(() => {
+    const localTheme = localStorage.getItem('theme');
+    if (localTheme === 'dark') setTheme('dark');
+    if (!localTheme) localStorage.setItem('theme', 'light');
     getSellers();
     const products = localStorage.getItem('products');
     const cartItems = JSON.parse(products);
@@ -72,6 +87,7 @@ function Checkout() {
         const { id } = response.result;
         setOrders([...orders, { ...response.result, cart }]);
         history.push(`/customer/orders/${id}`);
+        localStorage.removeItem('products');
       }
     } catch (error) {
       console.log(error);
@@ -84,12 +100,13 @@ function Checkout() {
   };
 
   return (
-    <>
+    <ThemeProvider theme={ theme === 'light' ? lightTheme : darkTheme }>
+      <GlobalStyle />
       <NavBar />
+      <CheckoutTable />
       <CheckoutContainer>
-        <CheckoutTable />
-        <p>Detalhes e Endereço Para Entrega</p>
-        <form>
+        <p className="title-form">Detalhes e Endereço Para Entrega</p>
+        <div className="input-form">
           <label htmlFor="seller-input">
             P. Vendedor Responsável:
             <select
@@ -126,18 +143,18 @@ function Checkout() {
               onChange={ ({ target }) => setNumber(target.value) }
             />
           </label>
+        </div>
 
-          <button
-            type="button"
-            data-testid="customer_checkout__button-submit-order"
-            onClick={ finish }
-            disabled={ isDisabled }
-          >
-            Finalizar Pedido
-          </button>
-        </form>
+        <button
+          type="button"
+          data-testid="customer_checkout__button-submit-order"
+          onClick={ finish }
+          disabled={ isDisabled }
+        >
+          Finalizar Pedido
+        </button>
       </CheckoutContainer>
-    </>
+    </ThemeProvider>
   );
 }
 
@@ -146,23 +163,29 @@ const CheckoutContainer = styled.div`
   flex-direction: column;
   justify-content: center;
   align-items: center;
-  & > p {
-    font-size: 25px;
+  border: 1px solid #CBD4D2;
+  border-radius: 8px;
+  width: 90%;
+  padding: 0px;
+  display: flex;
+  flex-flow: row wrap;
+  justify-content: center;
+  align-items: center;
+  margin: 20px;
+  .title-form{
     text-align: left;
-    width: 63%;
+    width: 92%;
+    font-size: 25px;
   }
-  & > form {
-    border: 1px solid #CBD4D2;
-    width: 61%;
-    padding: 15px;
+  .input-form {
     display: flex;
-    flex-flow: row wrap;
     justify-content: center;
     align-items: center;
+    margin: 20px 0;
     & > label {
       display: flex;
       flex-direction: column;
-      margin: 15px;
+      margin: 15px 15px 0;
       & > input {
         border: 1px solid #CBD4D2;
         border-radius: 5px;
@@ -183,18 +206,18 @@ const CheckoutContainer = styled.div`
         width: 250px;
       }
     }
-    & > button {
-      width: 320px;
-      height: 60px;
-      border: 1px solid #036B52;
-      border-radius: 5px;
-      background-color: #036B52;
-      font-size: 25px;
-      margin: 0;
-      color: white;
-      &:disabled {
-        background-color: #036b5352;
-      }
+  }
+  & > button {
+    width: 320px;
+    height: 60px;
+    border: 1px solid #036B52;
+    border-radius: 5px;
+    background-color: #036B52;
+    font-size: 25px;
+    margin: 0 0 20px;
+    color: white;
+    &:disabled {
+      background-color: #036b5352;
     }
   }
 `;

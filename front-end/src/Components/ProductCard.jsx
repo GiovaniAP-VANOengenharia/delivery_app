@@ -132,6 +132,9 @@ const ProductCardContainer = styled.div`
   border: 1px solid #CBD4D2;
   margin: 15px;
   width: 350px;
+  p {
+    color: black;
+  }
   & > img {
     width: fit-content;
     height: 350px;

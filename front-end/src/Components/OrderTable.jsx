@@ -18,66 +18,65 @@ function OrdersTable(props) {
 
   return (
     <DetailsContainer>
-      <table>
-        <DetailsTableContainer>
-          <thead>
-            <tr>
-              { tableHeaders.map((header) => (
-                <th key={ header }>{ header }</th>
-              )) }
-            </tr>
-          </thead>
-          <tbody>
-            { cart.map((product, index) => {
-              const { name, price, quantity } = product;
+      <DetailsTableContainer>
+        <thead>
+          <tr>
+            { tableHeaders.map((header) => (
+              <th key={ header }>{ header }</th>
+            )) }
+          </tr>
+        </thead>
+        <tbody>
+          { cart.map((product, index) => {
+            const { name, price, quantity } = product;
 
-              return (
-                <tr key={ name }>
-                  <td
-                    data-testid={
-                      `${role}_order_details__element-order-table-item-number-${index}`
-                    }
-                  >
-                    {index + 1 }
-                  </td>
+            return (
+              <tr key={ name }>
+                <td
+                  data-testid={
+                    `${role}_order_details__element-order-table-item-number-${index}`
+                  }
+                >
+                  {index + 1 }
+                </td>
 
-                  <td
-                    data-testid={
-                      `${role}_order_details__element-order-table-name-${index}`
-                    }
-                  >
-                    { name }
-                  </td>
+                <td
+                  data-testid={
+                    `${role}_order_details__element-order-table-name-${index}`
+                  }
+                  className="card"
+                >
+                  { name }
+                </td>
 
-                  <td
-                    data-testid={
-                      `${role}_order_details__element-order-table-quantity-${index}`
-                    }
-                  >
-                    { quantity }
-                  </td>
+                <td
+                  data-testid={
+                    `${role}_order_details__element-order-table-quantity-${index}`
+                  }
+                >
+                  { quantity }
+                </td>
 
-                  <td
-                    data-testid={
-                      `${role}_order_details__element-order-table-unit-price-${index}`
-                    }
-                  >
-                    { `R$ ${fixDecimals(price)}` }
-                  </td>
+                <td
+                  data-testid={
+                    `${role}_order_details__element-order-table-unit-price-${index}`
+                  }
+                >
+                  { `R$ ${fixDecimals(price)}` }
+                </td>
 
-                  <td
-                    data-testid={
-                      `${role}_order_details__element-order-table-sub-total-${index}`
-                    }
-                  >
-                    { `R$ ${fixDecimals(price * quantity)}` }
-                  </td>
-                </tr>
-              );
-            })}
-          </tbody>
-        </DetailsTableContainer>
-      </table>
+                <td
+                  data-testid={
+                    `${role}_order_details__element-order-table-sub-total-${index}`
+                  }
+                >
+                  { `R$ ${fixDecimals(price * quantity)}` }
+                </td>
+              </tr>
+            );
+          })}
+        </tbody>
+      </DetailsTableContainer>
     </DetailsContainer>
   );
 }
@@ -115,6 +114,7 @@ const DetailsTableContainer = styled.table`
   height: 40px;
   border-spacing: 0 10px;
   border: 1px solid #CBD4D2;
+  border-radius: 5px;
   padding: 10px 20px;
 
   & > tbody > tr > td {
@@ -133,8 +133,9 @@ const DetailsTableContainer = styled.table`
   & > tbody > tr > td:nth-child(2) {
     width: 50%;
     font-size: 20px;
-    background-color: #EAF1EF;
     text-align: left;
+    border-top: 1px solid #CBD4D2;
+    border-bottom: 1px solid #CBD4D2;
     margin: 0;
     padding: 7.5px 15px;
   }
@@ -163,6 +164,7 @@ const DetailsTableContainer = styled.table`
     margin: 0;
     padding: 5px;
     background-color: #056CF9;
+    border-radius: 0 8px 8px 0;
     color: white;
   }
   & > tbody > tr > td:nth-child(6) {
@@ -174,7 +176,6 @@ const DetailsTableContainer = styled.table`
     margin: 0;
     padding: 5px;
     background-color: #2FC18C;
-    border-radius: 0 8px 8px 0;
     color: white;
     border: none;
   }

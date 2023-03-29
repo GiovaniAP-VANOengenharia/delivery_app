@@ -13,78 +13,80 @@ function AdmTable(props) {
   };
 
   return (
-    <AdmContainer>
+    <AdmTableContainer>
       <h1>Lista de Usuários</h1>
-      <table>
-        <AdmTableContainer>
-          <thead>
-            <tr>
-              { tableHeaders.map((header) => (
-                <th key={ header }>{ header }</th>
-              )) }
-            </tr>
-          </thead>
-          <tbody>
-            { users.map((user, index) => {
-              const { id, name, email, role } = user;
+      <AdmTableSubContainer>
+        <thead>
+          <tr>
+            { tableHeaders.map((header) => (
+              <th key={ header }>{ header }</th>
+            )) }
+          </tr>
+        </thead>
+        <tbody>
+          { users.map((user, index) => {
+            const { id, name, email, role } = user;
 
-              return (
-                <tr key={ name }>
-                  <td
-                    data-testid={
-                      `adm_order_details__element-order-table-item-number-${index}`
-                    }
-                  >
-                    {index + 1 }
-                  </td>
+            return (
+              <tr key={ name }>
+                <td
+                  data-testid={
+                    `adm_order_details__element-order-table-item-number-${index}`
+                  }
+                >
+                  {index + 1 }
+                </td>
 
-                  <td
-                    data-testid={
-                      `adm_order_details__element-order-table-name-${index}`
-                    }
-                  >
-                    { name }
-                  </td>
+                <td
+                  data-testid={
+                    `adm_order_details__element-order-table-name-${index}`
+                  }
+                  className="card"
+                >
+                  { name }
+                </td>
 
-                  <td
-                    data-testid={
-                      `adm_order_details__element-order-table-quantity-${index}`
-                    }
-                  >
-                    { email }
-                  </td>
+                <td
+                  data-testid={
+                    `adm_order_details__element-order-table-quantity-${index}`
+                  }
+                >
+                  { email }
+                </td>
 
-                  <td
+                <td
+                  data-testid={
+                    `adm_order_details__element-order-table-unit-price-${index}`
+                  }
+                >
+                  { role }
+                </td>
+                <td>
+                  <button
+                    type="button"
                     data-testid={
-                      `adm_order_details__element-order-table-unit-price-${index}`
+                      `customer_checkout__element-order-table-remove-${index}`
                     }
+                    onClick={ () => removeUser(id) }
                   >
-                    { role }
-                  </td>
-                  <td>
-                    <button
-                      type="button"
-                      data-testid={
-                        `customer_checkout__element-order-table-remove-${index}`
-                      }
-                      onClick={ () => removeUser(id) }
-                    >
-                      Excluir
-                    </button>
-                  </td>
-                </tr>
-              );
-            })}
-          </tbody>
-        </AdmTableContainer>
-      </table>
-    </AdmContainer>
+                    Excluir
+                  </button>
+                </td>
+              </tr>
+            );
+          })}
+        </tbody>
+      </AdmTableSubContainer>
+    </AdmTableContainer>
   );
 }
 
-const AdmContainer = styled.div`
+const AdmTableContainer = styled.div`
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
   width: 100%;
-  background-color: #FBFFFE;
   & > p {
     font-size: 25px;
     text-align: left;
@@ -107,11 +109,12 @@ const AdmContainer = styled.div`
   }
 `;
 
-const AdmTableContainer = styled.table`
-  width: 1190px;
+const AdmTableSubContainer = styled.table`
+  width: 90%;
   height: 40px;
   border-spacing: 0 10px;
   border: 1px solid #CBD4D2;
+  border-radius: 8px;
   padding: 10px 20px;
 
   & > tbody > tr > td {
@@ -130,7 +133,8 @@ const AdmTableContainer = styled.table`
   & > tbody > tr > td:nth-child(2) {
     width: 50%;
     font-size: 20px;
-    background-color: #EAF1EF;
+    border-top: 1px solid #CBD4D2;
+    border-bottom: 1px solid #CBD4D2;
     text-align: left;
     margin: 0;
     padding: 7.5px 15px;

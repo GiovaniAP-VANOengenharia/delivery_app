@@ -1,12 +1,22 @@
-import React, { useEffect, useState } from 'react';
-import styled from 'styled-components';
+import React, { useContext, useEffect, useState } from 'react';
+import styled, { ThemeProvider } from 'styled-components';
 import NavBar from '../Components/NavBar';
 import OrderCard from '../Components/OrderCard';
+import MyContext from '../Context/MyContext';
 import { requestAllSales } from '../services/requests';
+import { lightTheme, darkTheme } from '../theme';
+import GlobalStyle from '../theme/GlobalStyle';
 
 function CustomerOrder() {
   const [sales, setSales] = useState();
   const [userData, setUser] = useState({});
+  const { theme, setTheme } = useContext(MyContext);
+
+  useEffect(() => {
+    const localTheme = localStorage.getItem('theme');
+    if (localTheme === 'dark') setTheme('dark');
+    if (!localTheme) localStorage.setItem('theme', 'light');
+  }, []);
 
   useEffect(() => {
     const getSales = async () => {
@@ -31,19 +41,20 @@ function CustomerOrder() {
   ));
 
   return (
-    <div>
+    <ThemeProvider theme={ theme === 'light' ? lightTheme : darkTheme }>
+      <GlobalStyle />
       <NavBar />
       <OrdersContainer>
         { sales && orderList}
       </OrdersContainer>
-    </div>
+    </ThemeProvider>
   );
 }
 
 const OrdersContainer = styled.div`
   display: flex;
   flex-flow: row wrap;
-  
+  width: 95%;
 `;
 
 export default CustomerOrder;

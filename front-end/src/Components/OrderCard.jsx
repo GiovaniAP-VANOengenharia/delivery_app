@@ -13,7 +13,10 @@ function OrderCard(props) {
 
   const orderIdMaxLength = 4;
   return (
-    <OrderContainer onClick={ () => history.push(`/${user.role}/orders/${id}`) }>
+    <OrderCardContainer
+      className="card"
+      onClick={ () => history.push(`/${user.role}/orders/${id}`) }
+    >
       <OrderId data-testid={ `${user.role}_orders__element-order-id-${id}` }>
         <div>Pedido</div>
         <div>{id.toString().padStart(orderIdMaxLength, '0')}</div>
@@ -36,24 +39,27 @@ function OrderCard(props) {
           </OrderDatePrice>
         </div>
         { pathname.includes('seller') && (
-          <div data-testid={ `seller_orders__element-card-address-${id}` }>
+          <div
+            data-testid={ `seller_orders__element-card-address-${id}` }
+            className="adress"
+          >
             {`${sale.deliveryAddress}, ${sale.deliveryNumber}`}
           </div>
         )}
       </div>
-    </OrderContainer>
+    </OrderCardContainer>
   );
 }
 
-const OrderContainer = styled.button`
+const OrderCardContainer = styled.button`
   display: flex;
   flex-direction: row;
   justify-content: space-around;
   align-items: center;
   width: 400px;
-  border: 1px solid #CBD4D2;
   margin: 20px;
-  background-color: #EAF1EF;
+  border: 1px solid #CBD4D2;
+  border-radius: 5px;
   & > div:nth-child(2) {
     & >:nth-child(1){
       display: flex;
@@ -64,6 +70,11 @@ const OrderContainer = styled.button`
       padding: 5px;
       text-align: left;
     }
+  }
+  .adress {
+    display: flex;
+    justify-content: flex-end;
+    width: 95%;
   }
 `;
 
@@ -90,6 +101,7 @@ const OrderStatus = styled.div`
   text-align: center;
   border-radius: 10px;
   background: ${(props) => props.backgroundColor};
+  color: black;
   & > div {
     font-size: 25px;
     font-weight: 500;
@@ -102,7 +114,6 @@ const OrderDatePrice = styled.div`
   flex-direction: column;
   justify-content: center;
   align-items: center;
-  background-color: #F0FBF9;
   margin: 10px;
   border-radius: 5px;
   padding: 10px 0;

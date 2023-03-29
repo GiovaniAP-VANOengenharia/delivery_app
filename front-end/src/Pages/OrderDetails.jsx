@@ -1,7 +1,7 @@
 /* eslint-disable max-lines */
-import React, { useEffect, useState } from 'react';
+import React, { useContext, useEffect, useState } from 'react';
 import { useParams } from 'react-router-dom';
-import styled from 'styled-components';
+import styled, { ThemeProvider } from 'styled-components';
 import OrderTable from '../Components/OrderTable';
 import {
   requestSaleById,
@@ -13,6 +13,9 @@ import mountDate from '../Utils/mountDate';
 import { fixDecimals } from '../Utils';
 import NavBar from '../Components/NavBar';
 import statusColors from '../Utils/statusColors';
+import MyContext from '../Context/MyContext';
+import { lightTheme, darkTheme } from '../theme';
+import GlobalStyle from '../theme/GlobalStyle';
 
 function OrderDetails() {
   const [sale, setSale] = useState();
@@ -22,8 +25,16 @@ function OrderDetails() {
   const [isDisabled, setIsDisabled] = useState(true);
   const [disablePrep, setDisablePrep] = useState(false);
   const [disableDisp, setDisableDisp] = useState(true);
+  const { theme, setTheme } = useContext(MyContext);
   const { id } = useParams();
   const orderIdMaxLength = 4;
+
+  useEffect(() => {
+    const localTheme = localStorage.getItem('theme');
+    if (localTheme === 'dark') setTheme('dark');
+    if (!localTheme) localStorage.setItem('theme', 'light');
+  }, []);
+
   useEffect(() => {
     const getSales = async () => {
       const userData = localStorage.getItem('user');
@@ -66,94 +77,105 @@ function OrderDetails() {
     setSale(updateStatusSale);
   };
   return (
-    <div>
-      <NavBar />
-      {sale && (
-        <OrderContainer>
-          <h1>Detalhes do Pedido</h1>
-          <OrderHeader>
-            <OrderNumber
-              data-test-id={
-                `${role}_order_details__element-order-details-label-order-id`
-              }
-            >
-              <p>PEDIDO</p>
-              {id.toString().padStart(orderIdMaxLength, '0')}
-            </OrderNumber>
-            { role === 'customer' && (
-              <Seller
-                data-testid={
-                  `customer_order_details__element-order-details-label-seller-${'name'}`
+    <ThemeProvider theme={ theme === 'light' ? lightTheme : darkTheme }>
+      <GlobalStyle />
+      <OrderPage>
+        <NavBar />
+        {sale && (
+          <OrderContainer>
+            <h1>Detalhes do Pedido</h1>
+            <OrderHeader className="order-header">
+              <OrderNumber
+                data-test-id={
+                  `${role}_order_details__element-order-details-label-order-id`
                 }
               >
-                <p>P. Vend:</p>
-                {sellerName}
-              </Seller>
-            )}
-            <DateContainer
-              data-testid={
-                `${role}_order_details__element-order-details-label-order-${'date'}`
-              }
-            >
-              { mountDate(new Date(sale.result.saleDate)) }
-            </DateContainer>
-            <DeliveryStatus
-              data-testid={
-                `${role}_order_details__element-order-details-label-delivery-status${id}`
-              }
-              style={ { backgroundColor: statusColors[status] } }
-            >
-              { status }
-            </DeliveryStatus>
-            { role === 'customer' && (
-              <MarkAsButton
-                type="button"
-                disabled={ isDisabled }
-                name="Entregue"
-                data-testid="customer_order_details__button-delivery-check"
-                onClick={ updateStatus }
+                <p>PEDIDO</p>
+                {id.toString().padStart(orderIdMaxLength, '0')}
+              </OrderNumber>
+              { role === 'customer' && (
+                <Seller
+                  data-testid={
+                    `customer_order_details__element-order-details-label-seller-${'name'}`
+                  }
+                >
+                  <p>P. Vend:</p>
+                  {sellerName}
+                </Seller>
+              )}
+              <DateContainer
+                data-testid={
+                  `${role}_order_details__element-order-details-label-order-${'date'}`
+                }
               >
-                MARCAR COMO ENTREGUE
-              </MarkAsButton>
-            )}
-            { role === 'seller' && (
-              <SellerButtons>
-                <button
+                { mountDate(new Date(sale.result.saleDate)) }
+              </DateContainer>
+              <DeliveryStatus
+                data-testid={
+                  `${role}_order_details__element-order-details-label-delivery-status${id}`
+                }
+                style={ { backgroundColor: statusColors[status] } }
+              >
+                { status }
+              </DeliveryStatus>
+              { role === 'customer' && (
+                <MarkAsButton
                   type="button"
-                  name="Preparando"
-                  disabled={ disablePrep }
-                  data-testid="seller_order_details__button-preparing-check"
+                  disabled={ isDisabled }
+                  name="Entregue"
+                  data-testid="customer_order_details__button-delivery-check"
                   onClick={ updateStatus }
                 >
-                  Preparar Pedido
-                </button>
+                  MARCAR COMO ENTREGUE
+                </MarkAsButton>
+              )}
+              { role === 'seller' && (
+                <SellerButtons>
+                  <button
+                    type="button"
+                    name="Preparando"
+                    disabled={ disablePrep }
+                    data-testid="seller_order_details__button-preparing-check"
+                    onClick={ updateStatus }
+                  >
+                    Preparar Pedido
+                  </button>
 
-                <button
-                  type="button"
-                  name="Em Trânsito"
-                  disabled={ disableDisp }
-                  data-testid="seller_order_details__button-dispatch-check"
-                  onClick={ updateStatus }
-                >
-                  Saiu para Entrega
-                </button>
-              </SellerButtons>
-            )}
-          </OrderHeader>
-          <OrderTable role={ role } sale={ sale } />
-          <div
-            data-testid={ `${role}_order_details__element-order-total-price` }
-          >
-            { `Total: R$ ${fixDecimals(sale.result.totalPrice)}`}
-          </div>
-        </OrderContainer>
-      )}
-    </div>
+                  <button
+                    type="button"
+                    name="Em Trânsito"
+                    disabled={ disableDisp }
+                    data-testid="seller_order_details__button-dispatch-check"
+                    onClick={ updateStatus }
+                  >
+                    Saiu para Entrega
+                  </button>
+                </SellerButtons>
+              )}
+            </OrderHeader>
+            <OrderTable role={ role } sale={ sale } />
+            <div
+              data-testid={ `${role}_order_details__element-order-total-price` }
+            >
+              { `Total: R$ ${fixDecimals(sale.result.totalPrice)}`}
+            </div>
+          </OrderContainer>
+        )}
+      </OrderPage>
+    </ThemeProvider>
   );
 }
 
+const OrderPage = styled.div`
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+`;
 const OrderContainer = styled.div`
-  margin: 20px 365px;
+  display: flex;
+  flex-direction: column;
+  width: 1200px;
   & >:nth-child(4){
     position: fixed;
     top:800px;
@@ -171,9 +193,10 @@ const OrderHeader = styled.div`
   justify-content: space-between;
   align-items: center;
   border: 1px solid #B1C2BE;
-  background-color: #EAF1EF;
+  border-radius: 5px;
   height: 50px;
-  padding: 0 10px 0 10px;
+  padding: 0 10px;
+  margin: 5px;
 `;
 const OrderNumber = styled.div`
   display: flex;
@@ -205,7 +228,6 @@ const DateContainer = styled.p`
   border-radius: 5px;
   font-size: 22px;
   font-weight: 500;
-  background-color: #F2FFFC;
   `;
 const DeliveryStatus = styled.p`
   width: 190px;

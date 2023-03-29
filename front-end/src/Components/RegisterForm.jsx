@@ -89,6 +89,14 @@ function RegisterForm() {
           CADASTRAR
         </button>
 
+        <button
+          onClick={ () => history.push('/') }
+          type="submit"
+          data-testid="common_register__button-register"
+        >
+          FAZER LOGIN
+        </button>
+
       </FormContainer>
       { showPopUp && (
         <p
@@ -118,7 +126,7 @@ const FormContainer = styled.div`
     margin: 7px 0;
     border-radius: 3px;
   }
-  & > :nth-child(4) {
+  & > button {
     &:disabled {
       background-color: #036b5352;
       color: white
