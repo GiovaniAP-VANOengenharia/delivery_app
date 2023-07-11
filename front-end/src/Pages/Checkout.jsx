@@ -163,7 +163,7 @@ const CheckoutContainer = styled.div`
   flex-direction: column;
   justify-content: center;
   align-items: center;
-  border: 1px solid #CBD4D2;
+  border: 1px solid #cbcdd4;
   border-radius: 8px;
   width: 90%;
   padding: 0px;
