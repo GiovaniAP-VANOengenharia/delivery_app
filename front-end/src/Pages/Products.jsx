@@ -1,18 +1,16 @@
 import React, { useContext, useEffect, useState } from 'react';
 import { useHistory } from 'react-router-dom';
-import styled, { ThemeProvider } from 'styled-components';
+import styled from 'styled-components';
 import NavBar from '../Components/NavBar';
 import ProductCard from '../Components/ProductCard';
 import MyContext from '../Context/MyContext';
 import { requestData } from '../services/requests';
 import { fixDecimals } from '../Utils';
-import { lightTheme, darkTheme } from '../theme';
-import GlobalStyle from '../theme/GlobalStyle';
 
 function Products() {
   const [totalPrice, setTotalPrice] = useState(0);
   const [productsArray, setProductsArray] = useState([]);
-  const { theme, cart, setCart } = useContext(MyContext);
+  const { cart, setCart } = useContext(MyContext);
 
   const history = useHistory();
 
@@ -41,26 +39,23 @@ function Products() {
   }, [cart]);
 
   return (
-    <ThemeProvider theme={ theme === 'light' ? lightTheme : darkTheme }>
-      <GlobalStyle />
-      <div>
-        <NavBar />
-        <ProductsContainer>
-          { productsArray.map((product) => (
-            <ProductCard productData={ product } key={ product.id } />
-          ))}
-        </ProductsContainer>
-        <Productsfooter
-          data-testid="customer_products__button-cart"
-          onClick={ customerCheckout }
-          disabled={ !cart.length }
-        >
-          <p data-testid="customer_products__checkout-bottom-value">
-            { `Ver Carrinho: R$ ${totalPrice}` }
-          </p>
-        </Productsfooter>
-      </div>
-    </ThemeProvider>
+    <div>
+      <NavBar />
+      <ProductsContainer>
+        { productsArray.map((product) => (
+          <ProductCard productData={ product } key={ product.id } />
+        ))}
+      </ProductsContainer>
+      <Productsfooter
+        data-testid="customer_products__button-cart"
+        onClick={ customerCheckout }
+        disabled={ !cart.length }
+      >
+        <p data-testid="customer_products__checkout-bottom-value">
+          { `Ver Carrinho: R$ ${totalPrice}` }
+        </p>
+      </Productsfooter>
+    </div>
   );
 }
 

@@ -1,7 +1,7 @@
 /* eslint-disable max-lines */
-import React, { useContext, useEffect, useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import { useParams } from 'react-router-dom';
-import styled, { ThemeProvider } from 'styled-components';
+import styled from 'styled-components';
 import OrderTable from '../Components/OrderTable';
 import {
   requestSaleById,
@@ -13,9 +13,6 @@ import mountDate from '../Utils/mountDate';
 import { fixDecimals } from '../Utils';
 import NavBar from '../Components/NavBar';
 import statusColors from '../Utils/statusColors';
-import MyContext from '../Context/MyContext';
-import { lightTheme, darkTheme } from '../theme';
-import GlobalStyle from '../theme/GlobalStyle';
 
 function OrderDetails() {
   const [sale, setSale] = useState();
@@ -25,15 +22,8 @@ function OrderDetails() {
   const [isDisabled, setIsDisabled] = useState(true);
   const [disablePrep, setDisablePrep] = useState(false);
   const [disableDisp, setDisableDisp] = useState(true);
-  const { theme, setTheme } = useContext(MyContext);
   const { id } = useParams();
   const orderIdMaxLength = 4;
-
-  useEffect(() => {
-    const localTheme = localStorage.getItem('theme');
-    if (localTheme === 'dark') setTheme('dark');
-    if (!localTheme) localStorage.setItem('theme', 'light');
-  }, []);
 
   useEffect(() => {
     const getSales = async () => {
@@ -50,6 +40,7 @@ function OrderDetails() {
     };
     getSales();
   }, []);
+
   useEffect(() => {
     if (sale && sale.result.status === 'Em Trânsito') {
       setIsDisabled(false);
@@ -76,93 +67,91 @@ function OrderDetails() {
     });
     setSale(updateStatusSale);
   };
+
   return (
-    <ThemeProvider theme={ theme === 'light' ? lightTheme : darkTheme }>
-      <GlobalStyle />
-      <OrderPage>
-        <NavBar />
-        {sale && (
-          <OrderContainer>
-            <h1>Detalhes do Pedido</h1>
-            <OrderHeader className="order-header">
-              <OrderNumber
-                data-test-id={
-                  `${role}_order_details__element-order-details-label-order-id`
-                }
-              >
-                <p>PEDIDO</p>
-                {id.toString().padStart(orderIdMaxLength, '0')}
-              </OrderNumber>
-              { role === 'customer' && (
-                <Seller
-                  data-testid={
-                    `customer_order_details__element-order-details-label-seller-${'name'}`
-                  }
-                >
-                  <p>P. Vend:</p>
-                  {sellerName}
-                </Seller>
-              )}
-              <DateContainer
+    <OrderPage>
+      <NavBar />
+      {sale && (
+        <OrderContainer>
+          <h1>Detalhes do Pedido</h1>
+          <OrderHeader className="order-header">
+            <OrderNumber
+              data-test-id={
+                `${role}_order_details__element-order-details-label-order-id`
+              }
+            >
+              <p>PEDIDO</p>
+              {id.toString().padStart(orderIdMaxLength, '0')}
+            </OrderNumber>
+            { role === 'customer' && (
+              <Seller
                 data-testid={
-                  `${role}_order_details__element-order-details-label-order-${'date'}`
+                  `customer_order_details__element-order-details-label-seller-${'name'}`
                 }
               >
-                { mountDate(new Date(sale.result.saleDate)) }
-              </DateContainer>
-              <DeliveryStatus
-                data-testid={
-                  `${role}_order_details__element-order-details-label-delivery-status${id}`
-                }
-                style={ { backgroundColor: statusColors[status] } }
+                <p>P. Vend:</p>
+                {sellerName}
+              </Seller>
+            )}
+            <DateContainer
+              data-testid={
+                `${role}_order_details__element-order-details-label-order-${'date'}`
+              }
+            >
+              { mountDate(new Date(sale.result.saleDate)) }
+            </DateContainer>
+            <DeliveryStatus
+              data-testid={
+                `${role}_order_details__element-order-details-label-delivery-status${id}`
+              }
+              style={ { backgroundColor: statusColors[status] } }
+            >
+              { status }
+            </DeliveryStatus>
+            { role === 'customer' && (
+              <MarkAsButton
+                type="button"
+                disabled={ isDisabled }
+                name="Entregue"
+                data-testid="customer_order_details__button-delivery-check"
+                onClick={ updateStatus }
               >
-                { status }
-              </DeliveryStatus>
-              { role === 'customer' && (
-                <MarkAsButton
+                MARCAR COMO ENTREGUE
+              </MarkAsButton>
+            )}
+            { role === 'seller' && (
+              <SellerButtons>
+                <button
                   type="button"
-                  disabled={ isDisabled }
-                  name="Entregue"
-                  data-testid="customer_order_details__button-delivery-check"
+                  name="Preparando"
+                  disabled={ disablePrep }
+                  data-testid="seller_order_details__button-preparing-check"
                   onClick={ updateStatus }
                 >
-                  MARCAR COMO ENTREGUE
-                </MarkAsButton>
-              )}
-              { role === 'seller' && (
-                <SellerButtons>
-                  <button
-                    type="button"
-                    name="Preparando"
-                    disabled={ disablePrep }
-                    data-testid="seller_order_details__button-preparing-check"
-                    onClick={ updateStatus }
-                  >
-                    Preparar Pedido
-                  </button>
+                  Preparar Pedido
+                </button>
 
-                  <button
-                    type="button"
-                    name="Em Trânsito"
-                    disabled={ disableDisp }
-                    data-testid="seller_order_details__button-dispatch-check"
-                    onClick={ updateStatus }
-                  >
-                    Saiu para Entrega
-                  </button>
-                </SellerButtons>
-              )}
-            </OrderHeader>
-            <OrderTable role={ role } sale={ sale } />
-            <div
-              data-testid={ `${role}_order_details__element-order-total-price` }
-            >
-              { `Total: R$ ${fixDecimals(sale.result.totalPrice)}`}
-            </div>
-          </OrderContainer>
-        )}
-      </OrderPage>
-    </ThemeProvider>
+                <button
+                  type="button"
+                  name="Em Trânsito"
+                  disabled={ disableDisp }
+                  data-testid="seller_order_details__button-dispatch-check"
+                  onClick={ updateStatus }
+                >
+                  Saiu para Entrega
+                </button>
+              </SellerButtons>
+            )}
+          </OrderHeader>
+          <OrderTable role={ role } sale={ sale } />
+          <div
+            data-testid={ `${role}_order_details__element-order-total-price` }
+          >
+            { `Total: R$ ${fixDecimals(sale.result.totalPrice)}`}
+          </div>
+        </OrderContainer>
+      )}
+    </OrderPage>
   );
 }
 
@@ -171,15 +160,17 @@ const OrderPage = styled.div`
   flex-direction: column;
   justify-content: center;
   align-items: center;
+  width: 100%;
 `;
 const OrderContainer = styled.div`
   display: flex;
   flex-direction: column;
-  width: 1200px;
+  align-items: center;
+  width: 90%;
   & >:nth-child(4){
     position: fixed;
-    top:800px;
-    right: 350px;
+    top:80%;
+    right: 5%;
     background-color: #036b52;
     color: white;
     font-size: 45px;
@@ -197,6 +188,7 @@ const OrderHeader = styled.div`
   height: 50px;
   padding: 0 10px;
   margin: 5px;
+  width: 100%;
 `;
 const OrderNumber = styled.div`
   display: flex;

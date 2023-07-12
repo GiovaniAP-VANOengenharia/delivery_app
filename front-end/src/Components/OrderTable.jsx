@@ -83,14 +83,13 @@ function OrdersTable(props) {
 
 const DetailsContainer = styled.div`
   display: flex;
+  width: 100%;
   flex-direction: column;
   justify-content: center;
   align-items: center;
-  width: 100%;
   & > p {
     font-size: 25px;
     text-align: left;
-    width: 90%;
   }
   & > div {
     display: flex;
@@ -110,7 +109,7 @@ const DetailsContainer = styled.div`
 `;
 
 const DetailsTableContainer = styled.table`
-  width: 1190px;
+  width: 100%;
   height: 40px;
   border-spacing: 0 10px;
   border: 1px solid #CBD4D2;

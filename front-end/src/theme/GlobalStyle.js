@@ -23,7 +23,7 @@ export default createGlobalStyle`
       color: ${(props) => props.theme.fontColor};;
     }
     .search-div{
-      /* background-color: ${(props) => props.theme.body}; */
+      background-color: ${(props) => props.theme.body};
     }
     .button {
       &:disabled {
@@ -38,7 +38,7 @@ export default createGlobalStyle`
       border-bottom: solid 2px ${(props) => props.theme.headerBorder};
     }
     .header-btn {
-      color: ${(props) => props.theme.fontColor};;
+      color: ${(props) => props.theme.fontColor};
     }
     .music_card-false {
       border: solid 1px ${(props) => props.theme.fontColor};

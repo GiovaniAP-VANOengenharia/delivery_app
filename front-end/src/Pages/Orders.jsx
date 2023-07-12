@@ -1,22 +1,12 @@
-import React, { useContext, useEffect, useState } from 'react';
-import styled, { ThemeProvider } from 'styled-components';
+import React, { useEffect, useState } from 'react';
+import styled from 'styled-components';
 import NavBar from '../Components/NavBar';
 import OrderCard from '../Components/OrderCard';
-import MyContext from '../Context/MyContext';
 import { requestAllSales } from '../services/requests';
-import { lightTheme, darkTheme } from '../theme';
-import GlobalStyle from '../theme/GlobalStyle';
 
 function CustomerOrder() {
   const [sales, setSales] = useState();
   const [userData, setUser] = useState({});
-  const { theme, setTheme } = useContext(MyContext);
-
-  useEffect(() => {
-    const localTheme = localStorage.getItem('theme');
-    if (localTheme === 'dark') setTheme('dark');
-    if (!localTheme) localStorage.setItem('theme', 'light');
-  }, []);
 
   useEffect(() => {
     const getSales = async () => {
@@ -41,20 +31,17 @@ function CustomerOrder() {
   ));
 
   return (
-    <ThemeProvider theme={ theme === 'light' ? lightTheme : darkTheme }>
-      <GlobalStyle />
+    <OrdersContainer>
       <NavBar />
-      <OrdersContainer>
-        { sales && orderList}
-      </OrdersContainer>
-    </ThemeProvider>
+      { sales && orderList}
+    </OrdersContainer>
   );
 }
 
 const OrdersContainer = styled.div`
   display: flex;
   flex-flow: row wrap;
-  width: 95%;
+  width: 100%;
 `;
 
 export default CustomerOrder;

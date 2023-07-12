@@ -1,18 +1,34 @@
-import React from 'react';
+import React, { useContext, useEffect } from 'react';
 import { Redirect, Route, Switch } from 'react-router-dom';
 import './App.css';
-import Provider from './Context/MyProvider';
+import { ThemeProvider } from 'styled-components';
 import Checkout from './Pages/Checkout';
 import Orders from './Pages/Orders';
 import Login from './Pages/Login';
 import Products from './Pages/Products';
 import Register from './Pages/Register';
 import Admin from './Pages/Admin';
+import { lightTheme, darkTheme } from './theme';
 import OrderDetails from './Pages/OrderDetails';
+import GlobalStyle from './theme/GlobalStyle';
+import MyContext from './Context/MyContext';
 
 function App() {
+  const { theme, setTheme } = useContext(MyContext);
+
+  useEffect(() => {
+    const localTheme = localStorage.getItem('theme');
+    if (localTheme === 'dark') {
+      setTheme('dark');
+    }
+    if (!localTheme) {
+      localStorage.setItem('theme', 'light');
+    }
+  }, []);
+
   return (
-    <Provider>
+    <ThemeProvider theme={ theme === 'light' ? lightTheme : darkTheme }>
+      <GlobalStyle />
       <Switch>
 
         <Route exact path="/">
@@ -46,9 +62,8 @@ function App() {
         <Route exact path="/admin/manage">
           <Admin />
         </Route>
-
       </Switch>
-    </Provider>
+    </ThemeProvider>
   );
 }
 
